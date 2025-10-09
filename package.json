@@ -26,7 +26,6 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@tanstack/eslint-plugin-query": "^5.83.1",
-    "@types/antd": "^0.12.32",
     "@types/estree": "^1.0.8",
     "@types/node": "^20",
     "@types/react": "^19",

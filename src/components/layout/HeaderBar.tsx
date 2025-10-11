@@ -2,6 +2,7 @@
 
 import { Button } from "antd";
 import { Bell, CircleUserRound } from "lucide-react";
+import Link from "next/link";
 
 export default function HeaderBar() {
   return (
@@ -17,7 +18,9 @@ export default function HeaderBar() {
         zIndex: 101,
       }}
     >
-      <h2 style={{ margin: 0, fontSize: 18 }}>Jangosoft</h2>
+      <Link href="/">
+        <h2 style={{ margin: 0, fontSize: 18 }}>Jangosoft</h2>
+      </Link>
 
       <div className="flex gap-3">
         <Button type="text" icon={<Bell />} />

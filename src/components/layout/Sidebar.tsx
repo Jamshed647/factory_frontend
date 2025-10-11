@@ -23,9 +23,9 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   // TODO: Remove Hardcoded Paths & Items
   const menuItems = [
     {
-      key: "/",
+      key: "/dashboard",
       icon: <PieChartOutlined />,
-      label: <Link href="/">Dashboard</Link>,
+      label: <Link href="/dashboard">Dashboard</Link>,
     },
     {
       key: "/factories-overview",
@@ -76,14 +76,12 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
           icon={
             <CircleChevronRight
               size={26}
+              color="#0a192f"
               className={`transition-transform duration-200 ${
-                collapsed ? "rotate-180" : ""
+                !collapsed ? "rotate-180" : ""
               }`}
             />
           }
-          style={{
-            color: "#0a192f",
-          }}
         />
       </div>
 

@@ -2,70 +2,77 @@
 
 import { Layout } from "antd";
 import { useState } from "react";
+import Sidebar from "./Sidebar";
+import HeaderBar from "./HeaderBar";
 
 const { Sider, Header, Content, Footer } = Layout;
 
 export default function LayoutContainer({
-  sidebar,
-  header,
   children,
 }: {
-  sidebar: React.ReactNode;
-  header?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* Sidebar */}
+      {/* ===== Sidebar ===== */}
       <Sider
+        trigger={null}
         collapsible
         collapsed={collapsed}
-        onCollapse={setCollapsed}
-        breakpoint="lg"
-        collapsedWidth="70"
+        width={220}
         style={{
-          background: "#001529",
-          position: "sticky",
-          top: 0,
-          height: "100vh",
+          position: "fixed",
+          top: 80,
+          bottom: 20,
+          left: 16,
+          borderRadius: 8,
+          overflow: "hidden",
+          transition: "all 0.3s ease",
         }}
       >
-        {sidebar}
+        <Sidebar
+          collapsed={collapsed}
+          onToggle={() => setCollapsed(!collapsed)}
+        />
       </Sider>
 
-      {/* Main Layout */}
-      <Layout>
+      {/* ===== Main Layout ===== */}
+      <Layout
+        style={{
+          marginLeft: collapsed ? 110 : 250,
+          transition: "margin-left 0.2s ease-in-out",
+        }}
+      >
         {/* Fixed Header */}
-        {header && (
-          <Header
-            style={{
-              background: "#fff",
-              padding: 0,
-              position: "fixed",
-              top: 0,
-              right: 0,
-              left: collapsed ? 80 : 200,
-              zIndex: 100,
-              height: 64,
-              transition: "left 0.2s ease-in-out",
-            }}
-          >
-            {header}
-          </Header>
-        )}
+        <Header
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 100,
+            background: "#fff",
+            height: 64,
+            paddingInline: 16,
+            boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          <HeaderBar />
+        </Header>
 
-        {/* Scrollable Content under Header */}
+        {/* Scrollable Content */}
         <Content
           style={{
-            margin: "80px 16px 0 16px",
-            transition: "margin-left 0.2s ease-in-out",
+            marginTop: 80,
+            marginRight: 16,
+            marginBottom: 40,
             background: "#fff",
             borderRadius: 8,
             padding: 24,
-            minHeight: "calc(100vh - 120px)",
             overflow: "auto",
+            minHeight: "calc(100vh - 120px)",
           }}
         >
           {children}
@@ -76,8 +83,7 @@ export default function LayoutContainer({
             textAlign: "center",
             fontSize: 13,
             color: "#888",
-            marginLeft: collapsed ? 80 : 200,
-            transition: "margin-left 0.2s ease-in-out",
+            padding: "12px 16px",
           }}
         >
           © {new Date().getFullYear()} Ant Design Layout Example

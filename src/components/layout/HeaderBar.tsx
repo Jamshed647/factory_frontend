@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
+import { Bell, CircleUserRound } from "lucide-react";
 
 export default function HeaderBar() {
   return (
@@ -11,15 +11,19 @@ export default function HeaderBar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 24px",
-        borderBottom: "1px solid #f0f0f0",
+        padding: "0 4px",
         background: "#fff",
         position: "relative",
         zIndex: 101,
       }}
     >
-      <h2 style={{ margin: 0, fontSize: 18 }}>Dashboard</h2>
-      <Button type="text" icon={<MenuOutlined />} />
+      <h2 style={{ margin: 0, fontSize: 18 }}>Jangosoft</h2>
+
+      <div className="flex gap-3">
+        <Button type="text" icon={<Bell />} />
+
+        <Button type="text" icon={<CircleUserRound />} />
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,9 @@ export default function RootLayout({
         <Toaster />
 
         <TanStackQueryWrapper>
-          <AntdRegistry>{children}</AntdRegistry>
+          <TooltipProvider>
+            <AntdRegistry>{children}</AntdRegistry>
+          </TooltipProvider>
         </TanStackQueryWrapper>
       </body>
     </html>

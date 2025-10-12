@@ -1,8 +1,7 @@
 "use client";
-
-import { Button } from "antd";
 import { Bell, CircleUserRound } from "lucide-react";
 import Link from "next/link";
+import ActionButton from "../common/button/actionButton";
 
 export default function HeaderBar() {
   return (
@@ -23,9 +22,9 @@ export default function HeaderBar() {
       </Link>
 
       <div className="flex gap-3">
-        <Button type="text" icon={<Bell />} />
+        <ActionButton icon={<Bell />} tooltipContent="Notifications" />
 
-        <Button type="text" icon={<CircleUserRound />} />
+        <ActionButton icon={<CircleUserRound />} />
       </div>
     </div>
   );

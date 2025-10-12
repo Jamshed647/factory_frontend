@@ -34,6 +34,23 @@ export default function DashboardPage() {
       <div className="mt-10">
         <UserTable />
       </div>
+
+      <div className="mt-10 py-30">
+        <p>This is a placeholder for the dashboard page.</p>
+        <p>
+          You can replace this page with your own content. For example, you
+          could add a new layout component to the dashboard layout.
+        </p>
+        <p>
+          Or you could add a new page to the dashboard route. For example, you
+          could add a new dashboard page that shows a list of all the users in
+          your application.
+          <br />
+          <br />
+          The dashboard route is located at{" "}
+          <code>src/app/(dashboard)/dashboard/page.tsx</code>.
+        </p>
+      </div>
     </div>
   );
 }

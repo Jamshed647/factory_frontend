@@ -1,9 +1,5 @@
-import LayoutContainer from "@/components/layout/LayoutContainer";
+import DashboardLayout from "./_assets/components/root/DashboardLayout";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <LayoutContainer>{children}</LayoutContainer>;
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <DashboardLayout>{children}</DashboardLayout>;
 }

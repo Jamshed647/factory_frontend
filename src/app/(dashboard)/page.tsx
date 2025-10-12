@@ -1,32 +1,12 @@
-export default function DashboardPage() {
-  // TODO: API Dashboard Content
-  const stats = [
-    { title: "Total Super Admins", value: 10 },
-    { title: "Total Factories", value: 10 },
-    { title: "Total Managers", value: 10 },
-  ];
-
+const JangosoftPage = () => {
   return (
     <div>
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-
-      {/* Overview */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((item) => (
-          <div
-            key={item.title}
-            className={`bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 
-`}
-          >
-            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-              {item.title}
-            </h4>
-            <p className="mt-1 text-3xl font-bold text-gray-600 dark:text-gray-300">
-              {item.value}
-            </p>
-          </div>
-        ))}
+      <h1> Home Page</h1>
+      <div>
+        <h3>This is the Jangosoft Home Page</h3>
       </div>
     </div>
   );
-}
+};
+
+export default JangosoftPage;

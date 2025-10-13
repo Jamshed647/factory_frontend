@@ -16,10 +16,6 @@ export const ToastMessageChange = (message: string | any) => {
         "Please ensure the assigned module credit is within the course credit.";
       break;
 
-    case "profile saved!":
-      message = "Profile saved aaaaa!";
-      break;
-
     default:
       message = message;
       break;

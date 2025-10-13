@@ -85,10 +85,10 @@ const ActionButton = forwardRef<HTMLButtonElement, ButtonTooltipProps>(
         variant={variant}
         disabled={isPending || disabled}
         className={cn(
-          "capitalize",
+          "capitalize cursor-pointer",
           hidden && "hidden",
+          (isPending || disabled) && "opacity-60 cursor-not-allowed",
           btnStyle,
-          isPending && "opacity-60 cursor-not-allowed",
           (icon || imageSrc) &&
             (buttonContent || loadingContent || isPending) &&
             "gap-x-3",

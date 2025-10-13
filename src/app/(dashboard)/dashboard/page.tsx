@@ -1,6 +1,56 @@
+"use client";
+import React from "react";
 import UserTable from "./_assets/components/UserTable";
 
 export default function DashboardPage() {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchText, setSearchText] = React.useState("");
+
+  interface UserDataType {
+    key: string;
+    name: string;
+    email: string;
+    factories_count: number;
+  }
+  interface PaginatedData<T> {
+    data: T[];
+    pagination: {
+      page: number;
+      total: number;
+      perPage: number;
+      totalPages: number;
+    };
+  }
+
+  const data: PaginatedData<UserDataType> = {
+    data: [
+      {
+        key: "1",
+        name: "John Brown",
+        email: "john.brown@example.com",
+        factories_count: 3,
+      },
+      {
+        key: "2",
+        name: "Jim Green",
+        email: "jim.green@example.com",
+        factories_count: 5,
+      },
+      {
+        key: "3",
+        name: "Joe Black",
+        email: "joe.black@example.com",
+        factories_count: 2,
+      },
+    ],
+    pagination: {
+      page: 1,
+      total: 3,
+      perPage: 10,
+      totalPages: 1,
+    },
+  };
+
   // TODO: API Dashboard Content
   const stats = [
     { title: "Total Super Admins", value: 10 },
@@ -32,24 +82,12 @@ export default function DashboardPage() {
 
       {/* User Table */}
       <div className="mt-10">
-        <UserTable />
-      </div>
-
-      <div className="mt-10 py-30">
-        <p>This is a placeholder for the dashboard page.</p>
-        <p>
-          You can replace this page with your own content. For example, you
-          could add a new layout component to the dashboard layout.
-        </p>
-        <p>
-          Or you could add a new page to the dashboard route. For example, you
-          could add a new dashboard page that shows a list of all the users in
-          your application.
-          <br />
-          <br />
-          The dashboard route is located at{" "}
-          <code>src/app/(dashboard)/dashboard/page.tsx</code>.
-        </p>
+        <UserTable
+          data={data}
+          isLoading={false}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </div>
   );

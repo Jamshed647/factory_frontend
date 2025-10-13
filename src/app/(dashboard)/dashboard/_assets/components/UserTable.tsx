@@ -1,131 +1,60 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
-import { Button, Space, Table } from "antd";
-import type { TableProps } from "antd";
-import TableTools from "./Tabletoolbar";
-import { Edit, MinusIcon, Trash } from "lucide-react";
-import UpdateUser from "./update/updateUser";
+import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
+import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
+import ActionButton from "@/components/common/button/actionButton";
+import { Edit2Icon, TrashIcon } from "lucide-react";
 
-interface UserDataType {
-  key: string;
-  name: string;
-  email: string;
-  factories_count: number;
+interface TableProps {
+  data: any;
+  isLoading: boolean;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
 }
 
-interface PaginatedData<T> {
-  data: T[];
-  pagination: {
-    page: number;
-    total: number;
-    perPage: number;
-    totalPages: number;
-  };
-}
-
-const data: PaginatedData<UserDataType> = {
-  data: [
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john.brown@example.com",
-      factories_count: 3,
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      email: "jim.green@example.com",
-      factories_count: 5,
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      email: "joe.black@example.com",
-      factories_count: 2,
-    },
-  ],
-  pagination: {
-    page: 1,
-    total: 3,
-    perPage: 10,
-    totalPages: 1,
-  },
-};
-
-const UserTable = () => {
-  const [searchText, setSearchText] = React.useState("");
-  const handleAction = (
-    info: UserDataType,
-    action: "update" | "disable" | "delete",
-  ) => {
+const UserTable = ({
+  data,
+  isLoading,
+  currentPage,
+  setCurrentPage,
+}: TableProps) => {
+  const handleAction = (info: any, action: "update" | "disable" | "delete") => {
     console.log("Action:", info, action);
   };
 
-  const columns: TableProps<UserDataType>["columns"] = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-    },
-    {
-      title: "Factories Count",
-      dataIndex: "factories_count",
-      align: "center" as const,
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      align: "end" as const,
-      render: (_, record) => (
-        <Space>
-          <UpdateUser info={record} />
-
-          <Button
-            style={{ height: "40px" }}
-            disabled={record.factories_count === 0}
-            onClick={() => handleAction(record, "disable")}
-          >
-            <MinusIcon strokeWidth={3} size={16} />
-          </Button>
-          <Button
-            danger
-            style={{ height: "40px" }}
-            onClick={() => handleAction(record, "delete")}
-          >
-            <Trash strokeWidth={3} size={16} />
-          </Button>
-        </Space>
-      ),
-    },
-  ];
-
-  // TODO: Optional: filter data based on searchText
-  const filteredData = data.data.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchText.toLowerCase()),
-  );
-
   return (
-    <Table<UserDataType>
-      columns={columns}
-      dataSource={filteredData}
-      bordered
-      title={() => (
-        <TableTools searchText={searchText} setSearchText={setSearchText} />
-      )}
-      pagination={{
-        current: data.pagination.page,
-        pageSize: data.pagination.perPage,
-        total: data.pagination.total,
-      }}
-      rowKey="key"
-    />
+    <>
+      <DynamicTableWithPagination
+        data={data?.data}
+        isLoading={isLoading}
+        pagination={data?.pagination}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        config={{
+          columns: [
+            { key: "name", header: "Name" },
+            { key: "email", header: "Email" },
+            { key: "factories_count", header: "Factories Count" },
+            { key: "action", header: "Action", render: (user) => <ResponsiveButtonGroup>
+
+              <ActionButton
+              icon={<Edit2Icon className="h-5 w-5" />}
+              handleOpen={() => handleAction(user, "update")}
+              />
+
+              <ActionButton
+                icon={<TrashIcon className="h-5 w-5" />}
+                handleOpen={() => handleAction(user, "delete")}
+              />
+
+            </ResponsiveButtonGroup> },
+
+          ],
+        }}
+      />
+    </>
   );
 };
 

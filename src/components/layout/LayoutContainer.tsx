@@ -66,15 +66,9 @@ function LayoutContainer({
           marginLeft: sidebarWidth + (!collapsed ? 40 : 10),
           transition: "margin-left 0.2s",
           minHeight: "100vh",
-          overflow: "auto", // now entire layout scrolls
+          overflow: "auto",
         }}
       >
-        {/* <Layout */}
-        {/*   style={{ */}
-        {/*     marginLeft: sidebarWidth + (!collapsed ? 40 : 10), */}
-        {/*     transition: "margin-left 0.2s", */}
-        {/*   }} */}
-        {/* > */}
         {HeaderBar && (
           <Header
             style={{

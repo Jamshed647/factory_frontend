@@ -1,4 +1,5 @@
-import { Search, X } from "lucide-react";
+"use client";
+import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -9,19 +10,20 @@ const CommonSearch = ({
   setSearchText,
 }: {
   width?: string;
-  searchText?: string;
-  setSearchText?: (text: string) => void;
+  searchText: string;
+  setSearchText: (text: string) => void;
 }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const [inputValue, setInputValue] = useState(searchText);
+  const [inputValue, setInputValue] = useState(searchText); // Local state for input
 
   useEffect(() => {
     setInputValue(searchText || "");
   }, [searchText]);
 
+  // Debounced function to update the search state
   const handleSearch = useDebouncedCallback((text: string) => {
     if (setSearchText) {
       setSearchText(text);
@@ -36,21 +38,15 @@ const CommonSearch = ({
     replace(`${pathname}?${params.toString()}`);
   }, 800);
 
+  // Update search text after 800ms when user stops typing
   useEffect(() => {
-    handleSearch(inputValue ?? "");
-  }, [handleSearch, inputValue]);
-
-  const clearSearch = () => {
-    setInputValue("");
-    if (setSearchText) setSearchText("");
-    const params = new URLSearchParams(searchParams);
-    params.delete("query");
-    replace(`${pathname}?${params.toString()}`);
-  };
+    // handleSearch(inputValue);
+    handleSearch(inputValue ?? ""); //only run if inputValue is not null TODO
+  }, [handleSearch, inputValue]); // Runs when inputValue changes
 
   return (
     <div
-      className={`flex gap-x-2 justify-start items-center py-2 px-4 rounded-lg border bg-[#FFFFFF] relative ${
+      className={`flex gap-x-2 justify-start items-center py-2 px-4 rounded-lg border bg-[#FFFFFF] ${
         width ? `w-[${width}]` : "w-[150px] xl:w-[300px]"
       } border border-[#CFD6DD]`}
     >
@@ -58,22 +54,12 @@ const CommonSearch = ({
       <input
         type="text"
         placeholder="Search"
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) => setInputValue(e.target.value)} // Update local state
         value={inputValue}
-        className="flex-grow pr-6 w-full text-black bg-transparent outline-none placeholder:text-gray-500"
+        className="flex-grow w-full text-black bg-transparent outline-none placeholder:text-gray-500"
       />
-      {inputValue && (
-        <button
-          type="button"
-          onClick={clearSearch}
-          className="absolute right-3 text-gray-400 hover:text-gray-600"
-        >
-          <X size={16} />
-        </button>
-      )}
     </div>
   );
 };
 
 export default CommonSearch;
-

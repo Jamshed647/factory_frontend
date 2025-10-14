@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-"use client";
+
 import {
   Pagination,
   PaginationContent,
@@ -10,7 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const CusPagination = ({
@@ -23,35 +22,24 @@ const CusPagination = ({
   setCurrentPage: (page: number) => void;
 }) => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  // const currentPage = Number(searchParams.get("page")) || 1;
   const router = useRouter();
 
-  // url set
+  // remove: const searchParams = useSearchParams();
+
   const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
+    // build URL manually without useSearchParams
+    const params = new URLSearchParams();
     params.set("page", pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   };
 
-  // Number of page links to display at once
   const pageLinksToShow = 5;
-
-  // Calculate the range of page numbers to display
   const startPage = Math.max(1, currentPage - Math.floor(pageLinksToShow / 2));
   const endPage = Math.min(totalPages, startPage + pageLinksToShow - 1);
 
-  // console.log("totalPages ", totalPages);
-
-  //   const handlePageChange = (page: number) => {
-  //     const newURL = createPageURL(page);
-  //     router.push(newURL);
-  //     setCurrentPage?.(page);
-  //   };
-
   const handlePageChange = (page: number) => {
     if (page === currentPage) return;
-    setCurrentPage(page); // This will trigger the useEffect below
+    setCurrentPage(page);
   };
 
   useEffect(() => {
@@ -61,21 +49,23 @@ const CusPagination = ({
 
   return (
     <Pagination>
-      <PaginationContent className="w-full flex justify-between">
+      <PaginationContent className="flex justify-between w-full">
+        {/* previous */}
         <div>
           <PaginationItem>
             {currentPage === 1 ? (
               <PaginationPrevious className="border" />
             ) : (
               <PaginationPrevious
-                className="cursor-pointer border"
+                className="border cursor-pointer"
                 onClick={() => handlePageChange(currentPage - 1)}
               />
             )}
           </PaginationItem>
         </div>
+
+        {/* number links */}
         <div className="flex gap-1">
-          {/* Always show first page */}
           {startPage > 1 && (
             <>
               <PaginationItem>
@@ -94,12 +84,9 @@ const CusPagination = ({
               )}
             </>
           )}
-          {/* <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem> */}
 
           {Array.from({ length: endPage - startPage + 1 }).map((_, index) => (
-            <PaginationItem key={index} className="">
+            <PaginationItem key={index}>
               <PaginationLink
                 className="cursor-pointer"
                 onClick={() => handlePageChange(startPage + index)}
@@ -110,13 +97,6 @@ const CusPagination = ({
             </PaginationItem>
           ))}
 
-          {/* {totalPages > 5 && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )} */}
-
-          {/* Always show last page */}
           {endPage < totalPages && (
             <>
               {endPage < totalPages - 1 && (
@@ -137,13 +117,14 @@ const CusPagination = ({
           )}
         </div>
 
+        {/* next */}
         <div>
           <PaginationItem>
             {currentPage === totalPages ? (
               <PaginationNext className="border" />
             ) : (
               <PaginationNext
-                className="cursor-pointer border"
+                className="border cursor-pointer"
                 onClick={() => handlePageChange(currentPage + 1)}
               />
             )}
@@ -153,4 +134,5 @@ const CusPagination = ({
     </Pagination>
   );
 };
+
 export default CusPagination;

@@ -54,7 +54,7 @@ export const Text = ({
                       {...field}
                       type="text"
                       onChange={(event) => {
-                        const inputValue = event.target.value;
+                        const inputValue = event.target.value as string;
                         if (isArray) {
                           const arr = inputValue
                             .split(/[\s,]+/)

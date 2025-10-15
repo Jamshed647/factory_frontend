@@ -12,6 +12,7 @@ export default function DashboardPage() {
     email: string;
     factories_count: number;
   }
+
   interface PaginatedData<T> {
     data: T[];
     pagination: {
@@ -83,6 +84,8 @@ export default function DashboardPage() {
       {/* User Table */}
       <div className="mt-10">
         <UserTable
+          searchText={searchText}
+          setSearchText={setSearchText}
           data={data}
           isLoading={false}
           currentPage={currentPage}

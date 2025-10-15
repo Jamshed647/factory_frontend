@@ -6,10 +6,13 @@ import DynamicTableWithPagination from "@/components/common/DynamicTable/Dynamic
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import ActionButton from "@/components/common/button/actionButton";
 import { Edit2Icon, TrashIcon } from "lucide-react";
+import { CustomField } from "@/components/common/fields/cusField";
 
 interface TableProps {
   data: any;
   isLoading: boolean;
+  searchText: string;
+  setSearchText: (text: string) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
 }
@@ -17,6 +20,8 @@ interface TableProps {
 const UserTable = ({
   data,
   isLoading,
+  searchText,
+  setSearchText,
   currentPage,
   setCurrentPage,
 }: TableProps) => {
@@ -25,7 +30,23 @@ const UserTable = ({
   };
 
   return (
-    <>
+    <div className="rounded-md border shadow-lg">
+      {/* Table Header */}
+      <div className="flex justify-between items-center p-3">
+        <CustomField.CommonSearch
+          width="w-full"
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
+
+        <ActionButton
+          btnStyle="bg-blue-500 text-white"
+          icon={<Edit2Icon className="w-5 h-5" />}
+          buttonContent="Add New Super Admin"
+        />
+      </div>
+
+      {/* Table Body */}
       <DynamicTableWithPagination
         data={data?.data}
         isLoading={isLoading}
@@ -37,24 +58,27 @@ const UserTable = ({
             { key: "name", header: "Name" },
             { key: "email", header: "Email" },
             { key: "factories_count", header: "Factories Count" },
-            { key: "action", header: "Action", render: (user) => <ResponsiveButtonGroup>
+            {
+              key: "action",
+              header: "Action",
+              render: (user) => (
+                <ResponsiveButtonGroup>
+                  <ActionButton
+                    icon={<Edit2Icon className="w-5 h-5" />}
+                    handleOpen={() => handleAction(user, "update")}
+                  />
 
-              <ActionButton
-              icon={<Edit2Icon className="h-5 w-5" />}
-              handleOpen={() => handleAction(user, "update")}
-              />
-
-              <ActionButton
-                icon={<TrashIcon className="h-5 w-5" />}
-                handleOpen={() => handleAction(user, "delete")}
-              />
-
-            </ResponsiveButtonGroup> },
-
+                  <ActionButton
+                    icon={<TrashIcon className="w-5 h-5" />}
+                    handleOpen={() => handleAction(user, "delete")}
+                  />
+                </ResponsiveButtonGroup>
+              ),
+            },
           ],
         }}
       />
-    </>
+    </div>
   );
 };
 

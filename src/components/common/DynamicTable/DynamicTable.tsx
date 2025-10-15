@@ -83,14 +83,12 @@ export type TableConfig = {
   rowClassName?: (item: any) => string;
   footer?: React.ReactNode;
 };
-
 interface Pagination {
   page: number;
   total: number;
   perPage?: number;
   totalPages: number;
 }
-
 interface DynamicTableProps {
   isLoading: boolean;
   pagination: Pagination;

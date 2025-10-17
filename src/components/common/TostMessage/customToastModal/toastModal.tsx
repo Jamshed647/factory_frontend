@@ -1,17 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/custom_ui/dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, CircleX, Info } from "lucide-react";
 import * as React from "react";
 import { createRoot } from "react-dom/client";
+import { DialogWrapper } from "../../common_dialog/common_dialog";
 
 type AlertType = "success" | "error" | "info";
 
@@ -55,54 +49,53 @@ const AlertModal: React.FC<AlertProps> = ({
   const renderIcon = () => {
     switch (type) {
       case "error":
-        return <CircleX className="h-16 w-16 text-red-600" />;
+        return <CircleX className="w-16 h-16 text-red-600" />;
       case "success":
-        return <CheckCircle2 className="h-16 w-16 text-green-600" />;
+        return <CheckCircle2 className="w-16 h-16 text-green-600" />;
       case "info":
       default:
-        return <Info className="h-16 w-16 text-blue-600" />;
+        return <Info className="w-16 h-16 text-blue-600" />;
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <div className="flex items-center justify-center">
-            <AnimatePresence>
-              <motion.div
-                key={type}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              >
-                {renderIcon()}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          <DialogTitle className="text-center"> {title && title}</DialogTitle>
-        </DialogHeader>
-        <div className="py-4 text-center">{description}</div>
-        <DialogFooter>
-          <div className="w-full flex items-center  justify-center gap-2 ">
-            {showCancel && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleClose(false)}
-              >
-                {cancelText}
-              </Button>
-            )}
-          </div>
+    <DialogWrapper
+      open={open}
+      handleOpen={setOpen}
+      closer={false}
+      style="min-w-[300px] w-fit"
+    >
+      <div>
+        <div className="flex justify-center items-center">
+          <AnimatePresence>
+            <motion.div
+              key={type}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            >
+              {renderIcon()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <p className="text-center"> {title && title}</p>
 
-          {/* <Button variant="default" onClick={() => handleClose(true)}>
-            {confirmText}
-          </Button> */}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div className="py-6 text-center">{description}</div>
+
+        <div className="flex gap-2 justify-center items-center w-full">
+          {showCancel && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleClose(false)}
+            >
+              {cancelText}
+            </Button>
+          )}
+        </div>
+      </div>
+    </DialogWrapper>
   );
 };
 
@@ -145,7 +138,7 @@ export function showAlert({
             div.remove();
           }, 300);
         }}
-      />
+      />,
     );
   });
 }

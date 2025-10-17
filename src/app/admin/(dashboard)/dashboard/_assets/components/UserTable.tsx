@@ -7,6 +7,7 @@ import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButt
 import ActionButton from "@/components/common/button/actionButton";
 import { Edit2Icon, TrashIcon } from "lucide-react";
 import { CustomField } from "@/components/common/fields/cusField";
+import CreateUserModal from "./create/createUserModal";
 
 interface TableProps {
   data: any;
@@ -38,12 +39,7 @@ const UserTable = ({
           searchText={searchText}
           setSearchText={setSearchText}
         />
-
-        <ActionButton
-          btnStyle="bg-blue-500 text-white"
-          icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Add New Super Admin"
-        />
+        <CreateUserModal />
       </div>
 
       {/* Table Body */}

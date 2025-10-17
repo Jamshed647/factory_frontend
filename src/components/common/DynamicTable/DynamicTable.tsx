@@ -195,13 +195,21 @@ const DynamicTableWithPagination = ({
       </TableHeader>
       <TableBody>
         {isLoading ? (
-          <div className="min-h-[250px] lg:min-h-[400px]">
-            <DataLoader />
-          </div>
+          <TableRow>
+            <TableCell colSpan={config?.columns?.length} className="p-0">
+              <div className="flex justify-center items-center min-h-[250px] lg:min-h-[400px]">
+                <DataLoader />
+              </div>
+            </TableCell>
+          </TableRow>
         ) : isEmpty ? (
-          <div className="min-h-[250px] lg:min-h-[400px]">
-            <NoDataComponent />
-          </div>
+          <TableRow>
+            <TableCell colSpan={config?.columns?.length} className="p-0">
+              <div className="flex justify-center items-center min-h-[200px] lg:min-h-[300px]">
+                <NoDataComponent />
+              </div>
+            </TableCell>
+          </TableRow>
         ) : (
           data?.map((row: any, rowIndex: number) => (
             <TableRow

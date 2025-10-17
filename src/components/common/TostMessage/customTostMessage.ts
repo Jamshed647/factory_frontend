@@ -16,8 +16,7 @@ export const showToast = (
   type: ToastType,
   message: any,
   options?: ToastOptions,
-  //
-  toastType: "modal" | "toast" = "modal", // default value here
+  toastType: "modal" | "toast" = "modal",
 ) => {
   const config = { ...defaultOptions, ...options };
 

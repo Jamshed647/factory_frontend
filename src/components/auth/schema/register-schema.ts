@@ -1,17 +1,21 @@
+import { validationSchemas } from "@/types/SchemaType/validationSchema";
 import { z } from "zod";
 
 // Register schema
 export const registerSchema = z
   .object({
-    firstName: z.string().min(1, "First name is required"),
+    firstName: z.string().min(1, "Please enter your first name."),
     lastName: z.string().optional(),
-    email: z.string().email("Invalid email address").optional(),
-    phone: z.string().min(10, "Invalid phone number"),
-    password: z.string().min(4, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(4, "Confirm your password"),
+    email: validationSchemas.emailSchema(),
+    phone: z.string().min(10, "Please enter a valid phone number."),
+    //confirmPassword: validationSchemas.passwordSchema({ min: 4 }),
+    password: z.string().min(4, "Password must be at least 6 characters long."),
+    confirmPassword: z
+      .string()
+      .min(4, "Password must be at least 6 characters long."),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
+    message: "Passwords do not match.",
     path: ["confirmPassword"],
   });
 

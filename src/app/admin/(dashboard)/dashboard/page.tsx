@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import UserTable from "./_assets/components/UserTable";
+import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 
 export default function DashboardPage() {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -52,6 +53,16 @@ export default function DashboardPage() {
     },
   };
 
+  const { data: x, isLoading } = useFetchData({
+    method: "GET",
+    path: "api/v1/auth/owner/users",
+    queryKey: "getUserData",
+    filterData: {
+      //  page: currentPage,
+    },
+  });
+  console.log("Fetch Data", x);
+
   // TODO: API Dashboard Content
   const stats = [
     { title: "Total Super Admins", value: 10 },
@@ -87,7 +98,7 @@ export default function DashboardPage() {
           searchText={searchText}
           setSearchText={setSearchText}
           data={data}
-          isLoading={false}
+          isLoading={isLoading}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />

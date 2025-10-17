@@ -7,6 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/custom_ui/dialog";
 import { ReactNode } from "react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface DialogWrapperProps {
   style?: string;
@@ -34,19 +35,29 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = ({
       <DialogTrigger asChild>{triggerContent}</DialogTrigger>
 
       <DialogContent forceMount className={style}>
-        {/* Sticky Header */}
+        {/* Only ONE DialogTitle total */}
+        {title ? (
+          <DialogTitle className="hidden">{title}</DialogTitle>
+        ) : (
+          <VisuallyHidden>
+            <DialogTitle>Dialog</DialogTitle>
+          </VisuallyHidden>
+        )}
+
+        {/* Optional Header (no DialogTitle inside here!) */}
         {closer && (
           <DialogHeader
             className={`capitalize bg-background ${
-              title
-                ? "py-5 px-2 bg-background border-b"
-                : " pt-2 bg-transparent"
+              title ? "py-5 px-2 bg-background border-b" : "pt-2 bg-transparent"
             }`}
           >
-            {title && <DialogTitle>{title}</DialogTitle>}
-            <DialogDescription className="hidden">
-              {description}
-            </DialogDescription>
+            {/* Just a span for visual layout — not DialogTitle */}
+            {title && <span className="text-lg font-semibold">{title}</span>}
+            {description && (
+              <DialogDescription className="hidden">
+                {description}
+              </DialogDescription>
+            )}
           </DialogHeader>
         )}
 
@@ -56,7 +67,6 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = ({
     </Dialog>
   );
 };
-
 /** Usage==>
  * - Uses controlled open/close with `open` and `handleOpen`.
  * - `triggerContent` is the element that opens the dialog.

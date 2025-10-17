@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import UserTable from "./_assets/components/UserTable";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
+import CompanyTable from "./_assets/components/CompanyTable";
 
 export default function DashboardPage() {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -55,7 +55,7 @@ export default function DashboardPage() {
 
   const { data: x, isLoading } = useFetchData({
     method: "GET",
-    path: "api/v1/auth/owner/users",
+    path: "api/v1/auth/company/users",
     queryKey: "getUserData",
     filterData: {
       //  page: currentPage,
@@ -94,7 +94,7 @@ export default function DashboardPage() {
 
       {/* User Table */}
       <div className="mt-10">
-        <UserTable
+        <CompanyTable
           searchText={searchText}
           setSearchText={setSearchText}
           data={data}

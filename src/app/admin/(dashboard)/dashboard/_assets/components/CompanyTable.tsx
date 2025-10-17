@@ -4,10 +4,10 @@
 import React from "react";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
-import ActionButton from "@/components/common/button/actionButton";
-import { Edit2Icon, TrashIcon } from "lucide-react";
 import { CustomField } from "@/components/common/fields/cusField";
-import CreateUserModal from "./create/createUserModal";
+import CreateCompanyModal from "./create/createCompanyModal";
+import UpdateCompanyModal from "./update/updateCompanyModal";
+import DeleteCompanyModal from "./delete/deleteCompanyModal";
 
 interface TableProps {
   data: any;
@@ -26,10 +26,6 @@ const UserTable = ({
   currentPage,
   setCurrentPage,
 }: TableProps) => {
-  const handleAction = (info: any, action: "update" | "disable" | "delete") => {
-    console.log("Action:", info, action);
-  };
-
   return (
     <div className="rounded-md border shadow-lg">
       {/* Table Header */}
@@ -39,7 +35,7 @@ const UserTable = ({
           searchText={searchText}
           setSearchText={setSearchText}
         />
-        <CreateUserModal />
+        <CreateCompanyModal />
       </div>
 
       {/* Table Body */}
@@ -59,15 +55,8 @@ const UserTable = ({
               header: "Action",
               render: (user) => (
                 <ResponsiveButtonGroup>
-                  <ActionButton
-                    icon={<Edit2Icon className="w-5 h-5" />}
-                    handleOpen={() => handleAction(user, "update")}
-                  />
-
-                  <ActionButton
-                    icon={<TrashIcon className="w-5 h-5" />}
-                    handleOpen={() => handleAction(user, "delete")}
-                  />
+                  <UpdateCompanyModal data={user} />
+                  <DeleteCompanyModal data={user} />
                 </ResponsiveButtonGroup>
               ),
             },

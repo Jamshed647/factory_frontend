@@ -42,10 +42,14 @@ type UrlValidationProps = BaseValidationProps & {
   blockedDomains?: string[];
 };
 
-type NumberValidationProps = BaseValidationProps & {
+interface NumberValidationProps {
+  label?: string;
+  required?: boolean;
+  min?: number;
+  max?: number;
   integerOnly?: boolean;
   positiveOnly?: boolean;
-};
+}
 
 type TextValidationProps = BaseValidationProps & {
   allowNumbers?: boolean;
@@ -433,30 +437,30 @@ const numberSchema = (props: NumberValidationProps = {}) => {
     positiveOnly,
   } = props;
 
-  let schema = z
-    .union([z.string(), z.number()])
-    .transform((val) =>
-      val === "" || val === null || val === undefined ? undefined : Number(val),
-    )
-    .refine((val) => val === undefined || !isNaN(val), {
-      message: `${label} must be a valid number`,
-    })
-    .pipe(z.number({ message: `${label} must be a valid number` }));
+  // Preprocess converts string/empty input to number | undefined
+  let schema: z.ZodType<number | undefined> = z.preprocess(
+    (val) => {
+      if (val === "" || val === null || val === undefined) return undefined;
+      const num = Number(val);
+      return isNaN(num) ? undefined : num;
+    },
+    z.number({ message: `${label} must be a valid number` }),
+  );
 
   if (integerOnly)
-    schema = schema.refine((v) => Number.isInteger(v), {
+    schema = schema.refine((v) => v === undefined || Number.isInteger(v), {
       message: `${label} must be an integer`,
     });
   if (positiveOnly)
-    schema = schema.refine((v) => v >= 0, {
+    schema = schema.refine((v) => v === undefined || v >= 0, {
       message: `${label} must be positive`,
     });
   if (min !== undefined)
-    schema = schema.refine((v) => v >= min, {
+    schema = schema.refine((v) => v === undefined || v >= min, {
       message: `${label} must be at least ${min}`,
     });
   if (max !== undefined)
-    schema = schema.refine((v) => v <= max, {
+    schema = schema.refine((v) => v === undefined || v <= max, {
       message: `${label} must be at most ${max}`,
     });
 

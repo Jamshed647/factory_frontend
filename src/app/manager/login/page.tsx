@@ -12,25 +12,14 @@ import { CustomField } from "@/components/common/fields/cusField";
 import ActionButton from "@/components/common/button/actionButton";
 import onFormError from "@/utils/formError";
 import Link from "next/link";
-import { useAuthStore } from "@/store/authStore";
-import { usePathname, useRouter } from "next/navigation";
 
-export default function LoginFormComponent() {
-  const pathname = usePathname();
-  const portalName = pathname.split("/")[1];
-  const { login, isLoggingIn, isAuthenticated } = useAuth();
-  const { redirectFrom } = useAuthStore();
-  const router = useRouter();
-  const target = redirectFrom || `/${portalName}/dashboard`;
-  console.log(isAuthenticated);
+export default function LoginPage() {
+  const { login, isLoggingIn } = useAuth();
 
   const loginForm = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
   });
 
-  if (isAuthenticated) {
-    router.replace(target);
-  }
   const onSubmit = (data: LoginFormType) => {
     login(data);
   };

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import { useAuth } from "@/hooks/hooks";
@@ -12,16 +11,17 @@ import { Form } from "@/components/ui/custom_ui/form";
 import { CustomField } from "@/components/common/fields/cusField";
 import ActionButton from "@/components/common/button/actionButton";
 import onFormError from "@/utils/formError";
+import Link from "next/link";
 
 export default function LoginPage() {
-  const { useLogin, isLoading } = useAuth();
+  const { login, isLoggingIn } = useAuth();
 
   const loginForm = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = (data: LoginFormType) => {
-    useLogin(data);
+    login(data);
   };
 
   return (
@@ -48,16 +48,16 @@ export default function LoginPage() {
           <ActionButton
             buttonContent="Login"
             type="submit"
-            isPending={isLoading}
+            isPending={isLoggingIn}
             handleOpen={loginForm.handleSubmit(onSubmit)}
             btnStyle="w-full bg-blue-500 text-white"
           />
 
           <p className="mt-4 text-sm text-center">
             Don&apos;t have an account?{" "}
-            <a href="/register" className="text-blue-500 underline">
+            <Link href="/register" className="text-blue-500 underline">
               Register
-            </a>
+            </Link>
           </p>
         </form>
       </Form>

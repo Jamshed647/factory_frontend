@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -30,8 +31,6 @@ export const Password = ({
   mode = "normal",
 }: FieldPropsInterface) => {
   const [showPassword, setShowPassword] = useState(false); // Show/hide password input
-  const [passwordValue, setPasswordValue] = useState(""); // Local state to evaluate password strength
-  //   const { watch } = useFormContext();
 
   return (
     <FormField
@@ -49,13 +48,10 @@ export const Password = ({
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
-                placeholder={TextCaseFormat(`${placeholder}`)}
+                placeholder={TextCaseFormat(placeholder)}
                 {...field}
-                value={passwordValue}
-                onChange={(e) => {
-                  field.onChange(e);
-                  setPasswordValue(e.target.value);
-                }}
+                value={field.value ?? ""} // SSR-safe controlled input
+                onChange={(e) => field.onChange(e)}
               />
 
               <Button
@@ -73,13 +69,14 @@ export const Password = ({
               </Button>
             </div>
           </FormControl>
-          {/* {mode === "validate" && passwordValue && ( */}
+
+          {/* Password validation rules */}
           {mode === "validate" &&
-            passwordValue &&
-            !passwordRules.every((rule) => rule.test(passwordValue)) && (
+            field.value &&
+            !passwordRules.every((rule) => rule.test(field.value)) && (
               <ul className="mt-2 space-y-1 text-sm">
                 {passwordRules.map((rule, index) => {
-                  const passed = rule.test(passwordValue);
+                  const passed = rule.test(field.value);
                   return (
                     <li
                       key={index}
@@ -98,7 +95,8 @@ export const Password = ({
                 })}
               </ul>
             )}
-          {/* Error message (from react-hook-form) */}
+
+          {/* Error message from react-hook-form */}
           <FormMessage />
         </FormItem>
       )}

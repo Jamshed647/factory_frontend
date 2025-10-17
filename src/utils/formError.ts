@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FieldError } from "react-hook-form";
+import { FieldErrors, FieldError } from "react-hook-form";
 
-const onFormError = (errors: any) => {
+const onFormError = (errors: FieldErrors<any>) => {
   Object.entries(errors).forEach(([key, value]) => {
-    const err = value as FieldError;
-    console.error(`- ${key}: ${err?.message}`);
+    const err = value as FieldError | undefined;
+    if (err?.message) {
+      console.error(`- ${key}: ${err.message}`);
+    }
   });
 };
 

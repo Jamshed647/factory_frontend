@@ -1,35 +1,47 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
-type Role = "ADMIN" | "MANAGER" | "USER";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: Role;
-  permissions: string[];
-}
+import { devtools } from "zustand/middleware";
+import type { User, UserRole } from "@/types/user";
 
 interface UserStore {
   user: User | null;
   setUser: (user: User) => void;
   clearUser: () => void;
-  hasRole: (role: Role) => boolean;
-  hasPermission: (perm: string) => boolean;
+
+  // Role & permission helpers
+  hasRole: (role: UserRole) => boolean;
+  hasAnyRole: (roles: UserRole[]) => boolean;
+  hasPermission: (permission: string) => boolean;
+  hasAllPermissions: (permissions: string[]) => boolean;
 }
 
 export const useUserStore = create<UserStore>()(
-  persist(
+  devtools(
     (set, get) => ({
       user: null,
 
       setUser: (user) => set({ user }),
       clearUser: () => set({ user: null }),
 
-      hasRole: (role) => get().user?.role === role,
-      hasPermission: (perm) => get().user?.permissions.includes(perm) ?? false,
+      hasRole: (role) => {
+        const roles = get().user?.roles ?? [];
+        return roles.includes(role);
+      },
+
+      hasAnyRole: (roles) => {
+        const userRoles = get().user?.roles ?? [];
+        return roles.some((r) => userRoles.includes(r));
+      },
+
+      hasPermission: (permission) => {
+        const permissions = get().user?.permissions ?? [];
+        return permissions.includes(permission);
+      },
+
+      hasAllPermissions: (permissions) => {
+        const userPermissions = get().user?.permissions ?? [];
+        return permissions.every((p) => userPermissions.includes(p));
+      },
     }),
-    { name: "user" },
+    { name: "user-store" },
   ),
 );

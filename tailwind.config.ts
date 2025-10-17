@@ -10,12 +10,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"], // Default font
-        inter: ["var(--font-inter)"], // Inter font
-        advent: ["var(--font-adentPro)"], // Advent Pro font
-      },
-
+      // fontFamily: {
+      //   sans: ["var(--font-inter)", "sans-serif"], // Default font
+      //   inter: ["var(--font-inter)"], // Inter font
+      //   advent: ["var(--font-adentPro)"], // Advent Pro font
+      // },
+      //
       colors: {
         // Custom button colors
         button: {

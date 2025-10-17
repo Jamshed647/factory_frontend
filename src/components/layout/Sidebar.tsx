@@ -3,8 +3,8 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import { Menu, Button } from "antd";
-import { CircleChevronRight, LogOut } from "lucide-react";
-import ActionButton from "../common/button/actionButton";
+import { CircleChevronRight } from "lucide-react";
+import SignOutConfirmation from "./SignOutDialog";
 
 interface MenuItem {
   key: string;
@@ -88,12 +88,7 @@ export default function Sidebar({
           borderTop: "1px solid rgba(0,0,0,0.05)",
         }}
       >
-        <ActionButton
-          icon={<LogOut size={18} />}
-          buttonContent={collapsed ? "" : "Logout"}
-          tooltipContent={!collapsed ? "" : "Logout"}
-          variant="ghost"
-        />
+        <SignOutConfirmation collapsed={collapsed} />
       </div>
     </div>
   );

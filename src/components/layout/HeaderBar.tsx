@@ -14,7 +14,6 @@ export default function HeaderBar() {
         padding: "0 4px",
         background: "#fff",
         position: "relative",
-        zIndex: 101,
       }}
     >
       <Link href="/">

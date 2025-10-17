@@ -6,8 +6,9 @@ import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
 import { CircleQuestionMark, Cog, Factory } from "lucide-react";
+import { Protected } from "@/components/auth/protected-route";
 
-export default function DashboardLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;

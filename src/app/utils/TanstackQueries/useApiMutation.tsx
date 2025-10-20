@@ -4,6 +4,8 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { RemoveEmptyFields } from "@/utils/formatter/RemoveEmptyFields";
 import { useMutation } from "@tanstack/react-query";
 import { handleApiError } from "../utils/errorHandler";
+import { useAuthStore } from "@/store/authStore";
+import { useAuth } from "@/hooks/hooks";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -32,17 +34,12 @@ export const useApiMutation = ({
   isSuccessToast = true,
   isErrorToast = true,
 }: MutationConfig) => {
-  const user = {
-    user: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2MjI2ODI0MDAiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjI5NjQ0NjU5LCJleHAiOjE2Mjk2NDQ2NTl9",
-      portName: "admin",
-    },
-  };
-  //const user = useAuths();
-  const portalName: string = user?.user?.portName ?? "/admin";
+  const { accessToken } = useAuthStore();
+  const { signout } = useAuth();
+
+  const portalName: string = "/admin";
   if (token == "" || token == undefined || token == null) {
-    token = user?.user?.token;
+    token = accessToken as string;
   }
 
   return useMutation({
@@ -86,6 +83,7 @@ export const useApiMutation = ({
 
         if (!response.ok) {
           console.error("API mutation error", parsedData);
+          // signout();
           throw {
             response: {
               status: response.status,

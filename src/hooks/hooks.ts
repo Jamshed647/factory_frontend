@@ -245,7 +245,7 @@ export const useAuth = () => {
       clearUser();
       queryClient.clear();
       showToast("success", "Logged out successfully");
-      router.push("/login");
+      router.push("admin/login");
     },
     onError: () => {
       clearTokens();

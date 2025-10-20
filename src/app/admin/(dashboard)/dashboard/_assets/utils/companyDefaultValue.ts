@@ -8,6 +8,7 @@ export const companyDefaultValue = (
     address: defaultValues.address || "",
     email: defaultValues.email || "",
     phone: defaultValues.phone || "",
-    pincode: defaultValues.pincode || undefined,
+    pinCode: defaultValues.pinCode || undefined,
+    confirmPinCode: defaultValues.confirmPinCode || undefined,
   };
 };

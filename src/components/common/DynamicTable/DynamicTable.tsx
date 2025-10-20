@@ -91,7 +91,7 @@ interface Pagination {
 }
 interface DynamicTableProps {
   isLoading: boolean;
-  pagination: Pagination;
+  pagination?: Pagination;
   currentPage: number;
   setCurrentPage: (page: number) => void;
   config: TableConfig;
@@ -161,7 +161,7 @@ const DynamicTableWithPagination = ({
 
   return (
     <Table className="border border-collapse bg-[#FFFFFF]">
-      {pagination?.totalPages > 0 && (
+      {pagination && pagination?.totalPages > 0 && (
         <TableCaption className="p-4 mb-2 border">
           <CusPagination
             currentPage={currentPage}

@@ -49,7 +49,7 @@ export default function AdminLayout({
   return (
     <LayoutContainer
       Sidebar={Sidebar}
-      HeaderBar={<HeaderBar />}
+      HeaderBar={<HeaderBar role="employee" />}
       menuItems={menuItems}
     >
       {children}

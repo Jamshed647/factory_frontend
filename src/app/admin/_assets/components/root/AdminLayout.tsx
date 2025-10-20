@@ -49,7 +49,7 @@ export default function AdminLayout({
     <Protected roles="ADMIN">
       <LayoutContainer
         Sidebar={Sidebar}
-        HeaderBar={<HeaderBar />}
+        HeaderBar={<HeaderBar role="admin" />}
         menuItems={menuItems}
       >
         {children}

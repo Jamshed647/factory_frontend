@@ -3,9 +3,38 @@ import React from "react";
 import ActionButton from "@/components/common/button/actionButton";
 import { Edit2Icon } from "lucide-react";
 import CompanyFormComponent from "../form/companyForm";
+import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
+import { showToast } from "@/components/common/TostMessage/customTostMessage";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { companyDefaultValue } from "../../utils/companyDefaultValue";
+import { useForm } from "react-hook-form";
+import { CompanyFormType, companySchema } from "../../schema/companySchema";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CreateUserModal = () => {
   const [open, setOpen] = React.useState(false);
+  const queryClient = useQueryClient();
+
+  const companyForm = useForm<CompanyFormType>({
+    resolver: zodResolver(companySchema),
+    defaultValues: companyDefaultValue(),
+  });
+
+  const createUser = useApiMutation({
+    path: "api/v1/auth/company",
+    method: "POST",
+    onSuccess: (data) => {
+      showToast("success", data);
+      queryClient.invalidateQueries({ queryKey: ["getCompanyData"] });
+      setOpen(false);
+    },
+  });
+
+  const onSubmit = async (data: CompanyFormType) => {
+    const { confirmPinCode, ...cleanData } = data;
+
+    createUser.mutate(cleanData);
+  };
 
   return (
     <DialogWrapper
@@ -20,7 +49,11 @@ const CreateUserModal = () => {
       handleOpen={setOpen}
       title="Create User"
     >
-      <CompanyFormComponent />
+      <CompanyFormComponent
+        form={companyForm}
+        isPending={createUser.isPending}
+        onSubmit={onSubmit}
+      />
     </DialogWrapper>
   );
 };

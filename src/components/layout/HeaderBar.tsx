@@ -3,7 +3,7 @@ import { Bell, CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import ActionButton from "../common/button/actionButton";
 
-export default function HeaderBar() {
+export default function HeaderBar({ role }: { role: string }) {
   return (
     <div
       style={{
@@ -21,9 +21,13 @@ export default function HeaderBar() {
       </Link>
 
       <div className="flex gap-3">
-        <ActionButton icon={<Bell />} tooltipContent="Notifications" />
+        <Link className="!h-fit w-fit bg-red" href="#">
+          <ActionButton icon={<Bell />} tooltipContent="Notifications" />
+        </Link>
 
-        <ActionButton icon={<CircleUserRound />} />
+        <Link className="!h-fit w-fit bg-red" href={`/${role}/profile`}>
+          <ActionButton icon={<CircleUserRound />} />
+        </Link>
       </div>
     </div>
   );

@@ -7,61 +7,12 @@ export default function DashboardPage() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
-  interface UserDataType {
-    key: string;
-    name: string;
-    email: string;
-    factories_count: number;
-  }
-
-  interface PaginatedData<T> {
-    data: T[];
-    pagination: {
-      page: number;
-      total: number;
-      perPage: number;
-      totalPages: number;
-    };
-  }
-
-  const data: PaginatedData<UserDataType> = {
-    data: [
-      {
-        key: "1",
-        name: "John Brown",
-        email: "john.brown@example.com",
-        factories_count: 3,
-      },
-      {
-        key: "2",
-        name: "Jim Green",
-        email: "jim.green@example.com",
-        factories_count: 5,
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        email: "joe.black@example.com",
-        factories_count: 2,
-      },
-    ],
-    pagination: {
-      page: 1,
-      total: 3,
-      perPage: 10,
-      totalPages: 1,
-    },
-  };
-
-  const { data: x, isLoading } = useFetchData({
+  const { data, isLoading } = useFetchData({
     method: "GET",
     path: "api/v1/auth/company/users",
-    queryKey: "getUserData",
-    filterData: {
-      //  page: currentPage,
-    },
+    queryKey: "getCompanyData",
+    filterData: {},
   });
-  console.log("Fetch Data", x);
 
   // TODO: API Dashboard Content
   const stats = [

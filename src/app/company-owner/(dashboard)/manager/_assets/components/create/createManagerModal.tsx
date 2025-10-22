@@ -7,7 +7,6 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/hooks";
 import ManagerFormComponent from "../form/managerForm";
 import { ManagerFormType, managerSchema } from "../../schema/companySchema";
 import { managerDefaultValue } from "../../utils/managerDefaultValue";
@@ -15,7 +14,6 @@ import { managerDefaultValue } from "../../utils/managerDefaultValue";
 const CreateManagerModal = () => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
-  const { user } = useAuth();
 
   const managerForm = useForm<ManagerFormType>({
     resolver: zodResolver(managerSchema),
@@ -23,18 +21,19 @@ const CreateManagerModal = () => {
   });
 
   const createManager = useApiMutation({
-    path: "api/v1/auth/factory",
+    path: "api/v1/auth/manager",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getCompanyData"] });
+      queryClient.invalidateQueries({ queryKey: ["getManagerData"] });
       setOpen(false);
     },
   });
 
   const onSubmit = async (data: ManagerFormType) => {
-    createManager.mutate({ ...data, companyOwnerId: user?.id });
+    const { confirmPinCode, ...formData } = data;
+    createManager.mutate(formData);
   };
 
   return (

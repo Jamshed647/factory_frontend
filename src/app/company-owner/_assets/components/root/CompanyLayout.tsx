@@ -23,26 +23,26 @@ export default function CompanyLayout({
       icon: <Factory />,
       label: <Link href="/company-owner/manager">Manager</Link>,
     },
-    {
-      key: "/admin/settings",
-      icon: <Cog />,
-      label: "Settings",
-      children: [
-        {
-          key: "/admin/settings/general",
-          label: <Link href="/admin/settings/general">General</Link>,
-        },
-        {
-          key: "/admin/settings/users",
-          label: <Link href="/admin/settings/users">Users</Link>,
-        },
-      ],
-    },
-    {
-      key: "/admin/support",
-      icon: <CircleQuestionMark />,
-      label: <Link href="/admin/support">Support</Link>,
-    },
+    // {
+    //   key: "/admin/settings",
+    //   icon: <Cog />,
+    //   label: "Settings",
+    //   children: [
+    //     {
+    //       key: "/admin/settings/general",
+    //       label: <Link href="/admin/settings/general">General</Link>,
+    //     },
+    //     {
+    //       key: "/admin/settings/users",
+    //       label: <Link href="/admin/settings/users">Users</Link>,
+    //     },
+    //   ],
+    // },
+    // {
+    //   key: "/admin/support",
+    //   icon: <CircleQuestionMark />,
+    //   label: <Link href="/admin/support">Support</Link>,
+    // },
   ];
 
   return (

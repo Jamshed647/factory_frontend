@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 
 /* -------------------------------------------------------------------------- */
@@ -427,46 +428,66 @@ const urlSchema = (props: UrlValidationProps = {}) => {
 /*                                 Number Schema                              */
 /* -------------------------------------------------------------------------- */
 
-const numberSchema = (props: NumberValidationProps = {}) => {
-  const {
-    label = "Number",
-    required = true,
-    min,
-    max,
-    integerOnly,
-    positiveOnly,
-  } = props;
+interface NumberValidationProps {
+  label?: string;
+  required?: boolean;
+  min?: number;
+  max?: number;
+  integerOnly?: boolean;
+  positiveOnly?: boolean;
+  type?: "number" | "string";
+}
 
-  // Preprocess converts string/empty input to number | undefined
-  let schema: z.ZodType<number | undefined> = z.preprocess(
-    (val) => {
-      if (val === "" || val === null || val === undefined) return undefined;
-      const num = Number(val);
-      return isNaN(num) ? undefined : num;
-    },
-    z.number({ message: `${label} must be a valid number` }),
-  );
+export const numberSchema = <T extends "number" | "string" = "number">({
+  label = "Number",
+  required = true,
+  min,
+  max,
+  integerOnly,
+  positiveOnly,
+  type = "number" as T,
+}: NumberValidationProps & { type?: T } = {}): T extends "string"
+  ? z.ZodString
+  : z.ZodNumber => {
+  let schema: z.ZodType<any> =
+    type === "string"
+      ? z.string().regex(/^[+]?\d+$/, `${label} must contain only digits or +`)
+      : z.preprocess(
+          (val) => {
+            if (val === "" || val === null || val === undefined)
+              return undefined;
+            if (typeof val === "number") return val;
+            if (typeof val === "string") {
+              const num = Number(val);
+              return isNaN(num) ? val : num;
+            }
+            return val;
+          },
+          z.number({ message: `${label} must be a valid number` }),
+        );
 
-  if (integerOnly)
-    schema = schema.refine((v) => v === undefined || Number.isInteger(v), {
+  if (integerOnly && type === "number")
+    schema = schema.refine((v) => Number.isInteger(v as number), {
       message: `${label} must be an integer`,
     });
-  if (positiveOnly)
-    schema = schema.refine((v) => v === undefined || v >= 0, {
+
+  if (positiveOnly && type === "number")
+    schema = schema.refine((v) => (v as number) >= 0, {
       message: `${label} must be positive`,
     });
-  if (min !== undefined)
-    schema = schema.refine((v) => v === undefined || v >= min, {
+
+  if (min !== undefined && type === "number")
+    schema = schema.refine((v) => (v as number) >= min, {
       message: `${label} must be at least ${min}`,
     });
-  if (max !== undefined)
-    schema = schema.refine((v) => v === undefined || v <= max, {
+
+  if (max !== undefined && type === "number")
+    schema = schema.refine((v) => (v as number) <= max, {
       message: `${label} must be at most ${max}`,
     });
 
-  return required ? schema : schema.optional();
+  return (required ? schema : schema.optional()) as any;
 };
-
 /* -------------------------------------------------------------------------- */
 /*                                  Text Schema                               */
 /* -------------------------------------------------------------------------- */

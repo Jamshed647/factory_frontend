@@ -5,8 +5,10 @@ import { z } from "zod";
 export const managerSchema = z
   .object({
     name: validationSchemas.nameSchema(),
-    // email: validationSchemas.emailSchema({ required: false }),
-    phone: validationSchemas.phoneSchema(),
+    phone: validationSchemas.numberSchema({
+      label: "Contact Info",
+      type: "string",
+    }),
     factoryId: validationSchemas.textSchema({ label: "Factory Owner Id" }),
     pinCode: z.string().min(4).max(4),
     confirmPinCode: z.string().min(4).max(4),

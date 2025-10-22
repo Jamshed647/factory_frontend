@@ -9,7 +9,7 @@ const FactoriesOverview = () => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: "api/v1/auth/factory/manager/all",
+    path: "api/v1/auth/manager/all",
     queryKey: "getManagerData",
     filterData: {},
   });

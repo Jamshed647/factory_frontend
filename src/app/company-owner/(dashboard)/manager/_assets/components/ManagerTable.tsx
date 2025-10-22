@@ -51,10 +51,14 @@ const ManagerTable = ({
         config={{
           columns: [
             { key: "name", header: "Name" },
-            { key: "address", header: "Address" },
-            { key: "contactInfo", header: "Contact Info" },
+            { key: "phone", header: "Contact Info" },
             { key: "status", header: "Status" },
-            { key: "companyOwner?.name", header: "Company Owner" },
+            { key: "role", header: "Role" },
+            {
+              key: "factoryName",
+              header: "Factory Owner Id",
+              render: (item) => item?.factory?.name,
+            },
             {
               key: "action",
               header: "Action",

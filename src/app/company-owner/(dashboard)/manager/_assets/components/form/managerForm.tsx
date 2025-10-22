@@ -88,7 +88,7 @@ export default function ManagerFormComponent<T extends Record<string, any>>({
           buttonContent={operation}
           type="submit"
           isPending={isPending}
-          handleOpen={form.handleSubmit(onSubmit)}
+          handleOpen={form.handleSubmit(onSubmit, onFormError)}
           btnStyle="w-full bg-green-500 text-white"
         />
       </form>

@@ -25,7 +25,7 @@ const UpdateManagerModal = ({ data }: { data: any }) => {
   });
 
   const createManager = useApiMutation({
-    path: `api/v1/auth/factory/${data.id}`,
+    path: `api/v1/auth/manager/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);

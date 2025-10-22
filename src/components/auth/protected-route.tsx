@@ -8,39 +8,36 @@ import DataLoader from "../common/GlobalLoader/dataLoader";
 
 interface ProtectedProps {
   children: React.ReactNode;
-  roles: "ADMIN" | "MANAGER" | "USER";
+  roles:
+    | "PROJECT_OWNER"
+    | "COMPANY_OWNER"
+    | "MANAGER"
+    | "EMPLOYEE"
+    | "SALESMAN";
 }
 
 export function Protected({ children, roles }: ProtectedProps) {
   const router = useRouter();
-  const { isAuthenticated, user, isLoading } = useAuth();
+  const { isLoading, isAuthenticated, user } = useAuth();
   const { hasRole } = usePermission();
 
-  // Redirect if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace(`login`);
+    if (!isLoading && !isAuthenticated) {
+      router.replace("login");
     }
-  }, [isAuthenticated, isLoading, roles, router]);
+  }, [isLoading, isAuthenticated, router]);
 
-  // Loading state
-  if (isLoading) {
+  // Show loader while loading or user not fetched
+  if (isLoading || (isAuthenticated && !user)) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-500">
+      <div className="flex justify-center items-center h-screen">
         <DataLoader />
       </div>
     );
   }
 
-  // If user not authenticated
-  // if (!isAuthenticated || !user) {
-  // TODO: remove this
-  if (!isAuthenticated) {
-    return null;
-  }
-
-  // Role-based access control
-  if (roles && !roles !== hasRole(roles)) {
+  // Check permission only when user exists
+  if (user && !hasRole(roles)) {
     return (
       <div className="flex flex-col justify-center items-center h-screen text-red-500">
         <h2 className="mb-2 text-xl font-semibold">Access Denied</h2>
@@ -49,6 +46,5 @@ export function Protected({ children, roles }: ProtectedProps) {
     );
   }
 
-  // All good — render protected content
   return <>{children}</>;
 }

@@ -9,9 +9,9 @@ interface UserStore {
 
   // Role & permission helpers
   hasRole: (role: UserRole) => boolean;
-  hasAnyRole: (roles: UserRole[]) => boolean;
-  hasPermission: (permission: string) => boolean;
-  hasAllPermissions: (permissions: string[]) => boolean;
+  // hasAnyRole: (roles: UserRole[]) => boolean;
+  // hasPermission: (permission: string) => boolean;
+  // hasAllPermissions: (permissions: string[]) => boolean;
 }
 
 export const useUserStore = create<UserStore>()(
@@ -23,24 +23,24 @@ export const useUserStore = create<UserStore>()(
       clearUser: () => set({ user: null }),
 
       hasRole: (role) => {
-        const roles = get().user?.roles ?? [];
+        const roles = get().user?.role ?? "";
         return roles.includes(role);
       },
 
-      hasAnyRole: (roles) => {
-        const userRoles = get().user?.roles ?? [];
-        return roles.some((r) => userRoles.includes(r));
-      },
-
-      hasPermission: (permission) => {
-        const permissions = get().user?.permissions ?? [];
-        return permissions.includes(permission);
-      },
-
-      hasAllPermissions: (permissions) => {
-        const userPermissions = get().user?.permissions ?? [];
-        return permissions.every((p) => userPermissions.includes(p));
-      },
+      // hasAnyRole: (roles) => {
+      //   const userRoles = get().user?.roles ?? [];
+      //   return roles.some((r) => userRoles.includes(r));
+      // },
+      //
+      // hasPermission: (permission) => {
+      //   const permissions = get().user?.permissions ?? [];
+      //   return permissions.includes(permission);
+      // },
+      //
+      // hasAllPermissions: (permissions) => {
+      //   const userPermissions = get().user?.permissions ?? [];
+      //   return permissions.every((p) => userPermissions.includes(p));
+      // },
     }),
     { name: "user-store" },
   ),

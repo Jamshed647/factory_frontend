@@ -8,11 +8,11 @@ interface SignOutDialogProps {
 }
 
 const SignOutConfirmation = ({ collapsed }: SignOutDialogProps) => {
-  const { signout, isSigningOut } = useAuth();
+  const { signout } = useAuth();
   const [open, setOpen] = useState(false);
   return (
     <DialogWrapper
-      closer={false}
+      closer={true}
       open={open}
       handleOpen={setOpen}
       triggerContent={
@@ -23,7 +23,7 @@ const SignOutConfirmation = ({ collapsed }: SignOutDialogProps) => {
           tooltipContent={!collapsed ? "" : "Logout"}
           variant="ghost"
           handleOpen={() => signout()}
-          isPending={isSigningOut}
+          // isPending={isSigningOut}
         />
       }
       style="w-[30%] py-4"
@@ -41,7 +41,7 @@ const SignOutConfirmation = ({ collapsed }: SignOutDialogProps) => {
           icon={<LogOut size={18} />}
           buttonContent="Sign out"
           handleOpen={() => signout()}
-          isPending={isSigningOut}
+          //  isPending={isSigningOut}
         />
       </div>
     </DialogWrapper>

@@ -1,10 +1,5 @@
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseQueryOptions,
-} from "@tanstack/react-query";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUserStore } from "@/store/userStore";
 import { useAuthStore } from "@/store/authStore";
@@ -12,127 +7,84 @@ import { LoginFormType } from "@/components/auth/schema/login-schema";
 import { RegisterFormPayload } from "@/components/auth/schema/register-schema";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import type { User } from "@/types/user";
-import { getAccessToken, getRefreshToken } from "@/utils/cookie/tokenHandler";
-import { calcGeneratorDuration } from "framer-motion";
+import { getAccessToken, getRole } from "@/utils/cookie/tokenHandler";
 
-interface AuthResponse {
-  token: string;
-  refreshToken: string;
-  user: User;
-}
+// interface AuthResponse {
+//   token: string;
+//   refreshToken: string;
+//   role: string;
+//   user: User;
+// }
 
-/**
- * useAuth Hook
- * -----------------------
- * Handles login, registration, logout, and current user management
- * using React Query + Zustand store for persistent state.
- */
 export const useAuth = () => {
-  const accessToken = getAccessToken();
-  const refreshToken = getRefreshToken();
   const router = useRouter();
   const queryClient = useQueryClient();
   const pathname = usePathname();
   const portalName = pathname.split("/")[1];
 
-  // Zustand store actions and states
+  // Zustand stores
   const {
     isAuthenticated,
     isLoading: authLoading,
-    actions: { setTokens, clearTokens, setLoading, initAuth },
     redirectFrom,
+    actions,
   } = useAuthStore();
 
-  const target = redirectFrom || `/${portalName}/dashboard`;
   const { user, setUser, clearUser } = useUserStore();
 
-  // Initialize authentication state from cookies on mount
+  const accessToken = getAccessToken();
+  const role = getRole();
+  const target = redirectFrom || `/${portalName}/dashboard`;
+
+  // Initialize auth and fetch user
   useEffect(() => {
-    initAuth();
-  }, [initAuth]);
+    actions.initAuth();
+  }, [actions]);
 
-  /**
-   * Fetch current logged-in user
-   * --------------------------------
-   * Triggered automatically if user is authenticated and not yet loaded.
-   */
-  // const currentUserQuery = useQuery<User, Error>({
-  //   queryKey: ["currentUser"],
-  //   queryFn: async (): Promise<User> => {
-  //     const res = await fetch(
-  //       //TODO: update url
-  //       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/owner/me`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       },
-  //     );
-  //
-  //     if (!res.ok) throw new Error("Failed to fetch current user");
-  //
-  //     const json = await res.json();
-  //     return {
-  //       id: json?.data?.id,
-  //       firstName: json?.data?.firstName,
-  //       lastName: json?.data?.lastName,
-  //       email: json?.data?.email,
-  //       photo: json?.data?.photo,
-  //       status: json?.data?.status,
-  //       createdAt: json?.data?.createdAt,
-  //       updatedAt: json?.data?.updatedAt,
-  //     };
-  //   },
-  //   enabled: !!(isAuthenticated && accessToken && !user),
-  //   retry: false,
-  // } as UseQueryOptions<User, Error>);
+  // Fetch current user
+  const { data: userData, error } = useQuery({
+    queryKey: ["currentUser", accessToken],
+    queryFn: async (): Promise<User> => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/profile?role=${role}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+      if (!res.ok) throw new Error("Failed to fetch user");
+      const json = await res.json();
+      return json.data;
+    },
+    enabled: !!accessToken && !user,
+    retry: false,
+  });
 
-  // Sync Zustand user state with query result
+  // Sync user state
   useEffect(() => {
     if (!accessToken) {
+      actions.clearTokens();
       clearUser();
-      clearTokens();
       return;
     }
 
-    if (!authLoading && accessToken && refreshToken) {
-      setTokens({ accessToken, refreshToken });
-      router.replace(target);
+    if (userData) setUser(userData);
+    if (error) {
+      actions.clearTokens();
+      clearUser();
     }
+  }, [userData, error, accessToken, setUser, clearUser, actions]);
 
-    // if (currentUserQuery.data) {
-    //   setUser(currentUserQuery.data);
-    //   setLoading(false);
-    //
-    //   // setTokens({ accessToken: accessToken, refreshToken: getRefreshToken() });
-    // }
-    // if (currentUserQuery.error) {
-    //   clearTokens();
-    //   clearUser();
-    // }
-  }, [
-    // currentUserQuery.data,
-    // currentUserQuery.error,
-    // setUser,
-    // setLoading,
-    clearTokens,
-    clearUser,
-  ]);
-
-  /**
-   * Login Mutation
-   * -------------------------
-   * Authenticates user and stores tokens + user in Zustand.
-   */
-  const loginMutation = useMutation<AuthResponse, Error, LoginFormType>({
-    mutationFn: async (data, role) => {
+  // Login mutation
+  const loginMutation = useMutation({
+    mutationFn: async (credentials: LoginFormType) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/owner/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/authorization/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(credentials),
         },
       );
 
@@ -147,39 +99,29 @@ export const useAuth = () => {
       return {
         token: json.data.accessToken,
         refreshToken: json.data.refreshToken,
-        user: {
-          id: json.data.id,
-          firstName: json.data.firstName,
-          lastName: json.data.lastName,
-          email: json.data.email,
-          photo: json.data.photo,
-          status: json.data.status,
-          createdAt: json.data.createdAt,
-          updatedAt: json.data.updatedAt,
-        },
+        role: credentials.role,
+        user: json.data.user || { id: json.data.id, phone: json.data.phone },
       };
     },
     onSuccess: (data) => {
-      showToast("success", "Login Success");
-      setTokens({ accessToken: data.token, refreshToken: data.refreshToken });
-      setUser(data.user);
-      queryClient.setQueryData(["currentUser"], data.user);
-      router.replace(target);
+      actions.setTokens({
+        accessToken: data.token,
+        refreshToken: data.refreshToken,
+        role: data.role || "",
+      });
+
+      // Wait for profile to load before redirecting
+      queryClient.refetchQueries({ queryKey: ["currentUser"] }).then(() => {
+        showToast("success", "Login successful");
+        router.replace(target);
+      });
     },
     onError: (err: Error) => showToast("error", err.message),
   });
 
-  /**
-   * Register Mutation
-   * -------------------------
-   * Registers a new user and logs them in automatically.
-   */
-  const registerMutation = useMutation<
-    AuthResponse,
-    Error,
-    RegisterFormPayload
-  >({
-    mutationFn: async (data) => {
+  // Register mutation
+  const registerMutation = useMutation({
+    mutationFn: async (data: RegisterFormPayload) => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/owner/signup`,
         {
@@ -197,77 +139,32 @@ export const useAuth = () => {
       }
 
       const json = await res.json();
-      return {
-        token: json.data.accessToken,
-        refreshToken: json.data.refreshToken,
-        user: {
-          id: json.data.id,
-          firstName: json.data.firstName,
-          lastName: json.data.lastName,
-          email: json.data.email,
-          photo: json.data.photo,
-          status: json.data.status,
-          createdAt: json.data.createdAt,
-          updatedAt: json.data.updatedAt,
-        },
-      };
+      return json.data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       showToast("success", "Registration Successful");
-      setTokens({ accessToken: data.token, refreshToken: data.refreshToken });
-      setUser(data.user);
-      queryClient.setQueryData(["currentUser"], data.user);
-      router.push("/");
+      router.push("/login");
     },
     onError: (err: Error) => showToast("error", err.message),
   });
 
-  /**
-   * Logout Mutation
-   * -------------------------
-   * Logs the user out, clears tokens and user state.
-   */
-  const signOutMutation = useMutation({
-    mutationFn: async () => {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/owner/logout`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token") || ""}`,
-          },
-        },
-      );
-    },
-    onSuccess: () => {
-      clearTokens();
-      clearUser();
-      queryClient.clear();
-      showToast("success", "Logged out successfully");
-      router.push("admin/login");
-    },
-    onError: () => {
-      clearTokens();
-      clearUser();
-      queryClient.clear();
-      router.push("/login");
-    },
-  });
+  // Logout
+  const signOut = () => {
+    actions.clearTokens();
+    clearUser();
+    queryClient.clear();
+    showToast("success", "Logged out successfully");
+    router.push("/admin/login");
+  };
 
-  // Expose states and actions to components
   return {
     user,
     isAuthenticated,
-    isLoading: authLoading,
-    // isLoading: authLoading || currentUserQuery.isLoading,
-
-    login: (credentials: LoginFormType) => loginMutation.mutate(credentials),
-    register: (data: RegisterFormPayload) => registerMutation.mutate(data),
-    signout: () => signOutMutation.mutate(),
-
+    isLoading: authLoading || loginMutation.isPending,
+    login: loginMutation.mutate,
+    register: registerMutation.mutate,
+    signout: signOut,
     isLoggingIn: loginMutation.isPending,
     isRegistering: registerMutation.isPending,
-    isSigningOut: signOutMutation.isPending,
   };
 };

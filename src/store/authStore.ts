@@ -10,6 +10,7 @@ import {
 interface AuthStore {
   isAuthenticated: boolean;
   isLoading: boolean;
+  role: string | null;
   accessToken: string | null;
   refreshToken: string | null;
   redirectFrom: string | null;
@@ -29,6 +30,7 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: true,
       accessToken: null,
+      role: null,
       refreshToken: null,
       redirectFrom: null,
 
@@ -37,6 +39,7 @@ export const useAuthStore = create<AuthStore>()(
         setTokens: (tokens) => {
           setToken(tokens);
           set({
+            role: tokens.role,
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
             isAuthenticated: true,
@@ -49,6 +52,7 @@ export const useAuthStore = create<AuthStore>()(
           set({
             accessToken: null,
             refreshToken: null,
+            role: null,
             isAuthenticated: false,
             isLoading: false,
             redirectFrom: null,
@@ -64,6 +68,7 @@ export const useAuthStore = create<AuthStore>()(
           set({
             accessToken: tokens?.accessToken ?? null,
             refreshToken: tokens?.refreshToken ?? null,
+            role: tokens?.role ?? null,
             isAuthenticated: !!tokens?.accessToken,
             isLoading: false,
           });

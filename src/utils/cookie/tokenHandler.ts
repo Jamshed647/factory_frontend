@@ -7,6 +7,7 @@ export const COOKIE_NAMES = {
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
+  role: string;
 }
 
 /**
@@ -39,6 +40,11 @@ export const getToken = (): AuthTokens | null => {
 export const getAccessToken = (): string | null => {
   const tokens = getToken();
   return tokens?.accessToken ?? null;
+};
+
+export const getRole = (): string | null => {
+  const tokens = getToken();
+  return tokens?.role ?? null;
 };
 
 /**

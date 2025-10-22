@@ -1,13 +1,19 @@
-export type UserRole = "ADMIN" | "MANAGER" | "USER";
+export type UserRole =
+  | "PROJECT_OWNER"
+  | "COMPANY_OWNER"
+  | "MANAGER"
+  | "EMPLOYEE"
+  | "SALESMAN";
 
 export interface User {
   id: string;
   firstName: string;
   lastName?: string;
+  phone?: string;
   email?: string;
   photo?: string;
   status: "ACTIVE" | "INACTIVE";
-  roles?: UserRole[];
+  role?: string;
   permissions?: string[];
   createdAt?: string;
   updatedAt?: string;

@@ -13,7 +13,7 @@ import ActionButton from "@/components/common/button/actionButton";
 import onFormError from "@/utils/formError";
 import Link from "next/link";
 
-export default function LoginFormComponent() {
+export default function LoginFormComponent({ role }: { role: string }) {
   const { login, isLoggingIn } = useAuth();
 
   const loginForm = useForm<LoginFormType>({
@@ -21,7 +21,7 @@ export default function LoginFormComponent() {
   });
 
   const onSubmit = (data: LoginFormType) => {
-    login(data);
+    login({ ...data, role: role });
   };
 
   return (
@@ -40,7 +40,7 @@ export default function LoginFormComponent() {
             form={loginForm}
           />
           <CustomField.Text
-            name="password"
+            name="pinCode"
             labelName="Password"
             placeholder="Enter your password"
             form={loginForm}

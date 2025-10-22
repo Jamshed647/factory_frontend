@@ -1,16 +1,18 @@
 "use client";
 import React from "react";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-import FactoryTable from "./_assets/components/FactoryTable";
+import { useAuth } from "@/hooks/hooks";
+import EmployeeTable from "./_assets/components/EmployeeTable";
 
 export default function DashboardPage() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const { user } = useAuth();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: "api/v1/auth/factory",
-    queryKey: "getFactoryData",
+    path: `api/v1/auth/salesman/factory/${user?.factoryId}`,
+    queryKey: "getSalesmanData",
     filterData: {},
   });
 
@@ -23,7 +25,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Company Dashboard</h1>
+      <h1 className="text-3xl font-bold">Salesman Dashboard</h1>
 
       {/* Overview */}
       <div className="grid grid-cols-1 gap-6 my-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -45,7 +47,7 @@ export default function DashboardPage() {
 
       {/* User Table */}
       <div className="mt-10">
-        <FactoryTable
+        <EmployeeTable
           searchText={searchText}
           setSearchText={setSearchText}
           data={data}

@@ -14,12 +14,12 @@ export default function CompanyLayout({
 }) {
   const menuItems = [
     {
-      key: "/admin/dashboard",
+      key: "/company-owner/dashboard",
       icon: <PieChartOutlined />,
       label: <Link href="/company-owner/dashboard">Dashboard</Link>,
     },
     {
-      key: "/manager",
+      key: "/company-owner/manager",
       icon: <Factory />,
       label: <Link href="/company-owner/manager">Manager</Link>,
     },

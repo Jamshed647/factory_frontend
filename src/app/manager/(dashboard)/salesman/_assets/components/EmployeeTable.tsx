@@ -5,9 +5,9 @@ import React from "react";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import { CustomField } from "@/components/common/fields/cusField";
-import UpdateCompanyModal from "./update/updateCompanyModal";
 import DeleteCompanyModal from "./delete/deleteCompanyModal";
-import CreateFactoryModal from "./create/createFactoryModal";
+import CreateEmployeeModal from "./create/createEmployeeModal";
+import UpdateEmployeeModal from "./update/updateEmployeeModal";
 
 interface TableProps {
   data: any;
@@ -18,7 +18,7 @@ interface TableProps {
   setCurrentPage: (page: number) => void;
 }
 
-const FactoryTable = ({
+const EmployeeTable = ({
   data,
   isLoading,
   searchText,
@@ -30,14 +30,14 @@ const FactoryTable = ({
     <div className="rounded-md border shadow-lg">
       {/* Table Header */}
       <div className="flex justify-between items-center p-3">
-        <h2 className="text-2xl font-bold">Factory List</h2>
+        <h2 className="text-2xl font-bold">Salesman List</h2>
         <div className="flex gap-x-2 items-center">
           <CustomField.CommonSearch
             width="w-full"
             searchText={searchText}
             setSearchText={setSearchText}
           />
-          <CreateFactoryModal />
+          <CreateEmployeeModal />
         </div>
       </div>
 
@@ -51,16 +51,19 @@ const FactoryTable = ({
         config={{
           columns: [
             { key: "name", header: "Name" },
-            { key: "address", header: "Address" },
-            { key: "contactInfo", header: "Contact Info" },
+            { key: "phone", header: "Contact Info" },
             { key: "status", header: "Status" },
-            { key: "companyOwner?.name", header: "Company Owner" },
+            {
+              key: "factory",
+              header: "Factory",
+              render: (user) => user.factory?.name,
+            },
             {
               key: "action",
               header: "Action",
               render: (user) => (
                 <ResponsiveButtonGroup>
-                  <UpdateCompanyModal data={user} />
+                  <UpdateEmployeeModal data={user} />
                   <DeleteCompanyModal data={user} />
                 </ResponsiveButtonGroup>
               ),
@@ -72,4 +75,4 @@ const FactoryTable = ({
   );
 };
 
-export default FactoryTable;
+export default EmployeeTable;

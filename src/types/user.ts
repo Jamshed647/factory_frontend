@@ -7,14 +7,23 @@ export type UserRole =
 
 export interface User {
   id: string;
-  firstName: string;
+  name?: string;
+  firstName?: string;
   lastName?: string;
   phone?: string;
   email?: string;
   photo?: string;
+  factoryId?: string;
+  companyOwnerId?: string;
   status: "ACTIVE" | "INACTIVE";
   role?: string;
   permissions?: string[];
   createdAt?: string;
   updatedAt?: string;
+  factory?: {
+    id?: string;
+    name?: string;
+    address?: string;
+    status?: "ACTIVE" | "INACTIVE";
+  };
 }

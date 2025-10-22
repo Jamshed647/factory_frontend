@@ -7,34 +7,37 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import FactoryFormComponent from "../form/factoryForm";
-import { FactoryFormType, factorySchema } from "../../schema/companySchema";
-import { factoryDefaultValue } from "../../utils/factoryDefaultValue";
 import { useAuth } from "@/hooks/hooks";
+import { EmployeeFormType, employeeSchema } from "../../schema/employeeSchema";
+import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
+import EmployeeFormComponent from "../form/employeForm";
 
-const CreateFactoryModal = () => {
+const CreateEmployeeModal = () => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
-  const companyForm = useForm<FactoryFormType>({
-    resolver: zodResolver(factorySchema),
-    defaultValues: factoryDefaultValue(),
+  const employeeForm = useForm<EmployeeFormType>({
+    resolver: zodResolver(employeeSchema),
+    defaultValues: employeeDefaultValue(),
   });
 
   const createFactory = useApiMutation({
-    path: "api/v1/auth/factory",
+    path: "api/v1/auth/salesman",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
+      employeeForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getCompanyData"] });
+      queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
       setOpen(false);
     },
   });
 
-  const onSubmit = async (data: FactoryFormType) => {
-    createFactory.mutate({ ...data, companyOwnerId: user?.id });
+  const onSubmit = async (data: EmployeeFormType) => {
+    const { confirmPinCode, ...rest } = data;
+
+    createFactory.mutate({ ...rest, factoryId: user?.factoryId });
   };
 
   return (
@@ -43,15 +46,15 @@ const CreateFactoryModal = () => {
         <ActionButton
           btnStyle="bg-blue-500 text-white"
           icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Create Factory"
+          buttonContent="Create Salesman"
         />
       }
       open={open}
       handleOpen={setOpen}
-      title="Create factory"
+      title="Create Salesman"
     >
-      <FactoryFormComponent
-        form={companyForm}
+      <EmployeeFormComponent
+        form={employeeForm}
         isPending={createFactory.isPending}
         onSubmit={onSubmit}
       />
@@ -59,4 +62,4 @@ const CreateFactoryModal = () => {
   );
 };
 
-export default CreateFactoryModal;
+export default CreateEmployeeModal;

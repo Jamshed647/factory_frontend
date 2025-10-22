@@ -9,23 +9,23 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
-  FactoryUpdateFormType,
-  factoryUpdateSchema,
-} from "../../schema/companySchema";
-import FactoryFormComponent from "../form/factoryForm";
-import { factoryDefaultValue } from "../../utils/factoryDefaultValue";
+  EmployeeUpdateFormType,
+  employeeUpdateSchema,
+} from "../../schema/employeeSchema";
+import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
+import EmployeeFormComponent from "../form/employeForm";
 
-const UpdateCompanyModal = ({ data }: { data: any }) => {
+const UpdateEmployeeModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const companyUpdateForm = useForm<FactoryUpdateFormType>({
-    resolver: zodResolver(factoryUpdateSchema),
-    defaultValues: factoryDefaultValue(data),
+  const companyUpdateForm = useForm<EmployeeUpdateFormType>({
+    resolver: zodResolver(employeeUpdateSchema),
+    defaultValues: employeeDefaultValue(data),
   });
 
-  const createUser = useApiMutation({
-    path: `api/v1/auth/factory/${data.id}`,
+  const updateEmployee = useApiMutation({
+    path: `api/v1/auth/employee/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
@@ -34,8 +34,8 @@ const UpdateCompanyModal = ({ data }: { data: any }) => {
     },
   });
 
-  const onSubmit = async (data: FactoryUpdateFormType) => {
-    createUser.mutate(data);
+  const onSubmit = async (data: EmployeeUpdateFormType) => {
+    updateEmployee.mutate(data);
   };
 
   return (
@@ -45,14 +45,14 @@ const UpdateCompanyModal = ({ data }: { data: any }) => {
       handleOpen={setOpen}
       title="Update Factory"
     >
-      <FactoryFormComponent
+      <EmployeeFormComponent
         operation="update"
         form={companyUpdateForm}
-        isPending={createUser.isPending}
+        isPending={updateEmployee.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>
   );
 };
 
-export default UpdateCompanyModal;
+export default UpdateEmployeeModal;

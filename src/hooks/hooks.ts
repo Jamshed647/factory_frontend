@@ -9,13 +9,6 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import type { User } from "@/types/user";
 import { getAccessToken, getRole } from "@/utils/cookie/tokenHandler";
 
-// interface AuthResponse {
-//   token: string;
-//   refreshToken: string;
-//   role: string;
-//   user: User;
-// }
-
 export const useAuth = () => {
   const router = useRouter();
   const queryClient = useQueryClient();

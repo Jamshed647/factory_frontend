@@ -14,35 +14,35 @@ export default function CompanyLayout({
 }) {
   const menuItems = [
     {
-      key: "/admin/dashboard",
+      key: "/manager/employees",
       icon: <PieChartOutlined />,
-      label: <Link href="/admin/dashboard">Dashboard</Link>,
+      label: <Link href="/manager/employees">Employees</Link>,
     },
     {
-      key: "/factories-overview",
+      key: "/manager/salesman",
       icon: <Factory />,
-      label: <Link href="/admin/factories-overview">Factories Overview</Link>,
+      label: <Link href="/manager/salesman">Sales Man</Link>,
     },
-    {
-      key: "/admin/settings",
-      icon: <Cog />,
-      label: "Settings",
-      children: [
-        {
-          key: "/admin/settings/general",
-          label: <Link href="/admin/settings/general">General</Link>,
-        },
-        {
-          key: "/admin/settings/users",
-          label: <Link href="/admin/settings/users">Users</Link>,
-        },
-      ],
-    },
-    {
-      key: "/admin/support",
-      icon: <CircleQuestionMark />,
-      label: <Link href="/admin/support">Support</Link>,
-    },
+    // {
+    //   key: "/admin/settings",
+    //   icon: <Cog />,
+    //   label: "Settings",
+    //   children: [
+    //     {
+    //       key: "/admin/settings/general",
+    //       label: <Link href="/admin/settings/general">General</Link>,
+    //     },
+    //     {
+    //       key: "/admin/settings/users",
+    //       label: <Link href="/admin/settings/users">Users</Link>,
+    //     },
+    //   ],
+    // },
+    // {
+    //   key: "/admin/support",
+    //   icon: <CircleQuestionMark />,
+    //   label: <Link href="/admin/support">Support</Link>,
+    // },
   ];
 
   return (

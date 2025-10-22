@@ -6,9 +6,7 @@ export const factoryDefaultValue = (
   return {
     name: defaultValues.name || "",
     address: defaultValues.address || "",
-    email: defaultValues.email || "",
     contactInfo: defaultValues.contactInfo || "",
-    factoryStatus: defaultValues.factoryStatus || "",
     //  companyOwnerId: defaultValues.companyOwnerId || "",
   };
 };

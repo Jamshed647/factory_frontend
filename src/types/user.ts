@@ -16,7 +16,7 @@ export interface User {
   factoryId?: string;
   companyOwnerId?: string;
   status: "ACTIVE" | "INACTIVE";
-  role?: string;
+  role: UserRole;
   permissions?: string[];
   createdAt?: string;
   updatedAt?: string;

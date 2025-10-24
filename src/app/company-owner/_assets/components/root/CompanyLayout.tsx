@@ -4,7 +4,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { CircleQuestionMark, Cog, Factory } from "lucide-react";
+import { CircleQuestionMark, Cog, Factory, Users } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 
 export default function CompanyLayout({
@@ -19,30 +19,35 @@ export default function CompanyLayout({
       label: <Link href="/company-owner/dashboard">Dashboard</Link>,
     },
     {
+      key: "/company-owner/factory",
+      icon: <Factory />,
+      label: <Link href="/company-owner/factory">Factory</Link>,
+    },
+    {
       key: "/company-owner/manager",
       icon: <Factory />,
       label: <Link href="/company-owner/manager">Manager</Link>,
     },
-    // {
-    //   key: "/admin/settings",
-    //   icon: <Cog />,
-    //   label: "Settings",
-    //   children: [
-    //     {
-    //       key: "/admin/settings/general",
-    //       label: <Link href="/admin/settings/general">General</Link>,
-    //     },
-    //     {
-    //       key: "/admin/settings/users",
-    //       label: <Link href="/admin/settings/users">Users</Link>,
-    //     },
-    //   ],
-    // },
-    // {
-    //   key: "/admin/support",
-    //   icon: <CircleQuestionMark />,
-    //   label: <Link href="/admin/support">Support</Link>,
-    // },
+    {
+      key: "/company-owner/user-management",
+
+      icon: <Users />,
+      label: "User Management",
+      children: [
+        {
+          key: "/company-owner/user-management/employee",
+          label: (
+            <Link href="/company-owner/user-management/employee">Employee</Link>
+          ),
+        },
+        {
+          key: "/company-owner/user-management/salesman",
+          label: (
+            <Link href="/company-owner/user-management/salesman">Salesman</Link>
+          ),
+        },
+      ],
+    },
   ];
 
   return (

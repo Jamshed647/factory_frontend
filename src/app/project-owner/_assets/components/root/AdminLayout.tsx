@@ -4,7 +4,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { CircleQuestionMark, Cog, Factory } from "lucide-react";
+import { CircleQuestionMark, Cog, Factory, Users } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 
 export default function AdminLayout({
@@ -14,34 +14,45 @@ export default function AdminLayout({
 }) {
   const menuItems = [
     {
-      key: "/admin/dashboard",
+      key: "/project-owner/dashboard",
       icon: <PieChartOutlined />,
-      label: <Link href="/admin/dashboard">Dashboard</Link>,
+      label: <Link href="/project-owner/dashboard">Dashboard</Link>,
     },
     {
-      key: "/factories-overview",
+      key: "/project-owner/company",
       icon: <Factory />,
-      label: <Link href="/admin/factories-overview">Factories Overview</Link>,
+      label: <Link href="/project-owner/company">Company</Link>,
     },
     {
-      key: "/admin/settings",
-      icon: <Cog />,
-      label: "Settings",
+      key: "/project-owner/factory",
+      icon: <Factory />,
+      label: <Link href="/project-owner/factory">Factory</Link>,
+    },
+    {
+      key: "/project-owner/manager",
+      icon: <Factory />,
+      label: <Link href="/project-owner/manager">Manager</Link>,
+    },
+
+    {
+      key: "/project-owner/user-management",
+
+      icon: <Users />,
+      label: "User Management",
       children: [
         {
-          key: "/admin/settings/general",
-          label: <Link href="/admin/settings/general">General</Link>,
+          key: "/project-owner/user-management/employee",
+          label: (
+            <Link href="/project-owner/user-management/employee">Employee</Link>
+          ),
         },
         {
-          key: "/admin/settings/users",
-          label: <Link href="/admin/settings/users">Users</Link>,
+          key: "/project-owner/user-management/salesman",
+          label: (
+            <Link href="/project-owner/user-management/salesman">Salesman</Link>
+          ),
         },
       ],
-    },
-    {
-      key: "/admin/support",
-      icon: <CircleQuestionMark />,
-      label: <Link href="/admin/support">Support</Link>,
     },
   ];
 

@@ -45,7 +45,7 @@ const EmployeeTable = ({
       <DynamicTableWithPagination
         data={data?.data}
         isLoading={isLoading}
-        //  pagination={data?.pagination}
+        pagination={data?.pagination}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         config={{

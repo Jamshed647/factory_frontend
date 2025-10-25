@@ -11,7 +11,10 @@ const FactoriesOverview = () => {
     method: "GET",
     path: "api/v1/auth/manager/all",
     queryKey: "getManagerData",
-    filterData: {},
+    filterData: {
+      search: searchText,
+      page: currentPage,
+    },
   });
 
   return (

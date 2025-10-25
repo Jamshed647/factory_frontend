@@ -8,6 +8,7 @@ import { CustomField } from "@/components/common/fields/cusField";
 import CreateCompanyModal from "./create/createCompanyModal";
 import UpdateCompanyModal from "./update/updateCompanyModal";
 import DeleteCompanyModal from "./delete/deleteCompanyModal";
+import Link from "next/link";
 
 interface TableProps {
   data: any;
@@ -47,7 +48,13 @@ const UserTable = ({
         setCurrentPage={setCurrentPage}
         config={{
           columns: [
-            { key: "name", header: "Name" },
+            {
+              key: "name",
+              header: "Name",
+              render: (user) => (
+                <Link href={`company/${user.id}`}>{user.name}</Link>
+              ),
+            },
             { key: "email", header: "Email" },
             { key: "factories_count", header: "Factories Count" },
             {

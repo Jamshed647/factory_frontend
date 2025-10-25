@@ -1,19 +1,20 @@
 "use client";
 import React from "react";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-import { useAuth } from "@/hooks/hooks";
 import EmployeeTable from "./_assets/components/EmployeeTable";
 
 export default function DashboardPage() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
-  const { user } = useAuth();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `api/v1/auth/employee/factory/${user?.factoryId}`,
+    path: `api/v1/auth/employee/all`,
     queryKey: "getEmployeeData",
-    filterData: {},
+    filterData: {
+      search: searchText,
+      page: currentPage,
+    },
   });
 
   return (

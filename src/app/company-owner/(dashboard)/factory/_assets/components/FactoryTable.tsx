@@ -8,6 +8,7 @@ import { CustomField } from "@/components/common/fields/cusField";
 import UpdateCompanyModal from "./update/updateCompanyModal";
 import DeleteCompanyModal from "./delete/deleteCompanyModal";
 import CreateFactoryModal from "./create/createFactoryModal";
+import Link from "next/link";
 
 interface TableProps {
   data: any;
@@ -45,12 +46,18 @@ const FactoryTable = ({
       <DynamicTableWithPagination
         data={data?.data}
         isLoading={isLoading}
-        //  pagination={data?.pagination}
+        pagination={data?.pagination}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         config={{
           columns: [
-            { key: "name", header: "Name" },
+            {
+              key: "name",
+              header: "Name",
+              render: (user) => (
+                <Link href={`factory/${user.id}`}>{user.name}</Link>
+              ),
+            },
             { key: "address", header: "Address" },
             { key: "contactInfo", header: "Contact Info" },
             { key: "status", header: "Status" },

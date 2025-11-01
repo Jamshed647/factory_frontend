@@ -10,7 +10,7 @@ export default function DashboardPage() {
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: "auth/company/users",
-    queryKey: "getCompanyData",
+    queryKey: "getCompanyTableData",
     filterData: {
       search: searchText,
       page: currentPage,

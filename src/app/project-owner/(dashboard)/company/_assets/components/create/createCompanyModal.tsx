@@ -26,7 +26,7 @@ const CreateUserModal = () => {
     onSuccess: (data) => {
       companyForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getCompanyData"] });
+      queryClient.invalidateQueries({ queryKey: ["getCompanyTableData"] });
       setOpen(false);
     },
   });

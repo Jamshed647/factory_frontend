@@ -58,7 +58,7 @@ const CompanyTable = ({
             { key: "phone", header: "Phone" },
             { key: "email", header: "Email" },
             { key: "address", header: "Address" },
-            { key: "factories_count", header: "Factories Count" },
+            // { key: "factories_count", header: "Factories Count" },
             {
               key: "action",
               header: "Action",

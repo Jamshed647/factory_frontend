@@ -14,6 +14,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { companyDefaultValue } from "../../utils/companyDefaultValue";
+import { getChangedFields } from "@/utils/formatter/formChangedValues";
 
 const UpdateCompanyModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
@@ -29,13 +30,15 @@ const UpdateCompanyModal = ({ data }: { data: any }) => {
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getCompanyData"] });
+      queryClient.invalidateQueries({ queryKey: ["getCompanyTableData"] });
       setOpen(false);
     },
   });
 
   const onSubmit = async (data: CompanyUpdateFormType) => {
-    createUser.mutate(data);
+    const updatedData = getChangedFields(companyUpdateForm, data);
+
+    createUser.mutate(updatedData);
   };
 
   return (

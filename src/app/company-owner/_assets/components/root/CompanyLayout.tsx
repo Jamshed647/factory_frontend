@@ -4,7 +4,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { CircleQuestionMark, Cog, Factory, Users } from "lucide-react";
+import { Factory, Users } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 
 export default function CompanyLayout({
@@ -54,7 +54,7 @@ export default function CompanyLayout({
     <Protected roles="COMPANY_OWNER">
       <LayoutContainer
         Sidebar={Sidebar}
-        HeaderBar={<HeaderBar role="company-owner" />}
+        HeaderBar={<HeaderBar />}
         menuItems={menuItems}
       >
         {children}

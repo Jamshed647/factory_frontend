@@ -34,9 +34,7 @@ const CreateFactoryModal = ({ companyOwnerId }: { companyOwnerId: string }) => {
   });
 
   const onSubmit = async (data: FactoryFormType) => {
-    const { factoryStatus, ...cleanData } = data;
-    console.log("companyOwnerId", { ...cleanData, companyOwnerId });
-    createFactory.mutate({ ...cleanData, companyOwnerId });
+    createFactory.mutate({ ...data, companyOwnerId });
   };
 
   return (

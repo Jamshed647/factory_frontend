@@ -4,9 +4,12 @@ import { z } from "zod";
 // Register schema
 export const factorySchema = z.object({
   name: validationSchemas.nameSchema(),
-  address: validationSchemas.textSchema({ label: "Address" }),
+  address: validationSchemas.textSchema({ label: "Address", required: false }),
   phone: validationSchemas.phoneSchema(),
-  status: validationSchemas.textSchema({ label: "Factory Status" }),
+  status: validationSchemas.textSchema({
+    label: "Factory Status",
+    required: false,
+  }),
   // email: validationSchemas.emailSchema({ required: false }),
   //  companyOwnerId: validationSchemas.textSchema({ label: "Company Owner Id" }),
 });

@@ -6,6 +6,7 @@ import CreateFactoryModal from "./create/createFactoryModal";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { StatusWithIcon } from "@/components/common/Badge/status_point";
 import UpdateFactoryModal from "./update/updateFactoryModal";
+import Link from "next/link";
 
 const CompaniesFactoryTable = ({ id }: { id: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -34,9 +35,11 @@ const CompaniesFactoryTable = ({ id }: { id: string }) => {
             {
               key: "name",
               header: "Name",
-              // render: (user) => (
-              //   <Link href={`factory/${user.id}`}>{user.name}</Link>
-              // ),
+              render: (user) => (
+                <Link href={`/project-owner/factory/${user.id}`}>
+                  {user.name}
+                </Link>
+              ),
             },
             { key: "address", header: "Address" },
             { key: "phone", header: "Contact Info" },

@@ -1,8 +1,12 @@
 "use client";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
+import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
+import CreateManagerModal from "./_assets/components/create/createManagerModal";
+import UpdateManagerModal from "./_assets/components/update/updateManagerModal";
+import DeleteManagerModal from "./_assets/components/delete/deleteManagerModal";
 
 const ManagerTable = ({ id }: { id: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -22,7 +26,7 @@ const ManagerTable = ({ id }: { id: string }) => {
     <div className="mt-10">
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
-        <div className="flex justify-between items-center p-3">
+        <div className="flex flex-col gap-5 justify-between items-center p-3 md:flex-row">
           <h2 className="text-2xl font-bold">Manager List</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
@@ -30,7 +34,7 @@ const ManagerTable = ({ id }: { id: string }) => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            {/* <CreateManagerModal /> */}
+            <CreateManagerModal factoryId={id} />
           </div>
         </div>
 
@@ -43,25 +47,32 @@ const ManagerTable = ({ id }: { id: string }) => {
           setCurrentPage={setCurrentPage}
           config={{
             columns: [
-              { key: "name", header: "Name" },
+              {
+                key: "name",
+                header: "Name",
+                render: (item) => (
+                  <span>{item?.firstName + " " + item?.lastName}</span>
+                ),
+              },
               { key: "phone", header: "Contact Info" },
+              { key: "email", header: "Email" },
               { key: "status", header: "Status" },
               { key: "role", header: "Role" },
               {
                 key: "factoryName",
-                header: "Factory Owner Id",
+                header: "Factory Owner",
                 render: (item) => item?.factory?.name,
               },
-              // {
-              //   key: "action",
-              //   header: "Action",
-              //   render: (user) => (
-              //     <ResponsiveButtonGroup>
-              //       <UpdateCompanyModal data={user} />
-              //       <DeleteCompanyModal data={user} />
-              //     </ResponsiveButtonGroup>
-              //   ),
-              // },
+              {
+                key: "action",
+                header: "Action",
+                render: (user) => (
+                  <ResponsiveButtonGroup>
+                    <UpdateManagerModal data={user} />
+                    <DeleteManagerModal data={user} />
+                  </ResponsiveButtonGroup>
+                ),
+              },
             ],
           }}
         />

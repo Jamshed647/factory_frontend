@@ -6,19 +6,19 @@ import { CustomField } from "@/components/common/fields/cusField";
 import onFormError from "@/utils/formError";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
-interface CompanyFormComponentProps<T extends Record<string, any>> {
+interface managerFormComponentProps<T extends Record<string, any>> {
   form: UseFormReturn<T>;
   onSubmit: (data: T) => void;
   isPending: boolean;
   operation?: "update" | "create";
 }
 
-export default function FactoryFormComponent<T extends Record<string, any>>({
+export default function ManagerFormComponent<T extends Record<string, any>>({
   form,
   onSubmit,
   isPending,
   operation = "create",
-}: CompanyFormComponentProps<T>) {
+}: managerFormComponentProps<T>) {
   return (
     <FormProvider {...form}>
       <form
@@ -26,26 +26,26 @@ export default function FactoryFormComponent<T extends Record<string, any>>({
         className="space-y-6 w-full"
       >
         <CustomField.Text
-          name="name"
-          labelName="Company Name"
-          placeholder="Enter your company name"
+          name="firstName"
+          labelName="First Name"
+          placeholder="Enter your first name"
           form={form}
           optional={false}
         />
 
         <CustomField.Text
-          name="address"
-          labelName="Address"
-          placeholder="Enter your address"
+          name="lastName"
+          labelName="Last Name"
+          placeholder="Enter your last name"
           form={form}
         />
 
-        {/* <CustomField.Text */}
-        {/*   name="email" */}
-        {/*   labelName="Email" */}
-        {/*   placeholder="Enter your email" */}
-        {/*   form={form} */}
-        {/* /> */}
+        <CustomField.Text
+          name="email"
+          labelName="Email"
+          placeholder="Enter your email"
+          form={form}
+        />
 
         <CustomField.Text
           name="phone"
@@ -55,24 +55,32 @@ export default function FactoryFormComponent<T extends Record<string, any>>({
           optional={false}
         />
 
-        <CustomField.SelectField
-          name="status"
-          labelName="Factory Status"
-          placeholder="Select Factory Status"
-          form={form}
-          options={[
-            { value: "ACTIVE", label: "Active" },
-            { value: "DEACTIVATE", label: "Deactivate" },
-          ]}
-        />
-
         {/* <CustomField.Text */}
-        {/*   name="companyOwnerId" */}
-        {/*   labelName="Company Owner Id" */}
-        {/*   placeholder="Enter your company owner id" */}
+        {/*   name="factoryId" */}
+        {/*   labelName="Factory Owner Id" */}
+        {/*   placeholder="Enter your factory owner id" */}
         {/*   form={form} */}
         {/*   optional={false} */}
         {/* /> */}
+
+        {operation === "create" && (
+          <>
+            <CustomField.Text
+              name="pinCode"
+              labelName="Pin Code"
+              placeholder="Enter your pin code"
+              form={form}
+              optional={false}
+            />
+            <CustomField.Text
+              name="confirmPinCode"
+              labelName="Confirm Pin Code"
+              placeholder="Enter your confirm pin code"
+              form={form}
+              optional={false}
+            />
+          </>
+        )}
 
         <ActionButton
           buttonContent={operation}

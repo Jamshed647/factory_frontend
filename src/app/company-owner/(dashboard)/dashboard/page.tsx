@@ -5,7 +5,7 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 export default function DashboardPage() {
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: "api/v1/auth/factory",
+    path: "auth/factory",
     queryKey: "getFactoryData",
     filterData: {},
   });

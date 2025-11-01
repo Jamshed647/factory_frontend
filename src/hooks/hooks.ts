@@ -150,11 +150,11 @@ export const useAuth = () => {
 
   // Logout
   const signOut = () => {
+    router.push("/login");
     actions.clearTokens();
     clearUser();
     queryClient.clear();
     showToast("success", "Logged out successfully");
-    router.push("/login");
   };
 
   return {

@@ -10,7 +10,7 @@ const ManagerTable = ({ id }: { id: string }) => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `api/v1/auth/manager/factory/${id}`,
+    path: `auth/manager/factory/${id}`,
     queryKey: "getManagerDataByFactory",
     filterData: {
       search: searchText,

@@ -10,7 +10,7 @@ const SalesmanTable = ({ id }: { id: string }) => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `api/v1/auth/salesman/factory/${id}`,
+    path: `auth/salesman/factory/${id}`,
     queryKey: "getSalesmanDataByFactory",
     filterData: {
       search: searchText,

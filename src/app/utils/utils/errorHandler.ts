@@ -2,12 +2,12 @@
 // utils/errorHandler.ts
 import toast from "react-hot-toast";
 
-export const handleApiError = (error: any, portalName: string) => {
+export const handleApiError = (error: any, portalName?: string) => {
   const status = error?.response?.status;
 
   if (status === 401) {
     toast.error("Unauthorized. Redirecting to login...");
-    window.location.href = `/${portalName}/login`;
+    window.location.href = `/login`;
     return;
   }
 

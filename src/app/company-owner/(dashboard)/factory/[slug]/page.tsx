@@ -1,97 +1,178 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import React from "react";
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import { Phone, Mail, MapPin } from "lucide-react";
+import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ManagerTable from "./_assets/components/managerInfo/managerTable";
+import EmployeeTable from "./_assets/components/employeeInfo/employeeTable";
+import SalesmanTable from "./_assets/components/salesmanInfo/salesmanTable";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "antd";
 
 interface CompanyPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 const Company_Page = ({ params }: CompanyPageProps) => {
-  const { slug } = params;
+  const { slug } = React.use(params);
+  console.log(slug);
 
   const { data, isLoading } = useFetchData({
     path: `api/v1/auth/factory/${slug}`,
-    queryKey: "fetch single company",
+    queryKey: "fetchSingleCompany",
   });
 
-  const user = data?.data;
+  const company = data?.data;
 
+  // Loading state
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-gray-500">
-        Loading company info...
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
-        No company found.
+      <div className="flex flex-col gap-3 justify-center items-center min-h-screen text-gray-500">
+        <Skeleton className="w-48 h-8 rounded" />
+        <Skeleton className="w-80 h-5 rounded" />
+        <p>Loading company info...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4">
-      <div className="flex justify-center items-center p-6 min-h-screen bg-muted/30">
-        <Card className="overflow-hidden w-full max-w-md bg-white rounded-2xl shadow-lg dark:bg-neutral-900">
-          <CardContent className="flex flex-col items-center p-6 space-y-4 text-center">
-            {/* Profile Image */}
-            {user.photo ? (
-              <Image
-                src={user.photo}
-                alt={user.name}
-                width={120}
-                height={120}
-                className="object-cover rounded-full border-4 shadow-md border-primary"
-              />
-            ) : (
-              <div className="flex justify-center items-center w-28 h-28 text-4xl font-semibold rounded-full border-4 shadow-md bg-primary/10 text-primary border-primary">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
-            )}
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-100">
+        Factory Dashboard —{" "}
+        <span className="text-primary">{company?.name}</span>
+      </h1>
 
-            {/* User Info */}
-            <div>
-              <h2 className="text-2xl font-semibold text-foreground">
-                {user.name}
-              </h2>
-              {/* <Badge */}
-              {/*   variant={user.status === "ACTIVE" ? "default" : "secondary"} */}
-              {/*   className="mt-2" */}
-              {/* > */}
-              {/*   {user.status} */}
-              {/* </Badge> */}
-            </div>
+      <Tabs defaultValue="info" className="mt-4">
+        {/* ========== Tabs ========== */}
+        <TabsList className="flex flex-wrap gap-2 justify-start pb-2 border-b">
+          <TabsTrigger value="info">Overview</TabsTrigger>
+          <TabsTrigger value="manager">Managers</TabsTrigger>
+          <TabsTrigger value="employee">Employees</TabsTrigger>
+          <TabsTrigger value="salesman">Salesmen</TabsTrigger>
+        </TabsList>
 
-            {/* Contact Info */}
-            <div className="space-y-2 text-muted-foreground">
-              <div className="flex gap-2 justify-center items-center">
-                <Mail size={16} /> {user.email}
-              </div>
-              <div className="flex gap-2 justify-center items-center">
-                <Phone size={16} /> {user.phone}
-              </div>
-              <div className="flex gap-2 justify-center items-center">
-                <MapPin size={16} /> {user.address}
-              </div>
-            </div>
+        {/* ========== Info Tab ========== */}
+        <TabsContent value="info">
+          <div className="grid grid-cols-1 gap-6 mt-6 md:grid-cols-2">
+            {/* Company Info */}
+            <Card className="shadow-md">
+              <CardHeader>
+                <CardTitle className="text-lg font-bold">
+                  Company Info
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm">
+                <p>
+                  <span className="font-medium text-gray-700">Name:</span>{" "}
+                  {company?.name ?? "—"}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-700">Address:</span>{" "}
+                  {company?.address ?? "—"}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-700">Contact:</span>{" "}
+                  {company?.contactInfo ?? "—"}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-700">Status:</span>{" "}
+                  <span
+                    className={`px-2 py-1 text-xs rounded ${
+                      company?.status === "ACTIVE"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {company?.status ?? "Unknown"}
+                  </span>
+                </p>
+                <p>
+                  <span className="font-medium text-gray-700">Created:</span>{" "}
+                  {company?.createdAt
+                    ? new Date(company.createdAt).toLocaleString()
+                    : "—"}
+                </p>
+              </CardContent>
+            </Card>
 
-            {/* Meta Info */}
-            <div className="pt-4 w-full text-xs border-t text-muted-foreground">
-              <p>Created: {new Date(user.createdAt).toLocaleDateString()}</p>
-              <p>Updated: {new Date(user.updatedAt).toLocaleDateString()}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            {/* Owner Info */}
+            <Card className="shadow-md">
+              <CardHeader>
+                <CardTitle className="text-lg font-bold">
+                  Company Owner
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm">
+                <p>
+                  <span className="font-medium text-gray-700">Name:</span>{" "}
+                  {company?.companyOwner?.name ?? "—"}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-700">Phone:</span>{" "}
+                  {company?.companyOwner?.phone ?? "—"}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Users Section */}
+          <Card className="mt-6 shadow-md">
+            <CardHeader>
+              <CardTitle className="text-lg font-bold">All Users</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3">
+                {company?.users?.length ? (
+                  company?.users?.map((user: any) => (
+                    <div
+                      key={user?.id}
+                      className="flex justify-between items-center pb-2 border-b"
+                    >
+                      <div>
+                        <p className="font-medium">
+                          {user?.name ?? "Unnamed User"}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {user?.phone ?? "—"}
+                        </p>
+                      </div>
+                      <span
+                        className={`text-xs px-3 py-1 rounded-full ${
+                          user?.role === "SALESMAN"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {user?.role ?? "—"}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No users available.
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* ========== Manager Tab ========== */}
+        <TabsContent value="manager" className="mt-6">
+          <ManagerTable id={slug} />
+        </TabsContent>
+
+        {/* ========== Employee Tab ========== */}
+        <TabsContent value="employee" className="mt-6">
+          <EmployeeTable id={slug} />
+        </TabsContent>
+
+        {/* ========== Salesman Tab ========== */}
+        <TabsContent value="salesman" className="mt-6">
+          <SalesmanTable id={slug} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

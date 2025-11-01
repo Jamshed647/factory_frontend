@@ -4,7 +4,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { CircleQuestionMark, Cog, Factory, Users } from "lucide-react";
+import { Factory, Users } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 
 export default function AdminLayout({
@@ -60,7 +60,7 @@ export default function AdminLayout({
     <Protected roles="PROJECT_OWNER">
       <LayoutContainer
         Sidebar={Sidebar}
-        HeaderBar={<HeaderBar role="admin" />}
+        HeaderBar={<HeaderBar />}
         menuItems={menuItems}
       >
         {children}

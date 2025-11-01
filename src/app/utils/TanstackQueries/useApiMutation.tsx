@@ -83,6 +83,10 @@ export const useApiMutation = ({
 
         if (!response.ok) {
           console.error("API mutation error", parsedData);
+          console.log("response", {
+            status: response.status,
+            data: parsedData,
+          });
           // signout();
           throw {
             response: {

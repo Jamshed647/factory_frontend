@@ -9,9 +9,12 @@ export default function DashboardPage() {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: "api/v1/auth/company/users",
+    path: "auth/company/users",
     queryKey: "getCompanyData",
-    filterData: {},
+    filterData: {
+      search: searchText,
+      page: currentPage,
+    },
   });
 
   return (

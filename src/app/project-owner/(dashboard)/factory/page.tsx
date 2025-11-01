@@ -11,7 +11,10 @@ export default function DashboardPage() {
     method: "GET",
     path: "api/v1/auth/factory",
     queryKey: "getFactoryData",
-    filterData: {},
+    filterData: {
+      search: searchText,
+      page: currentPage,
+    },
   });
 
   return (

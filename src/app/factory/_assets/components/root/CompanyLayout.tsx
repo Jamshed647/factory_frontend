@@ -12,7 +12,7 @@ import { useAuth } from "@/hooks/hooks";
 import { UserRole } from "@/types/user";
 import type { MenuProps } from "antd";
 
-// ✅ Use a distinct type alias name to avoid conflict
+// Use a distinct type alias name to avoid conflict
 type AntdMenuItem = Exclude<
   Required<MenuProps>["items"][number],
   null | undefined
@@ -25,7 +25,7 @@ export default function CompanyLayout({
 }) {
   const { user } = useAuth();
 
-  // ✅ Use AntdMenuItem instead of MenuItem
+  // Use AntdMenuItem instead of MenuItem
   const menuItems: AntdMenuItem[] = [
     {
       key: "/factory/dashboard",
@@ -34,6 +34,11 @@ export default function CompanyLayout({
     },
     ...(user?.role === "MANAGER"
       ? ([
+          {
+            key: "/factory/manager",
+            icon: <Factory />,
+            label: <Link href="/factory/manager">Manager</Link>,
+          },
           {
             key: "/factory/employees",
             icon: <PieChartOutlined />,
@@ -70,8 +75,8 @@ export default function CompanyLayout({
     <Protected roles={user?.role as UserRole}>
       <LayoutContainer
         Sidebar={Sidebar}
-        HeaderBar={<HeaderBar role="manager" />}
-        // ✅ Type cast once here to avoid type mismatch
+        HeaderBar={<HeaderBar />}
+        // Type cast once here to avoid type mismatch
         menuItems={menuItems as any}
       >
         {children}

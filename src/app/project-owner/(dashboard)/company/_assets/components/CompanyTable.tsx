@@ -19,7 +19,7 @@ interface TableProps {
   setCurrentPage: (page: number) => void;
 }
 
-const UserTable = ({
+const CompanyTable = ({
   data,
   isLoading,
   searchText,
@@ -43,7 +43,7 @@ const UserTable = ({
       <DynamicTableWithPagination
         data={data?.data}
         isLoading={isLoading}
-        //  pagination={data?.pagination}
+        pagination={data?.pagination}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         config={{
@@ -55,7 +55,9 @@ const UserTable = ({
                 <Link href={`company/${user.id}`}>{user.name}</Link>
               ),
             },
+            { key: "phone", header: "Phone" },
             { key: "email", header: "Email" },
+            { key: "address", header: "Address" },
             { key: "factories_count", header: "Factories Count" },
             {
               key: "action",
@@ -74,4 +76,4 @@ const UserTable = ({
   );
 };
 
-export default UserTable;
+export default CompanyTable;

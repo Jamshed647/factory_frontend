@@ -13,15 +13,14 @@ import ActionButton from "@/components/common/button/actionButton";
 import onFormError from "@/utils/formError";
 import Link from "next/link";
 
-export default function LoginFormComponent({ role }: { role?: string }) {
+export default function LoginFormComponent() {
   const { login, isLoggingIn } = useAuth();
-  //  console.log("role", role);
 
   const loginForm = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      role: role,
-    },
+    // defaultValues: {
+    //   role: role,
+    // },
   });
 
   const onSubmit = (data: LoginFormType) => {
@@ -50,19 +49,19 @@ export default function LoginFormComponent({ role }: { role?: string }) {
             form={loginForm}
           />
 
-          {!role && (
-            <CustomField.SelectField
-              placeholder="Select Role"
-              name="role"
-              labelName="Role"
-              options={[
-                { value: "MANAGER", label: "Manager" },
-                { value: "EMPLOYEE", label: "Employee" },
-                { value: "SALESMAN", label: "Salesman" },
-              ]}
-              form={loginForm}
-            />
-          )}
+          {/* {!role && ( */}
+          {/*   <CustomField.SelectField */}
+          {/*     placeholder="Select Role" */}
+          {/*     name="role" */}
+          {/*     labelName="Role" */}
+          {/*     options={[ */}
+          {/*       { value: "MANAGER", label: "Manager" }, */}
+          {/*       { value: "EMPLOYEE", label: "Employee" }, */}
+          {/*       { value: "SALESMAN", label: "Salesman" }, */}
+          {/*     ]} */}
+          {/*     form={loginForm} */}
+          {/*   /> */}
+          {/* )} */}
 
           <ActionButton
             buttonContent="Login"

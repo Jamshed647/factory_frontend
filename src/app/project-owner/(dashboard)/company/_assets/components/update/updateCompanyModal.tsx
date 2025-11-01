@@ -25,7 +25,7 @@ const UpdateCompanyModal = ({ data }: { data: any }) => {
   });
 
   const createUser = useApiMutation({
-    path: `api/v1/auth/company/${data.id}`,
+    path: `auth/company/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);

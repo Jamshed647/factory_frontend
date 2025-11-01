@@ -21,7 +21,7 @@ const CreateUserModal = () => {
   });
 
   const createUser = useApiMutation({
-    path: "api/v1/auth/company",
+    path: "auth/company",
     method: "POST",
     onSuccess: (data) => {
       companyForm.reset({});

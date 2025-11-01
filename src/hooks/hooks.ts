@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUserStore } from "@/store/userStore";
 import { useAuthStore } from "@/store/authStore";
@@ -12,8 +12,6 @@ import { getAccessToken, getRole } from "@/utils/cookie/tokenHandler";
 export const useAuth = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const pathname = usePathname();
-  const portalName = pathname.split("/")[1];
 
   // Zustand stores
   const {
@@ -27,7 +25,7 @@ export const useAuth = () => {
 
   const accessToken = getAccessToken();
   const role = getRole();
-  const target = redirectFrom || `/${portalName}/dashboard`;
+  const target = redirectFrom;
 
   // Initialize auth and fetch user
   useEffect(() => {
@@ -39,7 +37,7 @@ export const useAuth = () => {
     queryKey: ["currentUser", accessToken],
     queryFn: async (): Promise<User> => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/profile?role=${role}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/profile?role=${role}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -73,7 +71,7 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginFormType) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/authorization/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/authorization/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -92,7 +90,7 @@ export const useAuth = () => {
       return {
         token: json.data.accessToken,
         refreshToken: json.data.refreshToken,
-        role: credentials.role,
+        role: json.data.role,
         user: json.data.user || { id: json.data.id, phone: json.data.phone },
       };
     },
@@ -103,10 +101,19 @@ export const useAuth = () => {
         role: data.role || "",
       });
 
+      const portal =
+        data.role === "PROJECT_OWNER"
+          ? "project-owner"
+          : data.role === "COMPANY_OWNER"
+            ? "company-owner"
+            : ["MANAGER", "EMPLOYEE", "SALESMAN"].includes(data.role)
+              ? "factory"
+              : "";
+
       // Wait for profile to load before redirecting
       queryClient.refetchQueries({ queryKey: ["currentUser"] }).then(() => {
         showToast("success", "Login successful");
-        router.replace(target);
+        router.replace(target || `/${portal}/dashboard`);
       });
     },
     onError: (err: Error) => showToast("error", err.message),
@@ -147,7 +154,7 @@ export const useAuth = () => {
     clearUser();
     queryClient.clear();
     showToast("success", "Logged out successfully");
-    router.push("/admin/login");
+    router.push("/login");
   };
 
   return {

@@ -1,29 +1,32 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import React from "react";
 import ActionButton from "@/components/common/button/actionButton";
 import { Edit2Icon } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
 import ManagerFormComponent from "../form/managerForm";
-import { ManagerFormType, managerSchema } from "../../schema/managerSchema";
+import {
+  ManagerUpdateFormType,
+  managerUpdateSchema,
+} from "../../schema/managerSchema";
 import { managerDefaultValue } from "../../utils/managerDefaultValue";
 
-const CreateManagerModal = ({ factoryId }: { factoryId: string }) => {
+const UpdateManagerModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const managerForm = useForm<ManagerFormType>({
-    resolver: zodResolver(managerSchema),
-    defaultValues: managerDefaultValue({ factoryId: factoryId }),
+  const companyUpdateForm = useForm<ManagerUpdateFormType>({
+    resolver: zodResolver(managerUpdateSchema),
+    defaultValues: managerDefaultValue(data),
   });
 
   const createManager = useApiMutation({
-    path: "auth/manager",
-    method: "POST",
-    // dataType: "multipart/form-data",
+    path: `auth/manager/${data.id}`,
+    method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
       queryClient.invalidateQueries({ queryKey: ["getManagerData"] });
@@ -31,26 +34,20 @@ const CreateManagerModal = ({ factoryId }: { factoryId: string }) => {
     },
   });
 
-  const onSubmit = async (data: ManagerFormType) => {
-    const { confirmPinCode, ...formData } = data;
-    createManager.mutate(formData);
+  const onSubmit = async (data: ManagerUpdateFormType) => {
+    createManager.mutate(data);
   };
 
   return (
     <DialogWrapper
-      triggerContent={
-        <ActionButton
-          btnStyle="bg-blue-500 text-white"
-          icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Create Manager"
-        />
-      }
+      triggerContent={<ActionButton icon={<Edit2Icon className="w-5 h-5" />} />}
       open={open}
       handleOpen={setOpen}
-      title="Create Manager"
+      title="Update Manager"
     >
       <ManagerFormComponent
-        form={managerForm}
+        operation="update"
+        form={companyUpdateForm}
         isPending={createManager.isPending}
         onSubmit={onSubmit}
       />
@@ -58,4 +55,4 @@ const CreateManagerModal = ({ factoryId }: { factoryId: string }) => {
   );
 };
 
-export default CreateManagerModal;
+export default UpdateManagerModal;

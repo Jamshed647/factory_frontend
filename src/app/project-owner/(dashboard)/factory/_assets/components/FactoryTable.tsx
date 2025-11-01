@@ -59,9 +59,13 @@ const FactoryTable = ({
               ),
             },
             { key: "address", header: "Address" },
-            { key: "contactInfo", header: "Contact Info" },
+            { key: "phone", header: "Contact Info" },
             { key: "status", header: "Status" },
-            { key: "companyOwner?.name", header: "Company Owner" },
+            {
+              key: "companyOwner",
+              header: "Company Owner",
+              render: (user) => user.companyOwner.name,
+            },
             {
               key: "action",
               header: "Action",

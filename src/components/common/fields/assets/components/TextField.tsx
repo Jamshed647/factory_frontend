@@ -41,7 +41,7 @@ export const Text = ({
       // SSR-safe default value
       defaultValue={isArray ? [] : ""}
       render={({ field }) => {
-        const error = form.formState.errors?.[name];
+        const error = form?.formState?.errors?.[name];
         const isError = !!error;
 
         return (

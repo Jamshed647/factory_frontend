@@ -17,11 +17,11 @@ const Company_Page = ({ params }: CompanyPageProps) => {
   const { slug } = React.use(params);
 
   const { data, isLoading } = useFetchData({
-    path: `auth/factory/${slug}`,
-    queryKey: "fetchSingleCompany",
+    path: `auth/manager/${slug}`,
+    queryKey: "fetchSingleManager",
   });
 
-  const company = data?.data;
+  const manager = data?.data;
 
   // Loading state
   if (isLoading) {
@@ -37,14 +37,17 @@ const Company_Page = ({ params }: CompanyPageProps) => {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold tracking-wide text-gray-800 dark:text-gray-100">
-        Factory — <span className="text-primary">{company?.name}</span>
+        Manager —{" "}
+        <span className="text-primary">
+          {manager?.firstName + " " + manager?.lastName}
+        </span>
       </h1>
 
       <Tabs defaultValue="info" className="mt-4">
         {/* ========== Tabs ========== */}
         <TabsList className="flex flex-wrap gap-2 justify-start pb-2 border-b">
           <TabsTrigger value="info">Overview</TabsTrigger>
-          <TabsTrigger value="manager">Managers</TabsTrigger>
+          {/* <TabsTrigger value="manager">Managers</TabsTrigger> */}
           <TabsTrigger value="employee">Employees</TabsTrigger>
           <TabsTrigger value="salesman">Salesmen</TabsTrigger>
         </TabsList>
@@ -62,32 +65,32 @@ const Company_Page = ({ params }: CompanyPageProps) => {
               <CardContent className="space-y-2 text-sm">
                 <p>
                   <span className="font-medium text-gray-700">Name:</span>{" "}
-                  {company?.name ?? "—"}
+                  {manager?.firstName + " " + manager?.lastName}
                 </p>
                 <p>
                   <span className="font-medium text-gray-700">Address:</span>{" "}
-                  {company?.address ?? "—"}
+                  {manager?.address ?? "—"}
                 </p>
                 <p>
                   <span className="font-medium text-gray-700">Contact:</span>{" "}
-                  {company?.phone ?? "—"}
+                  {manager?.phone ?? "—"}
                 </p>
                 <p>
                   <span className="font-medium text-gray-700">Status:</span>{" "}
                   <span
                     className={`px-2 py-1 text-xs rounded ${
-                      company?.status === "ACTIVE"
+                      manager?.status === "ACTIVE"
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {company?.status ?? "Unknown"}
+                    {manager?.status ?? "Unknown"}
                   </span>
                 </p>
                 <p>
                   <span className="font-medium text-gray-700">Created:</span>{" "}
-                  {company?.createdAt
-                    ? new Date(company.createdAt).toLocaleString()
+                  {manager?.createdAt
+                    ? new Date(manager.createdAt).toLocaleString()
                     : "—"}
                 </p>
               </CardContent>
@@ -97,36 +100,59 @@ const Company_Page = ({ params }: CompanyPageProps) => {
             <Card className="shadow-md">
               <CardHeader>
                 <CardTitle className="text-lg font-bold">
-                  Company Owner
+                  Company Owner & Factory Info
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <p>
-                  <span className="font-medium text-gray-700">Name:</span>{" "}
-                  {company?.companyOwner?.name ?? "—"}
-                </p>
-                <p>
-                  <span className="font-medium text-gray-700">Phone:</span>{" "}
-                  {company?.companyOwner?.phone ?? "—"}
-                </p>
+              <CardContent className="space-y-3 text-sm">
+                {/* Company Owner Info */}
+                <div>
+                  <h3 className="mb-1 font-semibold text-gray-800">
+                    Company Owner
+                  </h3>
+                  <p>
+                    <span className="font-medium text-gray-700">Name:</span>{" "}
+                    {manager?.companyOwner?.name ?? "—"}
+                  </p>
+                  <p>
+                    <span className="font-medium text-gray-700">Phone:</span>{" "}
+                    {manager?.companyOwner?.phone ?? "—"}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t">
+                  <h3 className="mb-1 font-semibold text-gray-800">
+                    Factory Info
+                  </h3>
+                  <p>
+                    <span className="font-medium text-gray-700">
+                      Factory Name:
+                    </span>{" "}
+                    {manager?.factory?.name ?? "—"}
+                  </p>
+                  {/* <p> */}
+                  {/*   <span className="font-medium text-gray-700"> */}
+                  {/*     Factory Code: */}
+                  {/*   </span>{" "} */}
+                  {/*   {manager?.factory?.code ?? "—"} */}
+                  {/* </p> */}
+                  {/* <p> */}
+                  {/*   <span className="font-medium text-gray-700">Location:</span>{" "} */}
+                  {/*   {manager?.factory?.address ?? "—"} */}
+                  {/* </p> */}
+                </div>
               </CardContent>
             </Card>
           </div>
         </TabsContent>
 
-        {/* ========== Manager Tab ========== */}
-        <TabsContent value="manager" className="mt-6">
-          <ManagerTable id={slug} />
-        </TabsContent>
-
         {/* ========== Employee Tab ========== */}
         <TabsContent value="employee" className="mt-6">
-          <EmployeeTable id={slug} />
+          <EmployeeTable id={manager?.factory?.id} />
         </TabsContent>
 
         {/* ========== Salesman Tab ========== */}
         <TabsContent value="salesman" className="mt-6">
-          <SalesmanTable id={slug} />
+          <SalesmanTable id={manager?.factory?.id} />
         </TabsContent>
       </Tabs>
     </div>

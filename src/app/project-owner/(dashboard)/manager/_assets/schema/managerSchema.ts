@@ -4,7 +4,9 @@ import { z } from "zod";
 // Register schema
 export const managerSchema = z
   .object({
-    name: validationSchemas.nameSchema(),
+    firstName: validationSchemas.nameSchema({ label: "First Name" }),
+    lastName: validationSchemas.nameSchema({ label: "Last Name" }),
+    email: validationSchemas.emailSchema({ label: "Email", required: false }),
     phone: validationSchemas.numberSchema({
       label: "Contact Info",
       type: "string",

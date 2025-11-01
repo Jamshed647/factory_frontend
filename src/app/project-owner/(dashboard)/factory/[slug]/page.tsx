@@ -19,7 +19,7 @@ const Company_Page = ({ params }: CompanyPageProps) => {
   console.log(slug);
 
   const { data, isLoading } = useFetchData({
-    path: `api/v1/auth/factory/${slug}`,
+    path: `auth/factory/${slug}`,
     queryKey: "fetchSingleCompany",
   });
 

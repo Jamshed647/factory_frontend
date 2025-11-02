@@ -34,7 +34,7 @@ const EmployeeTable = ({ id }: { id: string }) => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateEmployeeModal />
+            <CreateEmployeeModal factoryId={id} />
           </div>
         </div>
 

@@ -6,13 +6,14 @@ import { z } from "zod";
 export const employeeSchema = z
   .object({
     name: validationSchemas.nameSchema(),
+    // firstName: validationSchemas.nameSchema({ label: "First Name" }),
+    // lastName: validationSchemas.nameSchema({ label: "Last Name" }),
     phone: validationSchemas.numberSchema({
       label: "Phone Number",
       type: "string",
     }),
     factoryId: validationSchemas.textSchema({
       label: "Factory Id",
-      required: false,
     }),
     pinCode: validationSchemas.textSchema({ label: "Pin Code" }),
     confirmPinCode: validationSchemas.textSchema({ label: "Confirm Pin Code" }),

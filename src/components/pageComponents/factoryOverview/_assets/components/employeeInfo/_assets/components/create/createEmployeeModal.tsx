@@ -7,23 +7,21 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/hooks";
 import { EmployeeFormType, employeeSchema } from "../../schema/employeeSchema";
 import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
 import EmployeeFormComponent from "../form/employeForm";
 
-const CreateEmployeeModal = () => {
+const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
-  const { user } = useAuth();
 
   const employeeForm = useForm<EmployeeFormType>({
     resolver: zodResolver(employeeSchema),
-    defaultValues: employeeDefaultValue(),
+    defaultValues: employeeDefaultValue({ factoryId: factoryId }),
   });
 
   const createFactory = useApiMutation({
-    path: "api/v1/auth/employee",
+    path: "auth/employee",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
@@ -37,7 +35,7 @@ const CreateEmployeeModal = () => {
   const onSubmit = async (data: EmployeeFormType) => {
     const { confirmPinCode, ...rest } = data;
 
-    createFactory.mutate({ ...rest, factoryId: user?.factoryId });
+    createFactory.mutate({ ...rest });
   };
 
   return (

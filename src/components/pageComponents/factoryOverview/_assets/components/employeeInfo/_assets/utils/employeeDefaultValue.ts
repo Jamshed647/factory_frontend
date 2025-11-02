@@ -4,10 +4,11 @@ export const employeeDefaultValue = (
   defaultValues: Partial<EmployeeFormType> = {},
 ) => {
   return {
-    name: defaultValues.name || "",
+    name: defaultValues?.name || "",
+    // firstName: defaultValues.firstName || "",
+    // lastName: defaultValues.lastName || "",
     phone: defaultValues.phone || "",
     factoryId: defaultValues.factoryId || "",
-
-    //  companyOwnerId: defaultValues.companyOwnerId || "",
+    pinCode: defaultValues.pinCode || "",
   };
 };

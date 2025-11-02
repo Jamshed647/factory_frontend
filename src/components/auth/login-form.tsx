@@ -14,13 +14,10 @@ import onFormError from "@/utils/formError";
 import Link from "next/link";
 
 export default function LoginFormComponent() {
-  const { login, isLoggingIn } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const loginForm = useForm<LoginFormType>({
     resolver: zodResolver(loginSchema),
-    // defaultValues: {
-    //   role: role,
-    // },
   });
 
   const onSubmit = (data: LoginFormType) => {
@@ -66,7 +63,7 @@ export default function LoginFormComponent() {
           <ActionButton
             buttonContent="Login"
             type="submit"
-            isPending={isLoggingIn}
+            isPending={isLoading}
             handleOpen={loginForm.handleSubmit(onSubmit)}
             btnStyle="w-full bg-blue-500 text-white"
           />

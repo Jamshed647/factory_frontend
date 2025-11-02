@@ -27,16 +27,23 @@ export default function EmployeeFormComponent<T extends Record<string, any>>({
       >
         <CustomField.Text
           name="name"
-          labelName="Employee Name"
-          placeholder="Enter your company name"
+          labelName="First Name"
+          placeholder="Enter your name"
           form={form}
-          optional={false}
         />
 
         {/* <CustomField.Text */}
-        {/*   name="" */}
-        {/*   labelName="Address" */}
-        {/*   placeholder="Enter your address" */}
+        {/*   name="firstName" */}
+        {/*   labelName="First Name" */}
+        {/*   placeholder="Enter your first name" */}
+        {/*   form={form} */}
+        {/*   optional={false} */}
+        {/* /> */}
+        {/**/}
+        {/* <CustomField.Text */}
+        {/*   name="lastName" */}
+        {/*   labelName="Last Name" */}
+        {/*   placeholder="Enter your last name" */}
         {/*   form={form} */}
         {/* /> */}
 

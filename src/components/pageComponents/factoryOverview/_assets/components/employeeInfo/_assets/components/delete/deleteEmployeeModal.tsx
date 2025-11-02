@@ -4,7 +4,7 @@ import React from "react";
 import ActionButton from "@/components/common/button/actionButton";
 import { TrashIcon } from "lucide-react";
 
-const DeleteManagerModal = ({ data }: { data: any }) => {
+const DeleteEmployeeModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -40,4 +40,4 @@ const DeleteManagerModal = ({ data }: { data: any }) => {
   );
 };
 
-export default DeleteManagerModal;
+export default DeleteEmployeeModal;

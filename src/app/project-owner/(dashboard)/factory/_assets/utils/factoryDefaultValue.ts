@@ -7,8 +7,8 @@ export const factoryDefaultValue = (
     name: defaultValues.name || "",
     address: defaultValues.address || "",
     //email: defaultValues.email || "",
-    contactInfo: defaultValues.contactInfo || "",
-    // factoryStatus: defaultValues.factoryStatus || "",
-    //  companyOwnerId: defaultValues.companyOwnerId || "",
+    phone: defaultValues.phone || "",
+    status: defaultValues.status || "",
+    companyOwnerId: defaultValues.companyOwnerId || "",
   };
 };

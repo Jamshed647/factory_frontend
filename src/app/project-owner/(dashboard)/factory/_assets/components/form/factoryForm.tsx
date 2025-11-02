@@ -3,6 +3,7 @@
 
 import ActionButton from "@/components/common/button/actionButton";
 import { CustomField } from "@/components/common/fields/cusField";
+import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import onFormError from "@/utils/formError";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
@@ -19,6 +20,9 @@ export default function FactoryFormComponent<T extends Record<string, any>>({
   isPending,
   operation = "create",
 }: CompanyFormComponentProps<T>) {
+  const { options: companyOption, isLoading: companyLoading } =
+    DataFetcher.fetchCompanies({});
+
   return (
     <FormProvider {...form}>
       <form
@@ -38,43 +42,48 @@ export default function FactoryFormComponent<T extends Record<string, any>>({
           placeholder="Enter your address"
           form={form}
         />
+
         {/* <CustomField.Text */}
         {/*   name="email" */}
         {/*   labelName="Email" */}
         {/*   placeholder="Enter your email" */}
         {/*   form={form} */}
         {/* /> */}
+
         <CustomField.Text
-          name="contactInfo"
+          name="phone"
           labelName="Contact Info"
           placeholder="Enter your contact info"
           form={form}
           optional={false}
         />
+
         <CustomField.SelectField
-          name="factoryStatus"
+          name="status"
           labelName="Factory Status"
           placeholder="Select Factory Status"
           form={form}
           options={[
-            { value: "Active", label: "Active" },
-            { value: "Inactive", label: "Inactive" },
+            { value: "ACTIVE", label: "Active" },
+            { value: "DEACTIVATE", label: "Deactivate" },
           ]}
         />
 
-        {/* <CustomField.Text */}
-        {/*   name="companyOwnerId" */}
-        {/*   labelName="Company Owner Id" */}
-        {/*   placeholder="Enter your company owner id" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
+        <CustomField.SelectField
+          name="companyOwnerId"
+          labelName="Company Owner Id"
+          placeholder="Enter your company owner id"
+          options={companyOption}
+          isLoading={companyLoading}
+          form={form}
+          optional={false}
+        />
 
         <ActionButton
           buttonContent={operation}
           type="submit"
           isPending={isPending}
-          handleOpen={form.handleSubmit(onSubmit)}
+          handleOpen={form.handleSubmit(onSubmit, onFormError)}
           btnStyle="w-full bg-green-500 text-white"
         />
       </form>

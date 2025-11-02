@@ -7,33 +7,37 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import ManagerFormComponent from "../form/managerForm";
-import { ManagerFormType, managerSchema } from "../../schema/managerSchema";
-import { managerDefaultValue } from "../../utils/managerDefaultValue";
+import { useAuth } from "@/hooks/hooks";
+import { EmployeeFormType, employeeSchema } from "../../schema/employeeSchema";
+import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
+import EmployeeFormComponent from "../form/employeForm";
 
-const CreateManagerModal = ({ factoryId }: { factoryId: string }) => {
+const CreateEmployeeModal = () => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
-  const managerForm = useForm<ManagerFormType>({
-    resolver: zodResolver(managerSchema),
-    defaultValues: managerDefaultValue({ factoryId: factoryId }),
+  const employeeForm = useForm<EmployeeFormType>({
+    resolver: zodResolver(employeeSchema),
+    defaultValues: employeeDefaultValue(),
   });
 
-  const createManager = useApiMutation({
-    path: "auth/manager",
+  const createFactory = useApiMutation({
+    path: "api/v1/auth/employee",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
+      employeeForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getManagerDataByFactory"] });
+      queryClient.invalidateQueries({ queryKey: ["getEmployeeData"] });
       setOpen(false);
     },
   });
 
-  const onSubmit = async (data: ManagerFormType) => {
-    const { confirmPinCode, ...formData } = data;
-    createManager.mutate(formData);
+  const onSubmit = async (data: EmployeeFormType) => {
+    const { confirmPinCode, ...rest } = data;
+
+    createFactory.mutate({ ...rest, factoryId: user?.factoryId });
   };
 
   return (
@@ -42,20 +46,20 @@ const CreateManagerModal = ({ factoryId }: { factoryId: string }) => {
         <ActionButton
           btnStyle="bg-blue-500 text-white"
           icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Create Manager"
+          buttonContent="Create Employee"
         />
       }
       open={open}
       handleOpen={setOpen}
-      title="Create Manager"
+      title="Create Employee"
     >
-      <ManagerFormComponent
-        form={managerForm}
-        isPending={createManager.isPending}
+      <EmployeeFormComponent
+        form={employeeForm}
+        isPending={createFactory.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>
   );
 };
 
-export default CreateManagerModal;
+export default CreateEmployeeModal;

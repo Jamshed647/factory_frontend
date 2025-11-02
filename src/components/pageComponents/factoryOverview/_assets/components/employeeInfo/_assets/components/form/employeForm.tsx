@@ -6,19 +6,19 @@ import { CustomField } from "@/components/common/fields/cusField";
 import onFormError from "@/utils/formError";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
-interface managerFormComponentProps<T extends Record<string, any>> {
+interface EmployeeFormComponentProps<T extends Record<string, any>> {
   form: UseFormReturn<T>;
   onSubmit: (data: T) => void;
   isPending: boolean;
   operation?: "update" | "create";
 }
 
-export default function ManagerFormComponent<T extends Record<string, any>>({
+export default function EmployeeFormComponent<T extends Record<string, any>>({
   form,
   onSubmit,
   isPending,
   operation = "create",
-}: managerFormComponentProps<T>) {
+}: EmployeeFormComponentProps<T>) {
   return (
     <FormProvider {...form}>
       <form
@@ -26,26 +26,26 @@ export default function ManagerFormComponent<T extends Record<string, any>>({
         className="space-y-6 w-full"
       >
         <CustomField.Text
-          name="firstName"
-          labelName="First Name"
-          placeholder="Enter your first name"
+          name="name"
+          labelName="Employee Name"
+          placeholder="Enter your company name"
           form={form}
           optional={false}
         />
 
-        <CustomField.Text
-          name="lastName"
-          labelName="Last Name"
-          placeholder="Enter your last name"
-          form={form}
-        />
+        {/* <CustomField.Text */}
+        {/*   name="" */}
+        {/*   labelName="Address" */}
+        {/*   placeholder="Enter your address" */}
+        {/*   form={form} */}
+        {/* /> */}
 
-        <CustomField.Text
-          name="email"
-          labelName="Email"
-          placeholder="Enter your email"
-          form={form}
-        />
+        {/* <CustomField.Text */}
+        {/*   name="email" */}
+        {/*   labelName="Email" */}
+        {/*   placeholder="Enter your email" */}
+        {/*   form={form} */}
+        {/* /> */}
 
         <CustomField.Text
           name="phone"
@@ -55,12 +55,15 @@ export default function ManagerFormComponent<T extends Record<string, any>>({
           optional={false}
         />
 
-        {/* <CustomField.Text */}
-        {/*   name="factoryId" */}
-        {/*   labelName="Factory Owner Id" */}
-        {/*   placeholder="Enter your factory owner id" */}
+        {/* <CustomField.SelectField */}
+        {/*   name="factoryStatus" */}
+        {/*   labelName="Factory Status" */}
+        {/*   placeholder="Select Factory Status" */}
         {/*   form={form} */}
-        {/*   optional={false} */}
+        {/*   options={[ */}
+        {/*     { value: "Active", label: "Active" }, */}
+        {/*     { value: "Inactive", label: "Inactive" }, */}
+        {/*   ]} */}
         {/* /> */}
 
         {operation === "create" && (
@@ -86,7 +89,7 @@ export default function ManagerFormComponent<T extends Record<string, any>>({
           buttonContent={operation}
           type="submit"
           isPending={isPending}
-          handleOpen={form.handleSubmit(onSubmit, onFormError)}
+          handleOpen={form.handleSubmit(onSubmit)}
           btnStyle="w-full bg-green-500 text-white"
         />
       </form>

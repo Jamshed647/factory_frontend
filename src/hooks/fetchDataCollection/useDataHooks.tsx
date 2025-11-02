@@ -26,6 +26,31 @@ export function fetchFactories({
   return { options, data, isLoading, isError };
 }
 
+/* Fetch Companies */
+
+export function fetchCompanies({
+  filter,
+  path,
+}: {
+  filter?: any;
+  path?: string;
+}) {
+  const { data, isLoading, isError } = useFetchData({
+    path: path ?? `auth/company/users`,
+    queryKey: "fetch-match-awarding-bodies",
+    filterData: { ...filter },
+    //enabled: !!sessionId,
+  });
+
+  const options = data?.data?.map((item: any) => ({
+    label: item?.name || item?.title || "Unknown",
+    value: item?.id,
+    code: item?.code,
+  }));
+
+  return { options, data, isLoading, isError };
+}
+
 /* Fetch Modules by Course Id */
 export function fetchModulesByCourseId({
   courseId,

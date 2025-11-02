@@ -1,7 +1,7 @@
 "use client";
 
+import FactoryAccessOverview from "@/components/pageComponents/factoryOverview/factoryOverview";
 import React from "react";
-import FactoryAccessOverview from "@/components/pageComponents/factory-access";
 
 interface CompanyPageProps {
   params: Promise<{ slug: string }>;

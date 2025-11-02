@@ -10,12 +10,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import FactoryFormComponent from "../form/factoryForm";
 import { FactoryFormType, factorySchema } from "../../schema/companySchema";
 import { factoryDefaultValue } from "../../utils/factoryDefaultValue";
-import { useAuth } from "@/hooks/hooks";
 
 const CreateFactoryModal = () => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
-  const { user } = useAuth();
 
   const companyForm = useForm<FactoryFormType>({
     resolver: zodResolver(factorySchema),
@@ -23,7 +21,7 @@ const CreateFactoryModal = () => {
   });
 
   const createFactory = useApiMutation({
-    path: "api/v1/auth/factory",
+    path: "auth/factory",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
@@ -34,7 +32,7 @@ const CreateFactoryModal = () => {
   });
 
   const onSubmit = async (data: FactoryFormType) => {
-    createFactory.mutate({ ...data, companyOwnerId: user?.id });
+    createFactory.mutate(data);
   };
 
   return (

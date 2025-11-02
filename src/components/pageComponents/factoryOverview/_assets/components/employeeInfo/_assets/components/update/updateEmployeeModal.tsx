@@ -8,34 +8,34 @@ import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import ManagerFormComponent from "../form/managerForm";
 import {
-  ManagerUpdateFormType,
-  managerUpdateSchema,
-} from "../../schema/managerSchema";
-import { managerDefaultValue } from "../../utils/managerDefaultValue";
+  EmployeeUpdateFormType,
+  employeeUpdateSchema,
+} from "../../schema/employeeSchema";
+import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
+import EmployeeFormComponent from "../form/employeForm";
 
-const UpdateManagerModal = ({ data }: { data: any }) => {
+const UpdateEmployeeModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const companyUpdateForm = useForm<ManagerUpdateFormType>({
-    resolver: zodResolver(managerUpdateSchema),
-    defaultValues: managerDefaultValue(data),
+  const companyUpdateForm = useForm<EmployeeUpdateFormType>({
+    resolver: zodResolver(employeeUpdateSchema),
+    defaultValues: employeeDefaultValue(data),
   });
 
-  const createManager = useApiMutation({
-    path: `auth/manager/${data.id}`,
+  const updateEmployee = useApiMutation({
+    path: `api/v1/auth/employee/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getManagerDataByFactory"] });
+      queryClient.invalidateQueries({ queryKey: ["getFactoryData"] });
       setOpen(false);
     },
   });
 
-  const onSubmit = async (data: ManagerUpdateFormType) => {
-    createManager.mutate(data);
+  const onSubmit = async (data: EmployeeUpdateFormType) => {
+    updateEmployee.mutate(data);
   };
 
   return (
@@ -43,16 +43,16 @@ const UpdateManagerModal = ({ data }: { data: any }) => {
       triggerContent={<ActionButton icon={<Edit2Icon className="w-5 h-5" />} />}
       open={open}
       handleOpen={setOpen}
-      title="Update Manager"
+      title="Update Factory"
     >
-      <ManagerFormComponent
+      <EmployeeFormComponent
         operation="update"
         form={companyUpdateForm}
-        isPending={createManager.isPending}
+        isPending={updateEmployee.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>
   );
 };
 
-export default UpdateManagerModal;
+export default UpdateEmployeeModal;

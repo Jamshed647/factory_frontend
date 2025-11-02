@@ -3,6 +3,10 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
+import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
+import UpdateEmployeeModal from "./_assets/components/update/updateEmployeeModal";
+import DeleteEmployeeModal from "./_assets/components/delete/deleteEmployeeModal";
+import CreateEmployeeModal from "./_assets/components/create/createEmployeeModal";
 
 const EmployeeTable = ({ id }: { id: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -30,7 +34,7 @@ const EmployeeTable = ({ id }: { id: string }) => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            {/* <CreateManagerModal /> */}
+            <CreateEmployeeModal />
           </div>
         </div>
 
@@ -52,16 +56,16 @@ const EmployeeTable = ({ id }: { id: string }) => {
                 header: "Factory Owner Id",
                 render: (item) => item?.factory?.name,
               },
-              // {
-              //   key: "action",
-              //   header: "Action",
-              //   render: (user) => (
-              //     <ResponsiveButtonGroup>
-              //       <UpdateCompanyModal data={user} />
-              //       <DeleteCompanyModal data={user} />
-              //     </ResponsiveButtonGroup>
-              //   ),
-              // },
+              {
+                key: "action",
+                header: "Action",
+                render: (user) => (
+                  <ResponsiveButtonGroup>
+                    <UpdateEmployeeModal data={user} />
+                    <DeleteEmployeeModal data={user} />
+                  </ResponsiveButtonGroup>
+                ),
+              },
             ],
           }}
         />

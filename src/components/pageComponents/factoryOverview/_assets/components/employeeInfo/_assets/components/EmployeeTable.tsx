@@ -5,9 +5,9 @@ import React from "react";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import { CustomField } from "@/components/common/fields/cusField";
-import DeleteCompanyModal from "./delete/deleteCompanyModal";
 import CreateEmployeeModal from "./create/createEmployeeModal";
 import UpdateEmployeeModal from "./update/updateEmployeeModal";
+import DeleteEmployeeModal from "./delete/deleteEmployeeModal";
 
 interface TableProps {
   data: any;
@@ -64,7 +64,7 @@ const EmployeeTable = ({
               render: (user) => (
                 <ResponsiveButtonGroup>
                   <UpdateEmployeeModal data={user} />
-                  <DeleteCompanyModal data={user} />
+                  <DeleteEmployeeModal data={user} />
                 </ResponsiveButtonGroup>
               ),
             },

@@ -15,7 +15,7 @@ import {
 import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
 import EmployeeFormComponent from "../form/employeForm";
 
-const UpdateEmployeeModal = ({ data }: { data: any }) => {
+const UpdateSalesmanModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
@@ -25,11 +25,11 @@ const UpdateEmployeeModal = ({ data }: { data: any }) => {
   });
 
   const updateEmployee = useApiMutation({
-    path: `auth/employee/${data.id}`,
+    path: `auth/salesman/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getFactoryData"] });
+      queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
       setOpen(false);
     },
   });
@@ -43,7 +43,7 @@ const UpdateEmployeeModal = ({ data }: { data: any }) => {
       triggerContent={<ActionButton icon={<Edit2Icon className="w-5 h-5" />} />}
       open={open}
       handleOpen={setOpen}
-      title="Update Factory"
+      title="Update Salesman"
     >
       <EmployeeFormComponent
         operation="update"
@@ -55,4 +55,4 @@ const UpdateEmployeeModal = ({ data }: { data: any }) => {
   );
 };
 
-export default UpdateEmployeeModal;
+export default UpdateSalesmanModal;

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUserStore } from "@/store/userStore";
 import { useAuthStore } from "@/store/authStore";
 import { LoginFormType } from "@/components/auth/schema/login-schema";
@@ -149,12 +149,24 @@ export const useAuth = () => {
   });
 
   // Logout
-  const signOut = () => {
-    router.push("/login");
-    actions.clearTokens();
-    clearUser();
-    queryClient.clear();
-    showToast("success", "Logged out successfully");
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const signOut = async () => {
+    try {
+      setIsSigningOut(true);
+
+      actions.clearTokens();
+      clearUser();
+      queryClient.clear();
+      showToast("success", "Logged out successfully");
+
+      // Wait briefly to ensure state clears fully
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      router.push("/login");
+    } finally {
+      setIsSigningOut(false);
+    }
   };
 
   return {
@@ -162,9 +174,10 @@ export const useAuth = () => {
     isAuthenticated,
     isLoading: authLoading || loginMutation.isPending,
     login: loginMutation.mutate,
-    register: registerMutation.mutate,
-    signout: signOut,
     isLoggingIn: loginMutation.isPending,
+    register: registerMutation.mutate,
     isRegistering: registerMutation.isPending,
+    signout: signOut,
+    isSignoutLoading: isSigningOut,
   };
 };

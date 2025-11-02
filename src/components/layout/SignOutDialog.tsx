@@ -8,7 +8,7 @@ interface SignOutDialogProps {
 }
 
 const SignOutConfirmation = ({ collapsed }: SignOutDialogProps) => {
-  const { signout } = useAuth();
+  const { signout, isSignoutLoading } = useAuth();
   const [open, setOpen] = useState(false);
   return (
     <DialogWrapper
@@ -22,8 +22,7 @@ const SignOutConfirmation = ({ collapsed }: SignOutDialogProps) => {
           buttonContent={collapsed ? "" : "Logout"}
           tooltipContent={!collapsed ? "" : "Logout"}
           variant="ghost"
-          handleOpen={() => signout()}
-          // isPending={isSigningOut}
+          isPending={isSignoutLoading}
         />
       }
       style="w-[30%] py-4"
@@ -32,16 +31,18 @@ const SignOutConfirmation = ({ collapsed }: SignOutDialogProps) => {
       <div className="flex gap-2 justify-end mt-10">
         <ActionButton
           buttonContent="Stay signed in"
+          type="button"
           variant="ghost"
           handleOpen={() => setOpen(false)}
           btnStyle="w-full bg-blue-500 text-white"
         />
         <ActionButton
+          type="submit"
           btnStyle="w-full bg-red-500 text-white"
           icon={<LogOut size={18} />}
           buttonContent="Sign out"
           handleOpen={() => signout()}
-          //  isPending={isSigningOut}
+          isPending={isSignoutLoading}
         />
       </div>
     </DialogWrapper>

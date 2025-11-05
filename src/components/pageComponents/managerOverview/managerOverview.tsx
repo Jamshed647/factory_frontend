@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EmployeeTable from "./_assets/components/employeeInfo/employeeTable";
 import SalesmanTable from "./_assets/components/salesmanInfo/salesmanTable";
 import ManagerInfo from "./_assets/components/managerInfo/managerInfo";
+import ProductTable from "../productComponents/productInfo/productTable";
 
 const ManagerOverview = ({ id }: { id: string }) => {
   const { data, isLoading } = useFetchData({
@@ -28,9 +29,9 @@ const ManagerOverview = ({ id }: { id: string }) => {
         {/* ========== Tabs ========== */}
         <TabsList className="flex flex-wrap gap-2 justify-start pb-2 border-b">
           <TabsTrigger value="info">Overview</TabsTrigger>
-          {/* <TabsTrigger value="manager">Managers</TabsTrigger> */}
           <TabsTrigger value="employee">Employees</TabsTrigger>
           <TabsTrigger value="salesman">Salesmen</TabsTrigger>
+          <TabsTrigger value="product"> Product</TabsTrigger>
         </TabsList>
 
         {/* ========== Info Tab ========== */}
@@ -46,6 +47,11 @@ const ManagerOverview = ({ id }: { id: string }) => {
         {/* ========== Salesman Tab ========== */}
         <TabsContent value="salesman" className="mt-6">
           <SalesmanTable id={manager?.factory?.id} />
+        </TabsContent>
+
+        {/* ========== Product Tab ========== */}
+        <TabsContent value="product">
+          <ProductTable id={manager?.factory?.id} />
         </TabsContent>
       </Tabs>
     </div>

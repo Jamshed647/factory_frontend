@@ -7,6 +7,7 @@ import ManagerTable from "./_assets/components/managerInfo/managerTable";
 import EmployeeTable from "./_assets/components/employeeInfo/employeeTable";
 import SalesmanTable from "./_assets/components/salesmanInfo/salesmanTable";
 import FactoryInfo from "./_assets/components/factoryInfo/factoryInfo";
+import ProductTable from "../productComponents/productInfo/productTable";
 
 interface CompanyPageProps {
   id: string;
@@ -34,6 +35,7 @@ const FactoryAccessOverview = ({ id }: CompanyPageProps) => {
           <TabsTrigger value="manager">Managers</TabsTrigger>
           <TabsTrigger value="employee">Employees</TabsTrigger>
           <TabsTrigger value="salesman">Salesmen</TabsTrigger>
+          <TabsTrigger value="product"> Product</TabsTrigger>
         </TabsList>
 
         {/* ========== Info Tab ========== */}
@@ -54,6 +56,11 @@ const FactoryAccessOverview = ({ id }: CompanyPageProps) => {
         {/* ========== Salesman Tab ========== */}
         <TabsContent value="salesman" className="mt-6">
           <SalesmanTable id={id} />
+        </TabsContent>
+
+        {/* ========== Product Tab ========== */}
+        <TabsContent value="product">
+          <ProductTable id={id} />
         </TabsContent>
       </Tabs>
     </div>

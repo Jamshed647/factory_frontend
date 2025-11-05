@@ -21,14 +21,17 @@ export function Protected({ children, roles }: ProtectedProps) {
   const { isLoading, isAuthenticated, user } = useAuth();
   const { hasRole } = usePermission();
 
+  // Wait until auth is fully initialized before redirecting
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace("login");
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.replace("/login");
+      }
     }
   }, [isLoading, isAuthenticated, router]);
 
-  // Show loader while loading or user not fetched
-  if (isLoading || (isAuthenticated && !user)) {
+  // Still loading auth state
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <DataLoader />
@@ -36,7 +39,12 @@ export function Protected({ children, roles }: ProtectedProps) {
     );
   }
 
-  // Check permission only when user exists
+  // Auth finished but user not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // User exists but has no permission
   if (user && !hasRole(roles)) {
     return (
       <div className="flex flex-col justify-center items-center h-screen text-red-500">

@@ -7,6 +7,7 @@ import React from "react";
 import CreateManagerModal from "./_assets/components/create/createManagerModal";
 import UpdateManagerModal from "./_assets/components/update/updateManagerModal";
 import DeleteManagerModal from "./_assets/components/delete/deleteManagerModal";
+import Link from "next/link";
 
 const ManagerTable = ({ id }: { id: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -51,11 +52,12 @@ const ManagerTable = ({ id }: { id: string }) => {
                 key: "name",
                 header: "Name",
                 render: (item) => (
-                  <span>{item?.firstName + " " + item?.lastName}</span>
+                  <Link href={`manager/${item?.id}`}>
+                    {item?.firstName} {item?.lastName}
+                  </Link>
                 ),
               },
               { key: "phone", header: "Contact Info" },
-              { key: "email", header: "Email" },
               { key: "status", header: "Status" },
               { key: "role", header: "Role" },
               {

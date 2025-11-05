@@ -5,9 +5,10 @@ import React from "react";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import { CustomField } from "@/components/common/fields/cusField";
-import UpdateCompanyModal from "./update/updateCompanyModal";
-import DeleteCompanyModal from "./delete/deleteCompanyModal";
 import CreateManagerModal from "./create/createManagerModal";
+import UpdateManagerModal from "./update/updateCompanyModal";
+import DeleteManagerModal from "./delete/deleteManagerModal";
+import Link from "next/link";
 
 interface TableProps {
   data: any;
@@ -50,13 +51,21 @@ const ManagerTable = ({
         setCurrentPage={setCurrentPage}
         config={{
           columns: [
-            { key: "name", header: "Name" },
+            {
+              key: "name",
+              header: "Name",
+              render: (item) => (
+                <Link href={`manager/${item?.id}`}>
+                  {item?.firstName} {item?.lastName}
+                </Link>
+              ),
+            },
             { key: "phone", header: "Contact Info" },
             { key: "status", header: "Status" },
             { key: "role", header: "Role" },
             {
               key: "factoryName",
-              header: "Factory Owner Id",
+              header: "Factory Owner",
               render: (item) => item?.factory?.name,
             },
             {
@@ -64,8 +73,8 @@ const ManagerTable = ({
               header: "Action",
               render: (user) => (
                 <ResponsiveButtonGroup>
-                  <UpdateCompanyModal data={user} />
-                  <DeleteCompanyModal data={user} />
+                  <UpdateManagerModal data={user} />
+                  <DeleteManagerModal data={user} />
                 </ResponsiveButtonGroup>
               ),
             },

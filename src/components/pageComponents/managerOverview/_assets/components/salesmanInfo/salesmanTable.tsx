@@ -3,6 +3,10 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
+import CreateSalesmanModal from "./_assets/components/create/createSalesmanModal";
+import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
+import UpdateSalesmanModal from "./_assets/components/update/updateSalesmanModal";
+import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
 
 const SalesmanTable = ({ id }: { id: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -30,7 +34,7 @@ const SalesmanTable = ({ id }: { id: string }) => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            {/* <CreateManagerModal /> */}
+            <CreateSalesmanModal factoryId={id} />
           </div>
         </div>
 
@@ -52,16 +56,16 @@ const SalesmanTable = ({ id }: { id: string }) => {
                 header: "Factory Owner Id",
                 render: (item) => item?.factory?.name,
               },
-              // {
-              //   key: "action",
-              //   header: "Action",
-              //   render: (user) => (
-              //     <ResponsiveButtonGroup>
-              //       <UpdateCompanyModal data={user} />
-              //       <DeleteCompanyModal data={user} />
-              //     </ResponsiveButtonGroup>
-              //   ),
-              // },
+              {
+                key: "action",
+                header: "Action",
+                render: (user) => (
+                  <ResponsiveButtonGroup>
+                    <UpdateSalesmanModal data={user} />
+                    <DeleteSalesmanModal data={user} />
+                  </ResponsiveButtonGroup>
+                ),
+              },
             ],
           }}
         />

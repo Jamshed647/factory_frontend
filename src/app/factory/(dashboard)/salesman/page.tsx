@@ -2,19 +2,24 @@
 import React from "react";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { useAuth } from "@/hooks/hooks";
-import EmployeeTable from "./_assets/components/EmployeeTable";
+import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import SalesmanTable from "@/components/pageComponents/salesmanComponents/salesmanInfo/salesmanTable";
 
 export default function DashboardPage() {
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [searchText, setSearchText] = React.useState("");
   const { user } = useAuth();
+  const factoryId = getFactoryId();
 
-  const { data, isLoading } = useFetchData({
-    method: "GET",
-    path: `api/v1/auth/salesman/factory/${user?.factoryId}`,
-    queryKey: "getSalesmanData",
-    filterData: {},
-  });
+  const id =
+    user?.role === "PROJECT_OWNER" || user?.role === "COMPANY_OWNER"
+      ? factoryId
+      : user?.factory?.id;
+
+  // const { data, isLoading } = useFetchData({
+  //   method: "GET",
+  //   path: `auth/salesman/factory/${id}`,
+  //   queryKey: "getSalesmanData",
+  //   filterData: {},
+  // });
 
   // TODO: API Dashboard Content
   const stats = [
@@ -47,14 +52,7 @@ export default function DashboardPage() {
 
       {/* User Table */}
       <div className="mt-10">
-        <EmployeeTable
-          searchText={searchText}
-          setSearchText={setSearchText}
-          data={data}
-          isLoading={isLoading}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
+        <SalesmanTable factoryId={id as string} />
       </div>
     </div>
   );

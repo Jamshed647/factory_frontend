@@ -9,6 +9,7 @@ import UpdateCompanyModal from "./update/updateCompanyModal";
 import DeleteCompanyModal from "./delete/deleteCompanyModal";
 import CreateFactoryModal from "./create/createFactoryModal";
 import Link from "next/link";
+import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
 
 interface TableProps {
   data: any;

@@ -10,6 +10,7 @@ import CreateEmployeeModal from "./create/createEmployeeModal";
 import UpdateEmployeeModal from "./update/updateEmployeeModal";
 
 interface TableProps {
+  factoryId: string;
   data: any;
   isLoading: boolean;
   searchText: string;
@@ -19,6 +20,7 @@ interface TableProps {
 }
 
 const EmployeeTable = ({
+  factoryId,
   data,
   isLoading,
   searchText,
@@ -37,7 +39,7 @@ const EmployeeTable = ({
             searchText={searchText}
             setSearchText={setSearchText}
           />
-          <CreateEmployeeModal />
+          <CreateEmployeeModal factoryId={factoryId} />
         </div>
       </div>
 

@@ -7,18 +7,22 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { EmployeeFormType, employeeSchema } from "../../schema/employeeSchema";
-import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
-import EmployeeFormComponent from "../form/employeForm";
+import { SalesmanFormType, salesmanSchema } from "../../schema/salesmanSchema";
+import { salesmanDefaultValue } from "../../utils/salesmanDefaultValue";
+import SalesmanFormComponent from "../form/salesmanForm";
 
 const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const employeeForm = useForm<EmployeeFormType>({
-    resolver: zodResolver(employeeSchema),
-    defaultValues: employeeDefaultValue(),
+  const employeeForm = useForm<SalesmanFormType>({
+    resolver: zodResolver(salesmanSchema),
+    defaultValues: salesmanDefaultValue({ factoryId: factoryId }),
   });
+
+  if (factoryId) {
+    employeeForm.setValue("factoryId", factoryId);
+  }
 
   const createFactory = useApiMutation({
     path: "auth/employee",
@@ -32,10 +36,10 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
     },
   });
 
-  const onSubmit = async (data: EmployeeFormType) => {
+  const onSubmit = async (data: SalesmanFormType) => {
     const { confirmPinCode, ...rest } = data;
 
-    createFactory.mutate({ ...rest, factoryId: factoryId });
+    createFactory.mutate({ ...rest });
   };
 
   return (
@@ -51,7 +55,7 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
       handleOpen={setOpen}
       title="Create Employee"
     >
-      <EmployeeFormComponent
+      <SalesmanFormComponent
         form={employeeForm}
         isPending={createFactory.isPending}
         onSubmit={onSubmit}

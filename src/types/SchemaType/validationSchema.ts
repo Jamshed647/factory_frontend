@@ -102,49 +102,29 @@ const createStringSchema = (props: BaseValidationProps = {}) => {
 /*                                Email Schema                                */
 /* -------------------------------------------------------------------------- */
 
-const emailSchema = (props: EmailValidationProps = {}) => {
-  const {
-    label = "Email",
-    required = true,
-    allowPlus = true,
-    allowMultipleDots = false,
-    specificDomains,
-    blockDomains,
-  } = props;
+export const emailSchema = (props: EmailValidationProps = {}) => {
+  const { label = "Email", required = true } = props;
 
-  let schema = createStringSchema({ min: 5, max: 254, label, required });
+  // Base email regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const basePattern = allowPlus
-    ? /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/
-    : /^[a-zA-Z0-9.!#$%&'*'=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/;
-
-  schema = schema.refine((val) => basePattern.test(val), {
-    message: `${label} must be a valid email address`,
-  });
-
-  if (!allowMultipleDots) {
-    schema = schema.refine((val) => !/\.{2,}/.test(val.split("@")[0]), {
-      message: `${label} cannot contain multiple consecutive dots`,
-    });
-  }
-
-  if (specificDomains?.length) {
-    const domains = specificDomains.map((d) => d.toLowerCase());
-    schema = schema.refine(
-      (val) => domains.includes(val.split("@")[1]?.toLowerCase() || ""),
-      { message: `${label} must be from: ${specificDomains.join(", ")}` },
+  return z
+    .string()
+    .trim()
+    .refine(
+      (val) => {
+        if (!val && !required) return true; // optional and empty -> valid
+        return emailRegex.test(val); // otherwise must match email pattern
+      },
+      { message: `${label} must be a valid email address` },
+    )
+    .refine(
+      (val) => {
+        if (!val && !required) return true; // optional and empty -> valid
+        return val.length > 0; // required check
+      },
+      { message: `${label} is required` },
     );
-  }
-
-  if (blockDomains?.length) {
-    const blocked = blockDomains.map((d) => d.toLowerCase());
-    schema = schema.refine(
-      (val) => !blocked.includes(val.split("@")[1]?.toLowerCase() || ""),
-      { message: `${label} from this domain is not allowed` },
-    );
-  }
-
-  return schema.email({ message: `${label} must be a valid email address` });
 };
 
 /* -------------------------------------------------------------------------- */
@@ -224,7 +204,7 @@ const passwordSchema = (props: PasswordValidationProps = {}) => {
 /*                                 Name Schema                                */
 /* -------------------------------------------------------------------------- */
 
-const nameSchema = (props: NameValidationProps = {}) => {
+export const nameSchema = (props: NameValidationProps = {}) => {
   const {
     label = "Name",
     min = 2,
@@ -234,32 +214,53 @@ const nameSchema = (props: NameValidationProps = {}) => {
     allowAccents = true,
   } = props;
 
-  let schema = createStringSchema({ min, max, label, required });
-
   const charPattern = allowAccents ? /^[A-Za-zÀ-ÿ .'-]+$/ : /^[A-Za-z .'-]+$/;
 
-  schema = schema
-    .refine((val) => charPattern.test(val), {
-      message: `${label} can only contain letters, spaces, and common name characters`,
-    })
-    .refine((val) => !/\d/.test(val), {
-      message: `${label} cannot contain numbers`,
-    })
-    .refine((val) => !/[@!#$%^&*()+=?/|{}[\]\\<>]/.test(val), {
-      message: `${label} cannot contain special characters other than ., -, and '`,
-    });
-
-  if (allowMultipleWords) {
-    schema = schema.refine((val) => val.trim().split(/\s+/).length >= 1, {
-      message: `${label} must contain at least one word`,
-    });
-  } else {
-    schema = schema.refine((val) => val.trim().split(/\s+/).length === 1, {
-      message: `${label} must be a single word`,
-    });
-  }
-
-  return schema;
+  return z
+    .string()
+    .trim()
+    .refine(
+      (val) => {
+        if (!val && !required) return true; // optional and empty -> valid
+        return val.length >= min && val.length <= max;
+      },
+      { message: `${label} must be between ${min} and ${max} characters` },
+    )
+    .refine(
+      (val) => {
+        if (!val && !required) return true;
+        return charPattern.test(val);
+      },
+      { message: `${label} can only contain letters, spaces, and . - '` },
+    )
+    .refine(
+      (val) => {
+        if (!val && !required) return true;
+        return !/\d/.test(val);
+      },
+      { message: `${label} cannot contain numbers` },
+    )
+    .refine(
+      (val) => {
+        if (!val && !required) return true;
+        return !/[@!#$%^&*()+=?/|{}[\]\\<>]/.test(val);
+      },
+      {
+        message: `${label} cannot contain special characters other than ., -, '`,
+      },
+    )
+    .refine(
+      (val) => {
+        if (!val && !required) return true;
+        const words = val.trim().split(/\s+/);
+        return allowMultipleWords ? words.length >= 1 : words.length === 1;
+      },
+      {
+        message: allowMultipleWords
+          ? `${label} must contain at least one word`
+          : `${label} must be a single word`,
+      },
+    );
 };
 
 /* -------------------------------------------------------------------------- */

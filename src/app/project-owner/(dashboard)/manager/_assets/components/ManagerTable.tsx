@@ -9,6 +9,8 @@ import CreateManagerModal from "./create/createManagerModal";
 import UpdateManagerModal from "./update/updateManagerModal";
 import DeleteManagerModal from "./delete/deleteManagerModal";
 import Link from "next/link";
+import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import ActionButton from "@/components/common/button/actionButton";
 
 interface TableProps {
   data: any;
@@ -75,6 +77,18 @@ const ManagerTable = ({
                 <ResponsiveButtonGroup>
                   <UpdateManagerModal data={user} />
                   <DeleteManagerModal data={user} />
+
+                  <Link
+                    href={`/factory/dashboard`}
+                    onClick={() => {
+                      setFactoryId(user.factoryId, user?.id);
+                    }}
+                  >
+                    <ActionButton
+                      variant="primaryIcon"
+                      buttonContent="Go to Dashboard"
+                    />
+                  </Link>
                 </ResponsiveButtonGroup>
               ),
             },

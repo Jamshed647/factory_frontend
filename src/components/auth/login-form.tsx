@@ -68,6 +68,12 @@ export default function LoginFormComponent() {
             btnStyle="w-full bg-blue-500 text-white"
           />
 
+          {/* <p>Didn&apos;t remember your password?</p> */}
+          <p className="mt-2 text-sm text-center">
+            <Link href="/forgot-password" className="text-blue-500 underline">
+              Forgot Password?
+            </Link>
+          </p>
           <p className="mt-4 text-sm text-center">
             Don&apos;t have an account?{" "}
             <Link href="/register" className="text-blue-500 underline">

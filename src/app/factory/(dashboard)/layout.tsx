@@ -1,7 +1,7 @@
-import CompanyLayout from "../_assets/components/root/CompanyLayout";
+import FactoryLayout from "../_assets/components/root/FactoryLayout";
 
 const Admin_Layout = ({ children }: { children: React.ReactNode }) => {
-  return <CompanyLayout>{children}</CompanyLayout>;
+  return <FactoryLayout>{children}</FactoryLayout>;
 };
 
 export default Admin_Layout;

@@ -17,8 +17,12 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
 
   const employeeForm = useForm<EmployeeFormType>({
     resolver: zodResolver(employeeSchema),
-    defaultValues: employeeDefaultValue(),
+    defaultValues: employeeDefaultValue({ factoryId: factoryId }),
   });
+
+  if (factoryId) {
+    employeeForm.setValue("factoryId", factoryId);
+  }
 
   const createFactory = useApiMutation({
     path: "auth/employee",
@@ -35,7 +39,7 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
   const onSubmit = async (data: EmployeeFormType) => {
     const { confirmPinCode, ...rest } = data;
 
-    createFactory.mutate({ ...rest, factoryId: factoryId });
+    createFactory.mutate({ ...rest });
   };
 
   return (

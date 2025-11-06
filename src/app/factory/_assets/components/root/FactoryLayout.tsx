@@ -18,7 +18,7 @@ type AntdMenuItem = Exclude<
   null | undefined
 >;
 
-export default function CompanyLayout({
+export default function FactoryLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -32,7 +32,7 @@ export default function CompanyLayout({
       icon: <PieChartOutlined />,
       label: <Link href="/factory/dashboard">Dashboard</Link>,
     },
-    ...(user?.role === "MANAGER"
+    ...(user?.role === "MANAGER" || "PROJECT_OWNER" || "COMPANY_OWNER"
       ? ([
           {
             key: "/factory/manager",
@@ -72,7 +72,9 @@ export default function CompanyLayout({
   ];
 
   return (
-    <Protected roles={user?.role as UserRole}>
+    <Protected
+      roles={(user?.role as UserRole) || "PROJECT_OWNER" || "COMPANY_OWNER"}
+    >
       <LayoutContainer
         Sidebar={Sidebar}
         HeaderBar={<HeaderBar />}

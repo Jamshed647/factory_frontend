@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CircleSmall, Dot } from "lucide-react";
+import { Dot } from "lucide-react";
 
 // Status color map
 const statusColorMap: Record<string, string> = {
@@ -22,6 +22,7 @@ const statusColorMap: Record<string, string> = {
   expired: "#DC2626", // dark red
   rejected: "#DC2626", // dark red
   inactive: "#DC2626", // dark red
+  deactivate: "#DC2626", // dark red
   suspended: "#DC2626", // dark red
   closed: "#DC2626", // dark red
   default: "#D0D5DD", // light gray

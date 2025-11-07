@@ -11,7 +11,8 @@ import { Protected } from "@/components/auth/protected-route";
 import { useAuth } from "@/hooks/hooks";
 import { UserRole } from "@/types/user";
 import type { MenuProps } from "antd";
-import { getRole } from "@/utils/cookie/tokenHandler";
+import { getSwitchedRole } from "@/utils/cookie/companyFactoryCookie";
+import { isAccessRole, isAdminRole } from "@/utils/roleUtils";
 
 // Use a distinct type alias name to avoid conflict
 type AntdMenuItem = Exclude<
@@ -24,22 +25,15 @@ export default function FactoryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const isWorkerRole = (r?: UserRole) =>
-    ["MANAGER", "SALESMAN", "EMPLOYEE"].includes(r ?? "");
-
-  const isAccessRole = (r?: UserRole) =>
-    ["MANAGER", "PROJECT_OWNER", "COMPANY_OWNER"].includes(r ?? "");
-
   const { user } = useAuth();
-  const switchedRole = getRole();
+  const switchedRole = getSwitchedRole();
 
-  const role = isWorkerRole(user?.role)
-    ? user?.role
-    : (switchedRole as UserRole);
+  const role = isAdminRole(user?.role)
+    ? (switchedRole as UserRole)
+    : (user?.role as UserRole);
 
   // Use AntdMenuItem instead of MenuItem
   const menuItems: AntdMenuItem[] = [
-    // ...(role === "MANAGER" || "PROJECT_OWNER" || "COMPANY_OWNER"
     ...(isAccessRole(role)
       ? ([
           {
@@ -69,7 +63,7 @@ export default function FactoryLayout({
           },
         ] as AntdMenuItem[])
       : []),
-    ...(user?.role === "EMPLOYEE"
+    ...(role === "EMPLOYEE"
       ? ([
           {
             key: "/factory/employee-dashboard",
@@ -83,7 +77,7 @@ export default function FactoryLayout({
           },
         ] as AntdMenuItem[])
       : []),
-    ...(user?.role === "SALESMAN"
+    ...(role === "SALESMAN"
       ? ([
           {
             key: "/factory/salesman-dashboard",
@@ -100,9 +94,7 @@ export default function FactoryLayout({
   ];
 
   return (
-    <Protected
-      roles={(user?.role as UserRole) || "PROJECT_OWNER" || "COMPANY_OWNER"}
-    >
+    <Protected roles={role as UserRole}>
       <LayoutContainer
         Sidebar={Sidebar}
         HeaderBar={<HeaderBar />}

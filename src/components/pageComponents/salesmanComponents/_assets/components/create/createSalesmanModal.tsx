@@ -19,21 +19,20 @@ const CreateSalesmanModal = ({ factoryId }: CreateSalesmanModalProps) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const employeeForm = useForm<SalesmanFormType>({
+  const salesmanForm = useForm<SalesmanFormType>({
     resolver: zodResolver(salesmanSchema),
     defaultValues: salesmanDefaultValue({ factoryId: factoryId }),
   });
 
   if (factoryId) {
-    employeeForm.setValue("factoryId", factoryId);
+    salesmanForm.setValue("factoryId", factoryId);
   }
 
   const createSalesman = useApiMutation({
     path: "auth/salesman",
     method: "POST",
-    // dataType: "multipart/form-data",
     onSuccess: (data) => {
-      employeeForm.reset({});
+      salesmanForm.reset({});
       showToast("success", data);
       queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
       setOpen(false);
@@ -52,16 +51,16 @@ const CreateSalesmanModal = ({ factoryId }: CreateSalesmanModalProps) => {
         <ActionButton
           btnStyle="bg-blue-500 text-white"
           icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Create Employee"
+          buttonContent="Create Salesman"
         />
       }
       open={open}
       handleOpen={setOpen}
-      title="Create Employee"
+      title="Create Salesman"
     >
       <SalesmanFormComponent
         selectFactory={!factoryId ? true : false}
-        form={employeeForm}
+        form={salesmanForm}
         isPending={createSalesman.isPending}
         onSubmit={onSubmit}
       />

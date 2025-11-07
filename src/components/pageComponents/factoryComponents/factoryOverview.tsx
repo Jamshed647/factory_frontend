@@ -34,7 +34,7 @@ const FactoryAccessOverview = ({ id }: CompanyPageProps) => {
           <TabsTrigger value="manager">Managers</TabsTrigger>
           <TabsTrigger value="employee">Employees</TabsTrigger>
           <TabsTrigger value="salesman">Salesmen</TabsTrigger>
-          <TabsTrigger value="product"> Product</TabsTrigger>
+          {/* <TabsTrigger value="product"> Product</TabsTrigger> */}
         </TabsList>
 
         {/* ========== Info Tab ========== */}
@@ -44,17 +44,17 @@ const FactoryAccessOverview = ({ id }: CompanyPageProps) => {
 
         {/* ========== Manager Tab ========== */}
         <TabsContent value="manager" className="mt-6">
-          <ManagerTable factoryId={id} />
+          <ManagerTable factoryId={id} switchUser={true} />
         </TabsContent>
 
         {/* ========== Employee Tab ========== */}
         <TabsContent value="employee" className="mt-6">
-          <EmployeeTable factoryId={id} />
+          <EmployeeTable factoryId={id} switchUser={true} />
         </TabsContent>
 
         {/* ========== Salesman Tab ========== */}
         <TabsContent value="salesman" className="mt-6">
-          <SalesmanTable factoryId={id} />
+          <SalesmanTable factoryId={id} switchUser={true} />
         </TabsContent>
 
         {/* ========== Product Tab ========== */}

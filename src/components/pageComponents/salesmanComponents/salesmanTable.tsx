@@ -34,7 +34,7 @@ const SalesmanTable = ({
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: path,
-    queryKey: "getManagerData",
+    queryKey: "getSalesmanData",
     filterData: {
       search: searchText,
       page: currentPage,
@@ -92,7 +92,7 @@ const SalesmanTable = ({
                     <DeleteSalesmanModal data={user} />
                     {switchUser === true && (
                       <Link
-                        href={`/factory/manager-dashboard`}
+                        href={`/factory/salesman-dashboard`}
                         onClick={() => {
                           setFactoryId(user.factoryId, user?.id, user?.role);
                         }}

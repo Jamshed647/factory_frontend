@@ -106,47 +106,6 @@ const FactoryInfo = ({ factory, isLoading }: CompanyPageProps) => {
               </CardContent>
             </Card>
           </div>
-
-          {/* Users Section */}
-          <Card className="mt-6 shadow-md">
-            <CardHeader>
-              <CardTitle className="text-lg font-bold">All Users</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-3">
-                {factory?.users?.length ? (
-                  factory?.users?.map((user: any) => (
-                    <div
-                      key={user?.id}
-                      className="flex justify-between items-center pb-2 border-b"
-                    >
-                      <div>
-                        <p className="font-medium">
-                          {user?.name ?? "Unnamed User"}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {user?.phone ?? "—"}
-                        </p>
-                      </div>
-                      <span
-                        className={`text-xs px-3 py-1 rounded-full ${
-                          user?.role === "SALESMAN"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-amber-100 text-amber-700"
-                        }`}
-                      >
-                        {user?.role ?? "—"}
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    No users available.
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
         </>
       )}
     </>

@@ -16,7 +16,6 @@ import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
 import EmployeeFormComponent from "../form/employeForm";
 
 const UpdateEmployeeModal = ({ data }: { data: any }) => {
-  console.log(data);
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 

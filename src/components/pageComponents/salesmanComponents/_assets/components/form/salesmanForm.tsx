@@ -63,11 +63,11 @@ export default function SalesmanFormComponent<T extends Record<string, any>>({
 
         <CustomField.SelectField
           name="status"
-          labelName="Factory Status"
-          placeholder="Select Factory Status"
+          labelName="Salesman Status"
+          placeholder="Select Salesman Status"
           form={form}
           options={[
-            { value: "ACTIVATE", label: "Active" },
+            { value: "ACTIVE", label: "Active" },
             { value: "DEACTIVATE", label: "Deactivate" },
           ]}
         />

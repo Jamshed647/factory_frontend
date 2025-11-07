@@ -6,7 +6,6 @@ import DynamicTableWithPagination from "@/components/common/DynamicTable/Dynamic
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import { CustomField } from "@/components/common/fields/cusField";
 import Link from "next/link";
-import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import CreateFactoryModal from "./_assets/components/create/createFactoryModal";
 import UpdateCompanyModal from "./_assets/components/update/updateCompanyModal";
 import DeleteCompanyModal from "./_assets/components/delete/deleteCompanyModal";

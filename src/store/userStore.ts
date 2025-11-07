@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import type { User, UserRole } from "@/types/user";
+import { hasPermission } from "@/utils/roleUtils";
 
 interface UserStore {
   user: User | null;
@@ -23,8 +24,9 @@ export const useUserStore = create<UserStore>()(
       clearUser: () => set({ user: null }),
 
       hasRole: (role) => {
-        const roles = get().user?.role ?? "";
-        return roles.includes(role);
+        const roles = get().user?.role as UserRole;
+
+        return hasPermission(roles, role);
       },
 
       // hasAnyRole: (roles) => {

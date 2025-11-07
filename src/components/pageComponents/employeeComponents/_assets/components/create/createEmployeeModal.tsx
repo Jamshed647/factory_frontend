@@ -11,7 +11,7 @@ import { EmployeeFormType, employeeSchema } from "../../schema/employeeSchema";
 import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
 import EmployeeFormComponent from "../form/employeForm";
 
-const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
+const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
@@ -56,6 +56,7 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
       title="Create Employee"
     >
       <EmployeeFormComponent
+        selectFactory={!factoryId ? true : false}
         form={employeeForm}
         isPending={createFactory.isPending}
         onSubmit={onSubmit}

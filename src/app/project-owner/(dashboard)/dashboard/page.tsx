@@ -1,5 +1,6 @@
 "use client";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
+import { ProjectOwnerDashboard } from "@/components/pageComponents/dashboards/projectowner-dashboard";
 import React from "react";
 
 export default function DashboardPage() {
@@ -79,6 +80,7 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+      <ProjectOwnerDashboard />
     </div>
   );
 }

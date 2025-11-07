@@ -6,7 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { Factory } from "lucide-react";
+import { Factory, PackageSearch } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 import { useAuth } from "@/hooks/hooks";
 import { UserRole } from "@/types/user";
@@ -38,6 +38,11 @@ export default function FactoryLayout({
             key: "/factory/manager",
             icon: <Factory />,
             label: <Link href="/factory/manager">Manager</Link>,
+          },
+          {
+            key: "/factory/product",
+            icon: <PackageSearch />,
+            label: <Link href="/factory/product">Product</Link>,
           },
           {
             key: "/factory/employees",

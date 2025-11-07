@@ -1,6 +1,6 @@
 "use client";
 
-import ManagerOverview from "@/components/pageComponents/managerOverview/managerOverview";
+import ManagerOverview from "@/components/pageComponents/managerComponents/managerOverview";
 import React from "react";
 
 interface CompanyPageProps {

@@ -1,6 +1,6 @@
 "use client";
 
-import FactoryAccessOverview from "@/components/pageComponents/factoryOverview/factoryOverview";
+import FactoryAccessOverview from "@/components/pageComponents/factoryComponents/factoryOverview";
 import React from "react";
 
 interface CompanyPageProps {

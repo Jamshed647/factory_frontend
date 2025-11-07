@@ -17,7 +17,7 @@ export default function DashboardPage() {
     <div>
       {/* User Table */}
       <div className="mt-10">
-        <EmployeeTable factoryId={id as string} />
+        <EmployeeTable factoryId={id as string} switchUser={true} />
       </div>
     </div>
   );

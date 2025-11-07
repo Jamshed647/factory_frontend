@@ -30,7 +30,7 @@ const ManagerOverview = ({ id }: { id: string }) => {
           <TabsTrigger value="info">Overview</TabsTrigger>
           <TabsTrigger value="employee">Employees</TabsTrigger>
           <TabsTrigger value="salesman">Salesmen</TabsTrigger>
-          <TabsTrigger value="product"> Product</TabsTrigger>
+          {/* <TabsTrigger value="product"> Product</TabsTrigger> */}
         </TabsList>
 
         {/* ========== Info Tab ========== */}

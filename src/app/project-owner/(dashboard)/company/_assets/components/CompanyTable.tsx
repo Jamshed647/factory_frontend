@@ -9,6 +9,8 @@ import CreateCompanyModal from "./create/createCompanyModal";
 import UpdateCompanyModal from "./update/updateCompanyModal";
 import DeleteCompanyModal from "./delete/deleteCompanyModal";
 import Link from "next/link";
+import ActionButton from "@/components/common/button/actionButton";
+import { setCompanyId } from "@/utils/cookie/companyFactoryCookie";
 
 interface TableProps {
   data: any;
@@ -66,6 +68,18 @@ const CompanyTable = ({
                 <ResponsiveButtonGroup>
                   <UpdateCompanyModal data={user} />
                   <DeleteCompanyModal data={user} />
+
+                  <Link
+                    href={`/company-owner/dashboard`}
+                    onClick={() => {
+                      setCompanyId(user.id);
+                    }}
+                  >
+                    <ActionButton
+                      variant="primaryIcon"
+                      buttonContent="Go to Dashboard"
+                    />
+                  </Link>
                 </ResponsiveButtonGroup>
               ),
             },

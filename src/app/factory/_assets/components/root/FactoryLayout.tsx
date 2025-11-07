@@ -52,9 +52,9 @@ export default function FactoryLayout({
             label: <Link href="/factory/product">Product</Link>,
           },
           {
-            key: "/factory/employees",
+            key: "/factory/employee",
             icon: <PieChartOutlined />,
-            label: <Link href="/factory/employees">Employees</Link>,
+            label: <Link href="/factory/employee">Employees</Link>,
           },
           {
             key: "/factory/salesman",

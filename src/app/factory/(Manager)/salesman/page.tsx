@@ -16,7 +16,7 @@ export default function DashboardPage() {
   return (
     <div>
       {/* User Table */}
-      <SalesmanTable factoryId={id as string} />
+      <SalesmanTable factoryId={id as string} switchUser={true} />
     </div>
   );
 }

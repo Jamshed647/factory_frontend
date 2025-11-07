@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -9,24 +8,28 @@ import Link from "next/link";
 import CreateFactoryModal from "./_assets/components/create/createFactoryModal";
 import UpdateCompanyModal from "./_assets/components/update/updateCompanyModal";
 import DeleteCompanyModal from "./_assets/components/delete/deleteCompanyModal";
+import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 
 interface TableProps {
-  data: any;
-  isLoading: boolean;
-  searchText: string;
-  setSearchText: (text: string) => void;
-  currentPage: number;
-  setCurrentPage: (page: number) => void;
+  companyId?: string;
 }
 
-const FactoryTable = ({
-  data,
-  isLoading,
-  searchText,
-  setSearchText,
-  currentPage,
-  setCurrentPage,
-}: TableProps) => {
+const FactoryTable = ({ companyId }: TableProps) => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchText, setSearchText] = React.useState("");
+
+  const path = companyId ? `auth/factory/company/${companyId}` : `auth/factory`;
+
+  const { data, isLoading } = useFetchData({
+    method: "GET",
+    path: path,
+    queryKey: "getFactoryData",
+    filterData: {
+      search: searchText,
+      page: currentPage,
+    },
+  });
+
   return (
     <div className="rounded-md border shadow-lg">
       {/* Table Header */}

@@ -1,35 +1,19 @@
 "use client";
 import React from "react";
-import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-import EmployeeTable from "./_assets/components/EmployeeTable";
+import { useAuth } from "@/hooks/hooks";
+import { getCompanyId } from "@/utils/cookie/companyFactoryCookie";
+import SalesmanTable from "@/components/pageComponents/salesmanComponents/salesmanTable";
 
 export default function DashboardPage() {
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [searchText, setSearchText] = React.useState("");
+  const { user } = useAuth();
+  const companyId = getCompanyId();
 
-  const { data, isLoading } = useFetchData({
-    method: "GET",
-    path: `api/v1/auth/salesman/all`,
-    queryKey: "getSalesmanData",
-    filterData: {
-      search: searchText,
-      page: currentPage,
-    },
-  });
+  const id = user?.role === "PROJECT_OWNER" ? companyId : user?.id;
 
   return (
     <div>
       {/* User Table */}
-      <div className="mt-10">
-        <EmployeeTable
-          searchText={searchText}
-          setSearchText={setSearchText}
-          data={data}
-          isLoading={isLoading}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
+      <SalesmanTable factoryId={id as string} switchUser={true} />
     </div>
   );
 }

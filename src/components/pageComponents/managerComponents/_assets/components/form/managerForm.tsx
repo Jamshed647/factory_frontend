@@ -3,11 +3,13 @@
 
 import ActionButton from "@/components/common/button/actionButton";
 import { CustomField } from "@/components/common/fields/cusField";
+import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import onFormError from "@/utils/formError";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
 interface managerFormComponentProps<T extends Record<string, any>> {
   form: UseFormReturn<T>;
+  selectFactory?: boolean;
   onSubmit: (data: T) => void;
   isPending: boolean;
   operation?: "update" | "create";
@@ -16,9 +18,13 @@ interface managerFormComponentProps<T extends Record<string, any>> {
 export default function ManagerFormComponent<T extends Record<string, any>>({
   form,
   onSubmit,
+  selectFactory,
   isPending,
   operation = "create",
 }: managerFormComponentProps<T>) {
+  const { options: factoryOption, isLoading: factoryLoading } =
+    DataFetcher.fetchFactories({});
+
   return (
     <FormProvider {...form}>
       <form
@@ -55,13 +61,16 @@ export default function ManagerFormComponent<T extends Record<string, any>>({
           optional={false}
         />
 
-        {/* <CustomField.Text */}
-        {/*   name="factoryId" */}
-        {/*   labelName="Factory Owner Id" */}
-        {/*   placeholder="Enter your factory owner id" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
+        {selectFactory && (
+          <CustomField.SelectField
+            name="factoryId"
+            labelName="Factory Owner Id"
+            placeholder="Enter your factory owner id"
+            form={form}
+            optional={false}
+            options={factoryOption}
+          />
+        )}
 
         {operation === "create" && (
           <>

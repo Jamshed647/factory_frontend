@@ -8,14 +8,21 @@ import CreateManagerModal from "./_assets/components/create/createManagerModal";
 import UpdateManagerModal from "./_assets/components/update/updateManagerModal";
 import DeleteManagerModal from "./_assets/components/delete/deleteManagerModal";
 import Link from "next/link";
+import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import ActionButton from "@/components/common/button/actionButton";
 
-const ManagerTable = ({ id }: { id: string }) => {
+interface TableProps {
+  id?: string;
+  switchUser?: boolean;
+}
+
+const ManagerTable = ({ id, switchUser = false }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `auth/manager/factory/${id}`,
+    path: id ? `auth/manager/factory/${id}` : `auth/manager/all`,
     queryKey: "getManagerDataByFactory",
     filterData: {
       search: searchText,
@@ -72,6 +79,19 @@ const ManagerTable = ({ id }: { id: string }) => {
                   <ResponsiveButtonGroup>
                     <UpdateManagerModal data={user} />
                     <DeleteManagerModal data={user} />
+                    {switchUser === true && (
+                      <Link
+                        href={`/factory/dashboard`}
+                        onClick={() => {
+                          setFactoryId(user.factoryId, user?.id);
+                        }}
+                      >
+                        <ActionButton
+                          variant="primaryIcon"
+                          buttonContent="Go to Dashboard"
+                        />
+                      </Link>
+                    )}
                   </ResponsiveButtonGroup>
                 ),
               },

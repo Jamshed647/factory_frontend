@@ -11,7 +11,11 @@ import ManagerFormComponent from "../form/managerForm";
 import { ManagerFormType, managerSchema } from "../../schema/managerSchema";
 import { managerDefaultValue } from "../../utils/managerDefaultValue";
 
-const CreateManagerModal = ({ factoryId }: { factoryId: string }) => {
+const CreateManagerModal = ({
+  factoryId,
+}: {
+  factoryId: string | undefined;
+}) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
@@ -50,6 +54,7 @@ const CreateManagerModal = ({ factoryId }: { factoryId: string }) => {
       title="Create Manager"
     >
       <ManagerFormComponent
+        selectFactory={!factoryId ? true : false}
         form={managerForm}
         isPending={createManager.isPending}
         onSubmit={onSubmit}

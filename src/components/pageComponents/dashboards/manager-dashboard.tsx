@@ -17,18 +17,21 @@ export function ManagerDashboard() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
+          link={`/factory/employees`}
           title="Total Employees"
           value={factoryAdminData.summary.totalEmployees.toString()}
           description="Working in factory"
           icon={<Users className="w-4 h-4 text-muted-foreground" />}
         />
         <MetricCard
+          link={`/factory/salesman`}
           title="Active Salesmen"
           value={factoryAdminData.summary.activeSalesmen.toString()}
           description="Currently active"
           icon={<UserCheck className="w-4 h-4 text-muted-foreground" />}
         />
         <MetricCard
+          link={`/factory/product`}
           title="Daily Production"
           value={factoryAdminData.summary.dailyProduction.toString()}
           description="Units produced today"

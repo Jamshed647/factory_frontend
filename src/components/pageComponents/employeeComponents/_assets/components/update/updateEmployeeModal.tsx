@@ -30,7 +30,7 @@ const UpdateEmployeeModal = ({ data }: { data: any }) => {
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getFactoryData"] });
+      queryClient.invalidateQueries({ queryKey: ["getEmployeeData"] });
       setOpen(false);
     },
   });

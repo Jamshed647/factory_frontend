@@ -25,18 +25,18 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
     defaultValues: salesmanDefaultValue(data),
   });
 
-  const updateEmployee = useApiMutation({
-    path: `auth/employee/${data.id}`,
+  const updateSalesman = useApiMutation({
+    path: `auth/salesman/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getFactoryData"] });
+      queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
       setOpen(false);
     },
   });
 
   const onSubmit = async (data: SalesmanUpdateFormType) => {
-    updateEmployee.mutate(data);
+    updateSalesman.mutate(data);
   };
 
   return (
@@ -49,7 +49,7 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
       <SalesmanFormComponent
         operation="update"
         form={companyUpdateForm}
-        isPending={updateEmployee.isPending}
+        isPending={updateSalesman?.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>

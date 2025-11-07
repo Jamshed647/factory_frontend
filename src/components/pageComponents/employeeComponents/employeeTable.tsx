@@ -14,8 +14,11 @@ const EmployeeTable = ({ factoryId }: { factoryId: string }) => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `auth/employee/factory/${factoryId}`,
-    queryKey: "getManagerDataByFactory",
+
+    path: factoryId
+      ? `auth/employee/factory/${factoryId}`
+      : `auth/employee/all`,
+    queryKey: "getEmployeeData",
     filterData: {
       search: searchText,
       page: currentPage,

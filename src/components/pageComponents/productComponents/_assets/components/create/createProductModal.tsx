@@ -10,14 +10,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import ProductFormComponent from "../form/productForm";
 import { createProductSchema, ProductType } from "../../schema/productSchema";
 import { productDefaultValue } from "../../utils/productDefaultValue";
+import { useAuth } from "@/hooks/hooks";
 
 const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
+  const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
   const productForm = useForm<ProductType>({
     resolver: zodResolver(createProductSchema),
-    defaultValues: productDefaultValue(),
+    defaultValues: productDefaultValue({
+      factory_id: factoryId,
+      created_by: user?.id,
+    }),
   });
 
   const createFactory = useApiMutation({

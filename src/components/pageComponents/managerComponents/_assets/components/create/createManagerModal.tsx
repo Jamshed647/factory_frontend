@@ -30,7 +30,7 @@ const CreateManagerModal = ({
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getManagerDataByFactory"] });
+      queryClient.invalidateQueries({ queryKey: ["getManagerData"] });
       setOpen(false);
     },
   });

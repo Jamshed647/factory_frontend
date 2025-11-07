@@ -63,12 +63,12 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           placeholder="Select Unit Type"
           form={form}
           options={[
-            { value: "KG", label: "Kg" },
-            { value: "PCS", label: "Pcs" },
-            { value: "BAG", label: "Bag" },
-            { value: "METER", label: "Meter" },
-            { value: "LITER", label: "Liter" },
-            { value: "ROLL", label: "Roll" },
+            { value: "kg", label: "Kg" },
+            { value: "pcs", label: "Pcs" },
+            { value: "bag", label: "Bag" },
+            { value: "meter", label: "Meter" },
+            { value: "liter", label: "Liter" },
+            { value: "roll", label: "Roll" },
           ]}
         />
         <CustomField.Text
@@ -111,7 +111,6 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           labelName="Image Url"
           placeholder="Enter your image url"
           form={form}
-          optional={false}
         />
         <CustomField.SelectField
           name="status"
@@ -128,7 +127,7 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           buttonContent={operation}
           type="submit"
           isPending={isPending}
-          handleOpen={form.handleSubmit(onSubmit)}
+          handleOpen={form.handleSubmit(onSubmit, onFormError)}
           btnStyle="w-full bg-green-500 text-white"
         />
       </form>

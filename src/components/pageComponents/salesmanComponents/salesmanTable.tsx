@@ -14,8 +14,11 @@ const SalesmanTable = ({ factoryId }: { factoryId: string }) => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `auth/salesman/factory/${factoryId}`,
-    queryKey: "getManagerDataByFactory",
+
+    path: factoryId
+      ? `auth/salesman/factory/${factoryId}`
+      : `auth/salesman/all`,
+    queryKey: "getManagerData",
     filterData: {
       search: searchText,
       page: currentPage,

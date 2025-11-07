@@ -27,7 +27,10 @@ export const createProductSchema = z.object({
   current_stock: validationSchemas.numberSchema({ label: "Current Stock" }),
   min_stock_level: validationSchemas.numberSchema({ label: "Min Stock Level" }),
   description: z.string().optional(),
-  image_url: z.string().url().optional(),
+  image_url: validationSchemas.urlSchema({
+    label: "Image URL",
+    required: false,
+  }),
   status: validationSchemas.textSchema({ label: "Status" }),
   created_by: z.string().uuid({ message: "Invalid creator ID" }),
 });

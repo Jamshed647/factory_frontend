@@ -364,7 +364,7 @@ const phoneSchema = (props: PhoneValidationProps = {}) => {
 /*                                  URL Schema                                */
 /* -------------------------------------------------------------------------- */
 
-const urlSchema = (props: UrlValidationProps = {}) => {
+export const urlSchema = (props: UrlValidationProps = {}) => {
   const {
     label = "URL",
     required = true,
@@ -373,56 +373,47 @@ const urlSchema = (props: UrlValidationProps = {}) => {
     blockedDomains,
   } = props;
 
-  let schema = createStringSchema({
-    min: 5,
-    max: 2048,
-    label,
-    required,
-  }).refine(
-    (val) => {
+  const base = z
+    .string()
+    .min(5, `${label} must be at least 5 characters`)
+    .max(2048, `${label} must be less than 2048 characters`)
+    .refine((val) => {
       try {
         const url = new URL(val);
         return ["http:", "https:"].includes(url.protocol);
       } catch {
         return false;
       }
-    },
-    {
-      message: `${label} must be a valid URL`,
-    },
-  );
+    }, `${label} must be a valid URL`)
+    .refine(
+      (val) => !requireHttps || val.startsWith("https://"),
+      `${label} must use HTTPS`,
+    )
+    .refine(
+      (val) =>
+        !allowedDomains?.length ||
+        allowedDomains.some((d) => new URL(val).hostname.endsWith(d)),
+      `${label} must be from: ${allowedDomains?.join(", ")}`,
+    )
+    .refine(
+      (val) =>
+        !blockedDomains?.length ||
+        !blockedDomains.some((d) => new URL(val).hostname.endsWith(d)),
+      `${label} from this domain is not allowed`,
+    );
 
-  if (requireHttps) {
-    schema = schema.refine((val) => val.startsWith("https://"), {
-      message: `${label} must use HTTPS`,
+  // ✅ Optional handling:
+  // Use `superRefine` to skip all checks for empty/undefined
+  return z
+    .union([base, z.literal(""), z.undefined()])
+    .superRefine((val, ctx) => {
+      if (required && (!val || val === "")) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `${label} is required`,
+        });
+      }
     });
-  }
-
-  if (allowedDomains?.length) {
-    schema = schema.refine(
-      (val) => {
-        const domain = new URL(val).hostname;
-        return allowedDomains.some((d) => domain.endsWith(d));
-      },
-      {
-        message: `${label} must be from: ${allowedDomains.join(", ")}`,
-      },
-    );
-  }
-
-  if (blockedDomains?.length) {
-    schema = schema.refine(
-      (val) => {
-        const domain = new URL(val).hostname;
-        return !blockedDomains.some((d) => domain.endsWith(d));
-      },
-      {
-        message: `${label} from this domain is not allowed`,
-      },
-    );
-  }
-
-  return schema.url({ message: `${label} must be a valid URL` });
 };
 
 /* -------------------------------------------------------------------------- */

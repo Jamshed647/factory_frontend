@@ -23,7 +23,7 @@ const ManagerTable = ({ id, switchUser = false }: TableProps) => {
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: id ? `auth/manager/factory/${id}` : `auth/manager/all`,
-    queryKey: "getManagerDataByFactory",
+    queryKey: "getManagerData",
     filterData: {
       search: searchText,
       page: currentPage,

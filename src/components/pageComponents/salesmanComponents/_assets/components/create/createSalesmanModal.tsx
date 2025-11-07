@@ -24,14 +24,14 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
     employeeForm.setValue("factoryId", factoryId);
   }
 
-  const createFactory = useApiMutation({
-    path: "auth/employee",
+  const createSalesman = useApiMutation({
+    path: "auth/salesman",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
       employeeForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getEmployeeData"] });
+      queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
       setOpen(false);
     },
   });
@@ -39,7 +39,7 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
   const onSubmit = async (data: SalesmanFormType) => {
     const { confirmPinCode, ...rest } = data;
 
-    createFactory.mutate({ ...rest });
+    createSalesman.mutate({ ...rest });
   };
 
   return (
@@ -56,8 +56,9 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
       title="Create Employee"
     >
       <SalesmanFormComponent
+        selectFactory={!factoryId ? true : false}
         form={employeeForm}
-        isPending={createFactory.isPending}
+        isPending={createSalesman.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>

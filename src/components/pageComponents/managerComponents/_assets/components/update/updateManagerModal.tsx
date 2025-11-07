@@ -24,18 +24,23 @@ const UpdateManagerModal = ({ data }: { data: any }) => {
     defaultValues: managerDefaultValue(data),
   });
 
-  const createManager = useApiMutation({
+  const updateManager = useApiMutation({
     path: `auth/manager/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getManagerDataByFactory"] });
+
+      queryClient.invalidateQueries({
+        queryKey: ["getManagerData"],
+        exact: false, // will invalidate all queries that start with "getManagerData"
+      });
+      // queryClient.invalidateQueries({ queryKey: ["getManagerData"] });
       setOpen(false);
     },
   });
 
   const onSubmit = async (data: ManagerUpdateFormType) => {
-    createManager.mutate(data);
+    updateManager.mutate(data);
   };
 
   return (
@@ -48,7 +53,7 @@ const UpdateManagerModal = ({ data }: { data: any }) => {
       <ManagerFormComponent
         operation="update"
         form={companyUpdateForm}
-        isPending={createManager.isPending}
+        isPending={updateManager.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>

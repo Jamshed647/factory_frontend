@@ -3,10 +3,12 @@
 
 import ActionButton from "@/components/common/button/actionButton";
 import { CustomField } from "@/components/common/fields/cusField";
+import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import onFormError from "@/utils/formError";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
 interface EmployeeFormComponentProps<T extends Record<string, any>> {
+  selectFactory?: boolean;
   form: UseFormReturn<T>;
   onSubmit: (data: T) => void;
   isPending: boolean;
@@ -18,7 +20,11 @@ export default function SalesmanFormComponent<T extends Record<string, any>>({
   onSubmit,
   isPending,
   operation = "create",
+  selectFactory = false,
 }: EmployeeFormComponentProps<T>) {
+  const { options: factoryOption, isLoading: factoryLoading } =
+    DataFetcher.fetchFactories({});
+
   return (
     <FormProvider {...form}>
       <form
@@ -61,10 +67,21 @@ export default function SalesmanFormComponent<T extends Record<string, any>>({
           placeholder="Select Factory Status"
           form={form}
           options={[
-            { value: "Active", label: "Active" },
-            { value: "Inactive", label: "Inactive" },
+            { value: "ACTIVATE", label: "Active" },
+            { value: "DEACTIVATE", label: "Deactivate" },
           ]}
         />
+        {selectFactory && (
+          <CustomField.SelectField
+            name="factoryId"
+            labelName="Factory Owner Id"
+            placeholder="Enter your factory owner id"
+            form={form}
+            optional={false}
+            isLoading={factoryLoading}
+            options={factoryOption}
+          />
+        )}
 
         {operation === "create" && (
           <>

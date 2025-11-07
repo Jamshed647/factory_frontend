@@ -25,7 +25,7 @@ const FactoriesOverview = () => {
 
   return (
     <div className="mt-10">
-      <ManagerTable id={id as string} />
+      <ManagerTable factoryId={id as string} />
     </div>
   );
 };

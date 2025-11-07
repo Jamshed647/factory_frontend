@@ -12,17 +12,28 @@ import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import ActionButton from "@/components/common/button/actionButton";
 
 interface TableProps {
-  id?: string;
+  factoryId?: string;
+  companyId?: string;
   switchUser?: boolean;
 }
 
-const ManagerTable = ({ id, switchUser = false }: TableProps) => {
+const ManagerTable = ({
+  factoryId,
+  companyId,
+  switchUser = false,
+}: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
+  const path = factoryId
+    ? `auth/manager/factory/${factoryId}`
+    : companyId
+      ? `auth/manager/companyOwner/${companyId}`
+      : `auth/manager/all`;
+
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: id ? `auth/manager/factory/${id}` : `auth/manager/all`,
+    path: path,
     queryKey: "getManagerData",
     filterData: {
       search: searchText,
@@ -42,7 +53,7 @@ const ManagerTable = ({ id, switchUser = false }: TableProps) => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateManagerModal factoryId={id} />
+            <CreateManagerModal factoryId={factoryId} />
           </div>
         </div>
 
@@ -81,9 +92,9 @@ const ManagerTable = ({ id, switchUser = false }: TableProps) => {
                     <DeleteManagerModal data={user} />
                     {switchUser === true && (
                       <Link
-                        href={`/factory/dashboard`}
+                        href={`/factory/manager-dashboard`}
                         onClick={() => {
-                          setFactoryId(user.factoryId, user?.id);
+                          setFactoryId(user.factoryId, user?.id, user?.role);
                         }}
                       >
                         <ActionButton

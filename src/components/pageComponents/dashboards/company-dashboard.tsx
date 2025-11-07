@@ -30,22 +30,26 @@ export function CompanyDashboard() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
+          link="factory"
           title="Total Factories"
           value={superAdminData.summary.totalFactories.toString()}
           description="Production units"
           icon={<Factory className="w-4 h-4 text-muted-foreground" />}
         />
         <MetricCard
-          title="Total Employees"
-          value={superAdminData.summary.totalEmployees.toString()}
-          description="Across all factories"
-          icon={<Users className="w-4 h-4 text-muted-foreground" />}
-        />
-        <MetricCard
+          link="manager"
           title="Managers"
           value={superAdminData.summary.totalManagers.toString()}
           description="Factory administrators"
           icon={<UserCheck className="w-4 h-4 text-muted-foreground" />}
+        />
+
+        <MetricCard
+          link="employee"
+          title="Total Employees"
+          value={superAdminData.summary.totalEmployees.toString()}
+          description="Across all factories"
+          icon={<Users className="w-4 h-4 text-muted-foreground" />}
         />
         <MetricCard
           title="Monthly Revenue"

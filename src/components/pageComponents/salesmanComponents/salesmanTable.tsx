@@ -7,17 +7,33 @@ import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButt
 import CreateSalesmanModal from "./_assets/components/create/createSalesmanModal";
 import UpdateSalesmanModal from "./_assets/components/update/updateSalesmanModal";
 import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
+import Link from "next/link";
+import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import ActionButton from "@/components/common/button/actionButton";
 
-const SalesmanTable = ({ factoryId }: { factoryId: string }) => {
+interface TableProps {
+  factoryId?: string;
+  companyId?: string;
+  switchUser?: boolean;
+}
+
+const SalesmanTable = ({
+  factoryId,
+  companyId,
+  switchUser = false,
+}: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
+  const path = factoryId
+    ? `auth/salesman/factory/${factoryId}`
+    : companyId
+      ? `auth/salesman/companyOwner/${companyId}`
+      : `auth/salesman/all`;
+
   const { data, isLoading } = useFetchData({
     method: "GET",
-
-    path: factoryId
-      ? `auth/salesman/factory/${factoryId}`
-      : `auth/salesman/all`,
+    path: path,
     queryKey: "getManagerData",
     filterData: {
       search: searchText,
@@ -74,6 +90,19 @@ const SalesmanTable = ({ factoryId }: { factoryId: string }) => {
                   <ResponsiveButtonGroup>
                     <UpdateSalesmanModal data={user} />
                     <DeleteSalesmanModal data={user} />
+                    {switchUser === true && (
+                      <Link
+                        href={`/factory/manager-dashboard`}
+                        onClick={() => {
+                          setFactoryId(user.factoryId, user?.id, user?.role);
+                        }}
+                      >
+                        <ActionButton
+                          variant="primaryIcon"
+                          buttonContent="Go to Dashboard"
+                        />
+                      </Link>
+                    )}
                   </ResponsiveButtonGroup>
                 ),
               },

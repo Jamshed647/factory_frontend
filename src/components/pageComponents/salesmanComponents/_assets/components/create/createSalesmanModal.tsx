@@ -11,7 +11,11 @@ import { SalesmanFormType, salesmanSchema } from "../../schema/salesmanSchema";
 import { salesmanDefaultValue } from "../../utils/salesmanDefaultValue";
 import SalesmanFormComponent from "../form/salesmanForm";
 
-const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
+interface CreateSalesmanModalProps {
+  factoryId?: string;
+}
+
+const CreateSalesmanModal = ({ factoryId }: CreateSalesmanModalProps) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
@@ -65,4 +69,4 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId: string }) => {
   );
 };
 
-export default CreateEmployeeModal;
+export default CreateSalesmanModal;

@@ -44,7 +44,7 @@ const FactoryAccessOverview = ({ id }: CompanyPageProps) => {
 
         {/* ========== Manager Tab ========== */}
         <TabsContent value="manager" className="mt-6">
-          <ManagerTable id={id} />
+          <ManagerTable factoryId={id} />
         </TabsContent>
 
         {/* ========== Employee Tab ========== */}

@@ -20,6 +20,7 @@ export function ProjectOwnerDashboard() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
+          link="company"
           title="Total Companies"
           value={jangosoftData.summary.totalCompanies.toString()}
           description="Registered companies"
@@ -27,6 +28,7 @@ export function ProjectOwnerDashboard() {
           trend={{ value: 12, isPositive: true }}
         />
         <MetricCard
+          link="factory"
           title="Total Factories"
           value={jangosoftData.summary.totalFactories.toString()}
           description="Across all companies"
@@ -34,6 +36,7 @@ export function ProjectOwnerDashboard() {
           trend={{ value: 8, isPositive: true }}
         />
         <MetricCard
+          link="user"
           title="Active Users"
           value={jangosoftData.summary.totalActiveUsers.toString()}
           description="Currently active"

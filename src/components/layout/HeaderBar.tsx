@@ -1,9 +1,15 @@
-"use client";
 import { Bell, CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import ActionButton from "../common/button/actionButton";
+import { usePathname } from "next/navigation";
 
 export default function HeaderBar() {
+  const pathname = usePathname();
+
+  const path = pathname.split("/")[2].split("-")[0];
+
+  const profilePath = `/${path}/profile`;
+
   return (
     <div
       style={{
@@ -25,7 +31,7 @@ export default function HeaderBar() {
           <ActionButton icon={<Bell />} tooltipContent="Notifications" />
         </Link>
 
-        <Link className="!h-fit w-fit bg-red" href={`/profile`}>
+        <Link className="!h-fit w-fit bg-red" href={`profile`}>
           <ActionButton icon={<CircleUserRound />} />
         </Link>
       </div>

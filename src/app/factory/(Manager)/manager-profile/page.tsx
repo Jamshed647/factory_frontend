@@ -1,16 +1,15 @@
 "use client";
+import { ProfileHeader } from "@/components/pageComponents/profile/profile-header";
 import { ProfileInfo } from "@/components/pageComponents/profile/profile-info";
 import { SecuritySettings } from "@/components/pageComponents/profile/security-settings";
 import { UserManagement } from "@/components/pageComponents/profile/user-management";
-import { BillingSection } from "@/components/pageComponents/profile/billing-section";
-// import { QuickActions } from "@/components/pageComponents/profile/quick-actions";
+// import { QuickActions } from "@/components/profile/quick-actions";
+//import { demoProfiles } from "@/lib/data/profile-data";
 import { Toaster } from "sonner";
-import { ProfileHeader } from "@/components/pageComponents/profile/profile-header";
 import { demoProfiles } from "@/lib/data/profile-data";
-import { QuickActions } from "@/components/pageComponents/profile/quick-actions";
 
-export default function CompanyOwnerProfilePage() {
-  const profile = demoProfiles.COMPANY_OWNER;
+export default function ManagerProfilePage() {
+  const profile = demoProfiles.MANAGER;
 
   const handleEditProfile = () => {
     console.log("Edit profile clicked");
@@ -25,7 +24,7 @@ export default function CompanyOwnerProfilePage() {
       <div className="container px-4 mx-auto max-w-6xl">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
-          <p className="mt-2 text-gray-600">Company Owner Dashboard</p>
+          <p className="mt-2 text-gray-600">Factory Manager Dashboard</p>
         </div>
 
         <div className="space-y-6">
@@ -40,16 +39,13 @@ export default function CompanyOwnerProfilePage() {
             {/* Left Column */}
             <div className="space-y-6 lg:col-span-2">
               <ProfileInfo profile={profile} />
-              <UserManagement
-                manageableRoles={["MANAGER", "SALESMAN", "EMPLOYEE"]}
-              />
+              <UserManagement manageableRoles={["SALESMAN", "EMPLOYEE"]} />
             </div>
 
             {/* Right Column */}
             <div className="space-y-6">
               <SecuritySettings canChangePIN={true} />
-              <BillingSection isProjectOwner={false} />
-              <QuickActions role="COMPANY_OWNER" />
+              {/* <QuickActions role="MANAGER" /> */}
             </div>
           </div>
         </div>

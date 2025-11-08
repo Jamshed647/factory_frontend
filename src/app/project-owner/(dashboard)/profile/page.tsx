@@ -1,89 +1,66 @@
 "use client";
+import { BillingSection } from "@/components/pageComponents/profile/billing-section";
+import { ProfileHeader } from "@/components/pageComponents/profile/profile-header";
+import { ProfileInfo } from "@/components/pageComponents/profile/profile-info";
+import { QuickActions } from "@/components/pageComponents/profile/quick-actions";
+import { SecuritySettings } from "@/components/pageComponents/profile/security-settings";
+import { SystemSettings } from "@/components/pageComponents/profile/system-settings";
+import { UserManagement } from "@/components/pageComponents/profile/user-management";
+import { demoProfiles } from "@/lib/data/profile-data";
+import { Toaster } from "sonner";
 
-import ActionButton from "@/components/common/button/actionButton";
-import { CustomField } from "@/components/common/fields/cusField";
-import onFormError from "@/utils/formError";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
-import { ProfileFormType, profileSchema } from "./_asset/schema/userSchema";
-import { profileDefaultValue } from "./_asset/utils/profilValue";
+export default function JangoSoftProfilePage() {
+  const profile = demoProfiles.PROJECT_OWNER;
 
-export default function ProfilePage() {
-  //   const {data,isLoading} = useFetchData({
-  // path: `/api/v1/auth/owner/user`,
-  //     queryKey:"get_user_profile",
-  //   });
-  //
-  //
-  const data = {
-    pincode: "1234",
-    name: "John",
-    address: "123 Main Street",
-    email: "john@example.com",
-    phone: "+880123456789",
+  const handleEditProfile = () => {
+    console.log("Edit profile clicked");
   };
 
-  const profileForm = useForm<ProfileFormType>({
-    resolver: zodResolver(profileSchema),
-    defaultValues: profileDefaultValue(data),
-  });
-
-  const onSubmit = (data: ProfileFormType) => {
-    // Add save logic here (API call)
-    console.log("Profile saved!", data);
+  const handleAvatarChange = () => {
+    console.log("Change avatar clicked");
   };
 
   return (
-    <main className="flex justify-center items-center p-4 min-h-screen bg-gray-50 dark:bg-gray-900">
-      <FormProvider {...profileForm}>
-        <form
-          onSubmit={profileForm.handleSubmit(onSubmit)}
-          className="space-y-6 w-full"
-        >
-          <CustomField.Text
-            name="name"
-            labelName="Name"
-            placeholder="Enter your first name"
-            form={profileSchema}
-            optional={false}
-          />
-          <CustomField.Text
-            name="address"
-            labelName="Address"
-            placeholder="Enter your address"
-            form={profileSchema}
-            optional={false}
-          />
-          <CustomField.Text
-            name="email"
-            labelName="Email"
-            placeholder="Enter your email"
-            form={profileSchema}
-          />
-          <CustomField.Text
-            name="phone"
-            labelName="Phone Number"
-            placeholder="Enter your phone number"
-            form={profileSchema}
-            optional={false}
-          />
-          <CustomField.Text
-            name="pincode"
-            labelName="Pincode"
-            placeholder="Enter your pincode"
-            form={profileSchema}
-            optional={false}
+    <div className="py-8 min-h-screen bg-gray-50">
+      <div className="container px-4 mx-auto max-w-6xl">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
+          <p className="mt-2 text-gray-600">JangoSoft System Administrator</p>
+        </div>
+
+        <div className="space-y-6">
+          <ProfileHeader
+            profile={profile}
+            onEdit={handleEditProfile}
+            onAvatarChange={handleAvatarChange}
+            canEdit={true}
           />
 
-          <ActionButton
-            buttonContent="Save"
-            type="submit"
-            // isPending={createUser.isPending}
-            // handleOpen={profileSchema.handleSubmit(onSubmit)}
-            btnStyle="w-full bg-green-500 text-white"
-          />
-        </form>
-      </FormProvider>
-    </main>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {/* Left Column */}
+            <div className="space-y-6 lg:col-span-2">
+              <ProfileInfo profile={profile} />
+              <UserManagement
+                manageableRoles={[
+                  "COMPANY_OWNER",
+                  "MANAGER",
+                  "SALESMAN",
+                  "EMPLOYEE",
+                ]}
+              />
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-6">
+              <SecuritySettings canChangePIN={true} />
+              <BillingSection isProjectOwner={true} />
+              <SystemSettings />
+              <QuickActions role="PROJECT_OWNER" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <Toaster position="top-right" />
+    </div>
   );
 }

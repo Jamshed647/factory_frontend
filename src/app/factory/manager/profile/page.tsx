@@ -7,6 +7,7 @@ import { UserManagement } from "@/components/pageComponents/profile/user-managem
 //import { demoProfiles } from "@/lib/data/profile-data";
 import { Toaster } from "sonner";
 import { demoProfiles } from "@/lib/data/profile-data";
+import { QuickActions } from "@/components/pageComponents/profile/quick-actions";
 
 export default function ManagerProfilePage() {
   const profile = demoProfiles.MANAGER;
@@ -45,7 +46,7 @@ export default function ManagerProfilePage() {
             {/* Right Column */}
             <div className="space-y-6">
               <SecuritySettings canChangePIN={true} />
-              {/* <QuickActions role="MANAGER" /> */}
+              <QuickActions role="MANAGER" />
             </div>
           </div>
         </div>

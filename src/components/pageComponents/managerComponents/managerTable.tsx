@@ -92,7 +92,7 @@ const ManagerTable = ({
                     <DeleteManagerModal data={user} />
                     {switchUser === true && (
                       <Link
-                        href={`/factory/manager-dashboard`}
+                        href={`/factory/manager/dashboard`}
                         onClick={() => {
                           setFactoryId(user.factoryId, user?.id, user?.role);
                         }}

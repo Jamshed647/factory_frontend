@@ -92,7 +92,7 @@ const EmployeeTable = ({
                     <DeleteEmployeeModal data={user} />
                     {switchUser === true && (
                       <Link
-                        href={`/factory/employee-dashboard`}
+                        href={`/factory/employee/dashboard`}
                         onClick={() => {
                           setFactoryId(user.factoryId, user?.id, user?.role);
                         }}

@@ -1,15 +1,8 @@
 import { Bell, CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import ActionButton from "../common/button/actionButton";
-import { usePathname } from "next/navigation";
 
 export default function HeaderBar() {
-  const pathname = usePathname();
-
-  const path = pathname.split("/")[2].split("-")[0];
-
-  const profilePath = `/${path}/profile`;
-
   return (
     <div
       style={{

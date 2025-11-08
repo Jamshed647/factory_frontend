@@ -37,57 +37,59 @@ export default function FactoryLayout({
     ...(isAccessRole(role)
       ? ([
           {
-            key: "/factory/manager-dashboard",
+            key: "/factory/manager/dashboard",
             icon: <PieChartOutlined />,
-            label: <Link href="/factory/manager-dashboard">Dashboard</Link>,
+            label: <Link href="/factory/manager/dashboard">Dashboard</Link>,
           },
           {
             key: "/factory/manager",
             icon: <Factory />,
-            label: <Link href="/factory/manager">Manager</Link>,
+            label: (
+              <Link href="/factory/manager/managerList">Manager List</Link>
+            ),
           },
           {
             key: "/factory/product",
             icon: <PackageSearch />,
-            label: <Link href="/factory/product">Product</Link>,
+            label: <Link href="/factory/manager/product">Product</Link>,
           },
           {
-            key: "/factory/employee",
+            key: "/factory/manager/employee",
             icon: <PieChartOutlined />,
-            label: <Link href="/factory/employee">Employees</Link>,
+            label: <Link href="/factory/manager/employee">Employees</Link>,
           },
           {
-            key: "/factory/salesman",
+            key: "/factory/manager/salesman",
             icon: <Factory />,
-            label: <Link href="/factory/salesman">Salesman</Link>,
+            label: <Link href="/factory/manager/salesman">Salesman</Link>,
           },
         ] as AntdMenuItem[])
       : []),
     ...(role === "EMPLOYEE"
       ? ([
           {
-            key: "/factory/employee-dashboard",
+            key: "/factory/employee/dashboard",
             icon: <PieChartOutlined />,
-            label: <Link href="/factory/employee-dashboard">Dashboard</Link>,
+            label: <Link href="/factory/employee/dashboard">Dashboard</Link>,
           },
           {
             key: "/factory/employee-work",
             icon: <PieChartOutlined />,
-            label: <Link href="/factory/employee-work">Employee Work</Link>,
+            label: <Link href="/factory/employee/work">Employee Work</Link>,
           },
         ] as AntdMenuItem[])
       : []),
     ...(role === "SALESMAN"
       ? ([
           {
-            key: "/factory/salesman-dashboard",
+            key: "/factory/salesman/dashboard",
             icon: <PieChartOutlined />,
-            label: <Link href="/factory/salesman-dashboard">Dashboard</Link>,
+            label: <Link href="/factory/salesman/dashboard">Dashboard</Link>,
           },
           {
-            key: "/factory/salesman-work",
+            key: "/factory/salesman/work",
             icon: <PieChartOutlined />,
-            label: <Link href="/factory/salesman-work">Salesman Work</Link>,
+            label: <Link href="/factory/salesman/work">Salesman Work</Link>,
           },
         ] as AntdMenuItem[])
       : []),

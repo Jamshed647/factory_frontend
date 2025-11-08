@@ -92,7 +92,7 @@ const SalesmanTable = ({
                     <DeleteSalesmanModal data={user} />
                     {switchUser === true && (
                       <Link
-                        href={`/factory/salesman-dashboard`}
+                        href={`/factory/salesman/dashboard`}
                         onClick={() => {
                           setFactoryId(user.factoryId, user?.id, user?.role);
                         }}

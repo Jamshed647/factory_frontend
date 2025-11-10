@@ -65,6 +65,12 @@ export default function FactoryLayout({
           },
         ] as AntdMenuItem[])
       : []),
+
+    {
+      key: "/factory/customer",
+      icon: <Factory />,
+      label: <Link href="/factory/customer">Customer</Link>,
+    },
     ...(role === "EMPLOYEE"
       ? ([
           {

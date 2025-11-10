@@ -55,7 +55,7 @@ export default function JangoSoftProfilePage() {
               <SecuritySettings canChangePIN={true} />
               <BillingSection isProjectOwner={true} />
               <SystemSettings />
-              <QuickActions role="PROJECT_OWNER" />
+              {/* <QuickActions role="PROJECT_OWNER" /> */}
             </div>
           </div>
         </div>

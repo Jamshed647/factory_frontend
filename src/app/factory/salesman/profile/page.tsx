@@ -43,7 +43,7 @@ export default function SalesmanProfilePage() {
             {/* Right Column */}
             <div className="space-y-6">
               <SecuritySettings canChangePIN={true} />
-              <QuickActions role="SALESMAN" />
+              {/* // <QuickActions role="SALESMAN" /> */}
             </div>
           </div>
         </div>

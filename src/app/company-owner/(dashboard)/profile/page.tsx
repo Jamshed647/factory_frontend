@@ -49,7 +49,7 @@ export default function CompanyOwnerProfilePage() {
             <div className="space-y-6">
               <SecuritySettings canChangePIN={true} />
               <BillingSection isProjectOwner={false} />
-              <QuickActions role="COMPANY_OWNER" />
+              {/* <QuickActions role="COMPANY_OWNER" /> */}
             </div>
           </div>
         </div>

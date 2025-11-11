@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MetricCard } from "@/components/ui/metric-card";
 import { Users, UserCheck, Package, TrendingUp } from "lucide-react";
 import { factoryAdminData } from "@/lib/data/demo-data";
 import { AttendanceChart } from "@/components/common/charts/attendance-chart";
 import { ProductionChart } from "@/components/common/charts/production-chart";
 
-export function ManagerDashboard() {
+export function ManagerDashboard({ cash }: { cash: any }) {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -40,7 +41,7 @@ export function ManagerDashboard() {
         />
         <MetricCard
           title="Current Stock"
-          value={factoryAdminData.summary.currentStock.toString()}
+          value={cash?.balance}
           description="Available units"
           icon={<TrendingUp className="w-4 h-4 text-muted-foreground" />}
         />

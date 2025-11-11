@@ -33,7 +33,11 @@ export function MetricCard({
         </CardHeader>
         <CardContent className="flex flex-col flex-grow justify-between">
           <div>
-            <div className="text-2xl font-bold">{value}</div>
+            <div
+              className={`text-2xl font-bold text-${Number(value) < 0 ? "red" : "green"}-500`}
+            >
+              {value}
+            </div>
             {description && (
               <p className="text-xs text-muted-foreground">{description}</p>
             )}

@@ -12,15 +12,23 @@ import ActionButton from "@/components/common/button/actionButton";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
+import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
+import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
 
 interface TakeDueDialogProps {
   data: any;
   type: "TAKE" | "PAY";
+  transactionType?: "CASH" | "ONLINE";
 }
 
-export default function TakeDueDialog({ data, type }: TakeDueDialogProps) {
+export default function TakeDueDialog({
+  data,
+  type,
+  transactionType,
+}: TakeDueDialogProps) {
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
+  const factoryId = getFactoryId();
 
   const takeDue = useApiMutation({
     path: `factory/supplier/${data?.id}/due`,
@@ -29,7 +37,12 @@ export default function TakeDueDialog({ data, type }: TakeDueDialogProps) {
       queryClient.invalidateQueries({ queryKey: ["getSingleSupplierData"] });
       showToast("success", data);
       setOpen(false);
+      form.reset({});
     },
+  });
+
+  const { options: bankOptions } = DataFetcher.fetchBankAccounts({
+    path: `factory/bank/factory/${factoryId}`,
   });
 
   const form = useForm<DueFormType>({
@@ -37,9 +50,17 @@ export default function TakeDueDialog({ data, type }: TakeDueDialogProps) {
     defaultValues: dueDefaultValue({ type: type }),
   });
 
-  if (type) {
-    form.setValue("type", type);
-  }
+  React.useEffect(() => {
+    if (transactionType) {
+      form.setValue("transactionType", transactionType);
+    }
+    if (type) {
+      form.setValue("type", type);
+    }
+    if (form.watch("transactionType") === "CASH") {
+      form.setValue("bankId", "");
+    }
+  }, [transactionType, type, form]);
 
   const handleSubmit = (payload: DueFormType) => {
     takeDue.mutate(payload);
@@ -68,30 +89,45 @@ export default function TakeDueDialog({ data, type }: TakeDueDialogProps) {
               labelName="Amount"
               placeholder="Amount"
             />
-            <CustomField.SelectField
-              form={form}
-              optional={false}
-              viewOnly={true}
-              name="type"
-              options={[
-                { value: "TAKE", label: "Take" },
-                { value: "PAY", label: "Pay" },
-              ]}
-              labelName="Type"
-              placeholder="Type"
-            />
-            <CustomField.SelectField
-              form={form}
-              optional={false}
-              name="transactionType"
-              labelName="Transaction Type"
-              options={[
-                { value: "SALE", label: "Sale" },
-                { value: "PAYMENT", label: "Payment" },
-                { value: "PURCHASE", label: "Purchase" },
-              ]}
-              placeholder="Transaction Type"
-            />
+
+            {type === "PAY" && (
+              <>
+                <CustomField.SelectField
+                  form={form}
+                  optional={false}
+                  viewOnly={true}
+                  name="type"
+                  options={[
+                    { value: "TAKE", label: "Take" },
+                    { value: "PAY", label: "Pay" },
+                  ]}
+                  labelName="Type"
+                  placeholder="Type"
+                />
+                <CustomField.SelectField
+                  form={form}
+                  optional={false}
+                  name="transactionType"
+                  labelName="Transaction Type"
+                  options={[
+                    { value: "CASH", label: "Cash" },
+                    { value: "ONLINE", label: "Online" },
+                  ]}
+                  placeholder="Transaction Type"
+                />
+              </>
+            )}
+
+            {form.watch("transactionType") === "ONLINE" && (
+              <CustomField.SelectField
+                form={form}
+                options={bankOptions}
+                name="bankId"
+                labelName="Bank Account"
+                placeholder="Enter your bank account"
+              />
+            )}
+
             <CustomField.TextArea
               form={form}
               name="note"

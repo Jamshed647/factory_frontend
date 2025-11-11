@@ -27,7 +27,6 @@ export function fetchFactories({
 }
 
 /* Fetch Companies */
-
 export function fetchCompanies({
   filter,
   path,
@@ -76,6 +75,31 @@ export function fetchModulesByCourseId({
       value: mod.id,
       label: mod.title,
     })) ?? [];
+
+  return { options, data, isLoading, isError };
+}
+
+/* Fetch Bank Accounts */
+export function fetchBankAccounts({
+  filter,
+  path,
+}: {
+  filter?: any;
+  path?: string;
+}) {
+  const { data, isLoading, isError } = useFetchData({
+    method: "GET",
+    path: path ?? `factory/bank`,
+    queryKey: "fetch-bank-accounts",
+    filterData: { ...filter },
+    //enabled: !!sessionId,
+  });
+
+  const options = data?.data?.map((item: any) => ({
+    label: item?.name || item?.title || "Unknown",
+    value: item?.id,
+    code: item?.code,
+  }));
 
   return { options, data, isLoading, isError };
 }

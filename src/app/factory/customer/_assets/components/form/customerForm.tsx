@@ -55,7 +55,6 @@ export default function CustomerFormComponent<T extends Record<string, any>>({
           labelName="Initial Due"
           placeholder="Enter your initial due"
           form={form}
-          optional={false}
         />
 
         {selectFactory && (

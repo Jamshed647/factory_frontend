@@ -30,7 +30,7 @@ const CreateSupplierModal = ({ factoryId }: { factoryId?: string }) => {
     onSuccess: (data) => {
       customerForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getEmployeeData"] });
+      queryClient.invalidateQueries({ queryKey: ["getSupplierData"] });
       setOpen(false);
     },
   });

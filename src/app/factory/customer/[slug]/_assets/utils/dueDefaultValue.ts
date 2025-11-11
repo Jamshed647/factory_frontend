@@ -5,6 +5,7 @@ export const dueDefaultValue = (v: Partial<DueFormType>) => {
     amount: v?.amount ?? 0,
     type: v?.type ?? "",
     transactionType: v?.transactionType ?? "",
+    bankId: v?.bankId ?? "",
     note: v?.note ?? "",
   };
 };

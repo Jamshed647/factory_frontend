@@ -8,28 +8,21 @@ import Link from "next/link";
 
 interface TableProps {
   factoryId?: string;
-  companyId?: string;
   switchUser?: boolean;
 }
 
-const SupplierTable = ({
-  factoryId,
-  companyId,
-  switchUser = false,
-}: TableProps) => {
+const SupplierTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
   const path = factoryId
-    ? `auth/employee/factory/${factoryId}`
-    : companyId
-      ? `auth/employee/companyOwner/${companyId}`
-      : `factory/supplier`;
+    ? `factory/supplier/factory/${factoryId}`
+    : `factory/supplier`;
 
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: path,
-    queryKey: "getEmployeeData",
+    queryKey: "getSupplierData",
     filterData: {
       search: searchText,
       page: currentPage,
@@ -48,7 +41,7 @@ const SupplierTable = ({
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateSupplierModal />
+            <CreateSupplierModal factoryId={factoryId} />
           </div>
         </div>
 

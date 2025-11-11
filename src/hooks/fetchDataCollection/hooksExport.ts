@@ -1,8 +1,13 @@
-import { fetchCompanies, fetchFactories } from "./useDataHooks";
+import {
+  fetchBankAccounts,
+  fetchCompanies,
+  fetchFactories,
+} from "./useDataHooks";
 
 const DataFetcher = {
   fetchFactories,
   fetchCompanies,
+  fetchBankAccounts,
 };
 
 export default DataFetcher;

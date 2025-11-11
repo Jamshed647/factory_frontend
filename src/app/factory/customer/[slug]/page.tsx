@@ -50,7 +50,7 @@ export default function SupplierPage({
           </div>
           <div className="flex gap-2">
             <DueDialog data={customer} type="PAY" />
-            <DueDialog data={customer} type="TAKE" />
+            <DueDialog data={customer} type="TAKE" transactionType="CASH" />
           </div>
         </CardContent>
       </Card>

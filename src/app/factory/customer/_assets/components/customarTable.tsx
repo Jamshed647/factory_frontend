@@ -8,23 +8,16 @@ import Link from "next/link";
 
 interface TableProps {
   factoryId?: string;
-  companyId?: string;
   switchUser?: boolean;
 }
 
-const CustomerTable = ({
-  factoryId,
-  companyId,
-  switchUser = false,
-}: TableProps) => {
+const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
   const path = factoryId
-    ? `auth/employee/factory/${factoryId}`
-    : companyId
-      ? `auth/employee/companyOwner/${companyId}`
-      : `factory/customer`;
+    ? `factory/customer/factory/${factoryId}`
+    : `factory/customer`;
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -48,7 +41,7 @@ const CustomerTable = ({
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateCustomerModal />
+            <CreateCustomerModal factoryId={factoryId} />
           </div>
         </div>
 

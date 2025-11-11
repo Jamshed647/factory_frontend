@@ -13,17 +13,18 @@ import {
   UpdateProductType,
 } from "../../schema/productSchema";
 import ProductFormComponent from "../form/productForm";
+import { productDefaultValue } from "../../utils/productDefaultValue";
 
 const UpdateSalesmanModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const companyUpdateForm = useForm<UpdateProductType>({
+  const updateProductForm = useForm<UpdateProductType>({
     resolver: zodResolver(updateProductSchema),
-    //defaultValues: employeeDefaultValue(data),
+    defaultValues: productDefaultValue(data),
   });
 
-  const updateEmployee = useApiMutation({
+  const updateProduct = useApiMutation({
     path: `auth/salesman/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
@@ -34,7 +35,7 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
   });
 
   const onSubmit = async (data: UpdateProductType) => {
-    updateEmployee.mutate(data);
+    updateProduct.mutate(data);
   };
 
   return (
@@ -46,8 +47,8 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
     >
       <ProductFormComponent
         operation="update"
-        form={companyUpdateForm}
-        isPending={updateEmployee.isPending}
+        form={updateProductForm}
+        isPending={updateProduct.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>

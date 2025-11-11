@@ -8,14 +8,15 @@ import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal
 import CreateProductModal from "./_assets/components/create/createProductModal";
 import UpdateProductModal from "./_assets/components/update/updateProductModal";
 
-const ProductTable = ({ id }: { id: string }) => {
+const ProductTable = ({ id }: { id?: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `auth/salesman/factory/${id}`,
-    queryKey: "getSalesmanDataByFactory",
+    // path: `auth/salesman/factory/${id}`,
+    path: `factory/product`,
+    queryKey: "getProductDataByFactory",
     filterData: {
       search: searchText,
       page: currentPage,
@@ -34,7 +35,7 @@ const ProductTable = ({ id }: { id: string }) => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateProductModal factoryId={id} />
+            <CreateProductModal factoryId={id as string} />
           </div>
         </div>
 

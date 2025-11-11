@@ -49,7 +49,7 @@ export default function FactoryLayout({
             ),
           },
           {
-            key: "/factory/product",
+            key: "/factory/manager/product",
             icon: <PackageSearch />,
             label: <Link href="/factory/manager/product">Product</Link>,
           },

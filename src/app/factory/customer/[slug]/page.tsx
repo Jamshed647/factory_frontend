@@ -37,7 +37,14 @@ export default function SupplierPage({
         <CardContent className="flex justify-between items-center">
           <div>
             <p className="text-sm text-muted-foreground">Current Due</p>
-            <p className="text-2xl font-bold text-red-500">
+
+            <p
+              className={`text-2xl font-bold ${
+                (customer?.totalDueAmount ?? 0) < 0
+                  ? "text-red-500"
+                  : "text-green-500"
+              }`}
+            >
               ৳ {customer?.totalDueAmount ?? 0}
             </p>
           </div>

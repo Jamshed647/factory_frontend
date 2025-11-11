@@ -20,27 +20,30 @@ const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
   const productForm = useForm<ProductType>({
     resolver: zodResolver(createProductSchema),
     defaultValues: productDefaultValue({
-      factory_id: factoryId,
-      created_by: user?.id,
+      factoryId: factoryId,
     }),
   });
 
+  if (factoryId || user?.id) {
+    productForm.setValue("factoryId", factoryId);
+  }
+
   const createFactory = useApiMutation({
-    path: "auth/salesman",
+    path: "factory/product",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
       productForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
+      queryClient.invalidateQueries({ queryKey: ["getProductDataByFactory"] });
       setOpen(false);
     },
   });
 
   const onSubmit = async (data: ProductType) => {
-    console.log("Create Product", data, factoryId);
+    console.log("Create Product", data);
 
-    //  createFactory.mutate(data);
+    createFactory.mutate(data);
   };
 
   return (
@@ -57,6 +60,7 @@ const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
       title="Add Product"
     >
       <ProductFormComponent
+        isFactoryId={factoryId ? false : true}
         form={productForm}
         isPending={createFactory.isPending}
         onSubmit={onSubmit}

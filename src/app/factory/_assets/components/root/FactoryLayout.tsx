@@ -71,6 +71,12 @@ export default function FactoryLayout({
       icon: <Factory />,
       label: <Link href="/factory/customer">Customer</Link>,
     },
+    {
+      key: "/factory/supplier",
+      icon: <Factory />,
+      label: <Link href="/factory/supplier">Supplier</Link>,
+    },
+
     ...(role === "EMPLOYEE"
       ? ([
           {

@@ -1,0 +1,114 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+"use client";
+import { FormProvider, useForm } from "react-hook-form";
+import { DueFormType, dueSchema } from "./schema/dueSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { dueDefaultValue } from "./utils/dueDefaultValue";
+import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
+import React from "react";
+import { CustomField } from "@/components/common/fields/cusField";
+import ActionButton from "@/components/common/button/actionButton";
+import { showToast } from "@/components/common/TostMessage/customTostMessage";
+import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
+import { useQueryClient } from "@tanstack/react-query";
+
+interface TakeDueDialogProps {
+  data: any;
+  type: "TAKE" | "PAY";
+}
+
+export default function TakeDueDialog({ data, type }: TakeDueDialogProps) {
+  const queryClient = useQueryClient();
+  const [open, setOpen] = React.useState(false);
+
+  const takeDue = useApiMutation({
+    path: `factory/supplier/${data?.id}/due`,
+    method: "POST",
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["getSingleSupplierData"] });
+      showToast("success", data);
+      setOpen(false);
+    },
+  });
+
+  const form = useForm<DueFormType>({
+    resolver: zodResolver(dueSchema),
+    defaultValues: dueDefaultValue({ type: type }),
+  });
+
+  if (type) {
+    form.setValue("type", type);
+  }
+
+  const handleSubmit = (payload: DueFormType) => {
+    takeDue.mutate(payload);
+    console.log("Take Due:", payload);
+  };
+  return (
+    <DialogWrapper
+      triggerContent={
+        <ActionButton
+          btnStyle={`${type === "PAY" ? "bg-green-500 text-white" : "bg-red-500"} text-white`}
+          buttonContent={type === "PAY" ? "Pay Due" : "Take Due"}
+        />
+      }
+      open={open}
+      handleOpen={() => setOpen(!open)}
+      title={`Take Due - ${data?.name}`}
+    >
+      <FormProvider {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <div className="space-y-3">
+            <CustomField.Text
+              optional={false}
+              form={form}
+              name="amount"
+              labelName="Amount"
+              placeholder="Amount"
+            />
+            <CustomField.SelectField
+              form={form}
+              optional={false}
+              viewOnly={true}
+              name="type"
+              options={[
+                { value: "TAKE", label: "Take" },
+                { value: "PAY", label: "Pay" },
+              ]}
+              labelName="Type"
+              placeholder="Type"
+            />
+            <CustomField.SelectField
+              form={form}
+              optional={false}
+              name="transactionType"
+              labelName="Transaction Type"
+              options={[
+                { value: "SALE", label: "Sale" },
+                { value: "PAYMENT", label: "Payment" },
+                { value: "PURCHASE", label: "Purchase" },
+              ]}
+              placeholder="Transaction Type"
+            />
+            <CustomField.TextArea
+              form={form}
+              name="note"
+              labelName="Note"
+              placeholder="Note"
+            />
+
+            <div className="flex justify-end">
+              <ActionButton
+                btnStyle="bg-blue-500 text-white"
+                isPending={takeDue.isPending}
+                buttonContent="Submit"
+                type="submit"
+              />
+            </div>
+          </div>
+        </form>
+      </FormProvider>
+    </DialogWrapper>
+  );
+}

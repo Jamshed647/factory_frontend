@@ -6,7 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { Factory, PackageSearch } from "lucide-react";
+import { BanknoteX, Factory, PackageSearch } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 import { useAuth } from "@/hooks/hooks";
 import { UserRole } from "@/types/user";
@@ -66,6 +66,11 @@ export default function FactoryLayout({
         ] as AntdMenuItem[])
       : []),
 
+    {
+      key: "/factory/bank",
+      icon: <BanknoteX />,
+      label: <Link href="/factory/bank">Bank</Link>,
+    },
     {
       key: "/factory/customer",
       icon: <Factory />,

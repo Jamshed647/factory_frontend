@@ -2,9 +2,9 @@
 
 "use client";
 import { FormProvider, useForm } from "react-hook-form";
-import { DueFormType, dueSchema } from "./schema/dueSchema";
+import { DueFormType, dueSchema } from "../schema/dueSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { dueDefaultValue } from "./utils/dueDefaultValue";
+import { dueDefaultValue } from "../utils/dueDefaultValue";
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import React from "react";
 import { CustomField } from "@/components/common/fields/cusField";
@@ -23,7 +23,7 @@ export default function TakeDueDialog({ data, type }: TakeDueDialogProps) {
   const [open, setOpen] = React.useState(false);
 
   const takeDue = useApiMutation({
-    path: `factory/supplier/${data?.id}/due`,
+    path: `factory/customer/${data?.id}/due`,
     method: "POST",
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["getSingleSupplierData"] });
@@ -45,6 +45,7 @@ export default function TakeDueDialog({ data, type }: TakeDueDialogProps) {
     takeDue.mutate(payload);
     console.log("Take Due:", payload);
   };
+
   return (
     <DialogWrapper
       triggerContent={

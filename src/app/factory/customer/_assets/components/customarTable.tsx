@@ -4,6 +4,7 @@ import DynamicTableWithPagination from "@/components/common/DynamicTable/Dynamic
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
 import CreateCustomerModal from "./create/createCustomerModal";
+import Link from "next/link";
 
 interface TableProps {
   factoryId?: string;
@@ -63,6 +64,9 @@ const CustomerTable = ({
               {
                 key: "name",
                 header: "Name",
+                render: (item) => (
+                  <Link href={`/factory/customer/${item.id}`}>{item.name}</Link>
+                ),
               },
               { key: "phone", header: "Contact Info" },
               { key: "address", header: "Address" },

@@ -49,38 +49,21 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           />
         )}
 
-        <CustomField.Text
-          name="sku"
-          labelName="Product Code"
-          placeholder="Enter your product code"
-          form={form}
-          // optional={false}
-        />
-        <CustomField.Text
-          name="unit"
-          labelName="Unit"
-          placeholder="Enter your unit"
-          form={form}
-          // optional={false}
-        />
-        <CustomField.Text
-          name="size"
-          labelName="Size"
-          placeholder="Enter your size"
-          form={form}
-          // optional={false}
-        />
-        <CustomField.Text
+        <CustomField.SelectField
           name="category"
           labelName="Category"
           placeholder="Enter your category"
           form={form}
-          //  optional={false}
+          options={[
+            { value: "rice", label: "Rice" },
+            { value: "muri", label: "Muri" },
+          ]}
+          optional={false}
         />
         <CustomField.SelectField
-          name="unit_type"
-          labelName="Unit Type"
-          placeholder="Select Unit Type"
+          name="quantityType"
+          labelName="Quantity Type"
+          placeholder="Select Quantity Type"
           form={form}
           options={[
             { value: "kg", label: "Kg" },
@@ -90,26 +73,38 @@ export default function ProductFormComponent<T extends Record<string, any>>({
             { value: "liter", label: "Liter" },
             { value: "roll", label: "Roll" },
           ]}
-          // optional={false}
+          optional={false}
         />
         <CustomField.Text
+          name="quantity"
+          labelName="Quantity"
+          placeholder="Enter your quantity"
+          form={form}
+          optional={false}
+        />
+        <CustomField.SelectField
+          name="productType"
+          labelName="Product Type"
+          placeholder="Select Product Type"
+          form={form}
+          options={[
+            { value: "Raw_Product", label: "Raw Product" },
+            { value: "Finished_Product", label: "Finished Product" },
+          ]}
+          optional={false}
+        />
+
+        <CustomField.Number
           name="buyPrice"
           labelName="Buy Price"
           placeholder="Enter your buy price"
           form={form}
           // optional={false}
         />
-        <CustomField.Text
+        <CustomField.Number
           name="sellPrice"
           labelName="Sell Price"
           placeholder="Enter your sell price"
-          form={form}
-          // optional={false}
-        />
-        <CustomField.Text
-          name="stock"
-          labelName="Stock"
-          placeholder="Enter your stock"
           form={form}
           // optional={false}
         />
@@ -120,81 +115,17 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           form={form}
           // optional={false}
         />
+        <CustomField.SelectField
+          name="status"
+          labelName="Status"
+          placeholder="Select Status"
+          form={form}
+          options={[
+            { value: "ACTIVE", label: "Active" },
+            { value: "INACTIVE", label: "Inactive" },
+          ]}
+        />
 
-        {/**/}
-        {/* <CustomField.Text */}
-        {/*   name="product_type" */}
-        {/*   labelName="Product Type" */}
-        {/*   placeholder="Enter your product type" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
-        {/**/}
-        {/* <CustomField.Text */}
-        {/*   name="name" */}
-        {/*   labelName="Product Name" */}
-        {/*   placeholder="Enter your product name" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
-        {/**/}
-        {/* <CustomField.Text */}
-        {/*   name="category" */}
-        {/*   labelName="Category" */}
-        {/*   placeholder="Enter your category" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
-        {/**/}
-        {/* <CustomField.SelectField */}
-        {/*   name="unit_type" */}
-        {/*   labelName="Unit Type" */}
-        {/*   placeholder="Select Unit Type" */}
-        {/*   form={form} */}
-        {/*   options={[ */}
-        {/*     { value: "kg", label: "Kg" }, */}
-        {/*     { value: "pcs", label: "Pcs" }, */}
-        {/*     { value: "bag", label: "Bag" }, */}
-        {/*     { value: "meter", label: "Meter" }, */}
-        {/*     { value: "liter", label: "Liter" }, */}
-        {/*     { value: "roll", label: "Roll" }, */}
-        {/*   ]} */}
-        {/* /> */}
-        {/* <CustomField.Text */}
-        {/*   name="purchase_price" */}
-        {/*   labelName="Purchase Price" */}
-        {/*   placeholder="Enter your purchase price" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
-        {/* <CustomField.Text */}
-        {/*   name="selling_price" */}
-        {/*   labelName="Selling Price" */}
-        {/*   placeholder="Enter your selling price" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
-        {/* <CustomField.Text */}
-        {/*   name="current_stock" */}
-        {/*   labelName="Current Stock" */}
-        {/*   placeholder="Enter your current stock" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
-        {/* <CustomField.Text */}
-        {/*   name="min_stock_level" */}
-        {/*   labelName="Min Stock Level" */}
-        {/*   placeholder="Enter your min stock level" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
-        {/* <CustomField.Text */}
-        {/*   name="description" */}
-        {/*   labelName="Description" */}
-        {/*   placeholder="Enter your description" */}
-        {/*   form={form} */}
-        {/*   optional={false} */}
-        {/* /> */}
         {/* <CustomField.Text */}
         {/*   name="image_url" */}
         {/*   labelName="Image Url" */}

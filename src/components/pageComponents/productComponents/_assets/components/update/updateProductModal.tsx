@@ -25,7 +25,7 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
   });
 
   const updateProduct = useApiMutation({
-    path: `auth/salesman/${data.id}`,
+    path: `factory/product/${data.id}`,
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);

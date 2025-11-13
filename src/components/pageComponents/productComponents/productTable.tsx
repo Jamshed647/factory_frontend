@@ -53,21 +53,21 @@ const ProductTable = ({ id }: { id?: string }) => {
               { key: "status", header: "Status" },
               { key: "buyPrice", header: "Buy Price" },
               { key: "sellPrice", header: "Sell Price" },
-              // {
-              //   key: "factoryName",
-              //   header: "Factory Owner Id",
-              //   render: (item) => item?.factory?.name,
-              // },
-              // {
-              //   key: "action",
-              //   header: "Action",
-              //   render: (user) => (
-              //     <ResponsiveButtonGroup>
-              //       <UpdateProductModal data={user} />
-              //       <DeleteSalesmanModal data={user} />
-              //     </ResponsiveButtonGroup>
-              //   ),
-              // },
+              {
+                key: "factoryName",
+                header: "Factory Owner Id",
+                render: (item) => item?.factory?.name,
+              },
+              {
+                key: "action",
+                header: "Action",
+                render: (user) => (
+                  <ResponsiveButtonGroup>
+                    <UpdateProductModal data={user} />
+                    <DeleteSalesmanModal data={user} />
+                  </ResponsiveButtonGroup>
+                ),
+              },
             ],
           }}
         />

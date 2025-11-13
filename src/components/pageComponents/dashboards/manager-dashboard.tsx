@@ -31,16 +31,16 @@ export function ManagerDashboard({ cash }: { cash: any }) {
           description="Currently active"
           icon={<UserCheck className="w-4 h-4 text-muted-foreground" />}
         />
+        {/* <MetricCard */}
+        {/*   link={`/factory/product`} */}
+        {/*   title="Daily Production" */}
+        {/*   value={factoryAdminData.summary.dailyProduction.toString()} */}
+        {/*   description="Units produced today" */}
+        {/*   icon={<Package className="w-4 h-4 text-muted-foreground" />} */}
+        {/*   trend={{ value: 8, isPositive: true }} */}
+        {/* /> */}
         <MetricCard
-          link={`/factory/product`}
-          title="Daily Production"
-          value={factoryAdminData.summary.dailyProduction.toString()}
-          description="Units produced today"
-          icon={<Package className="w-4 h-4 text-muted-foreground" />}
-          trend={{ value: 8, isPositive: true }}
-        />
-        <MetricCard
-          title="Current Stock"
+          title="Cash Balance"
           value={cash?.balance}
           description="Available units"
           icon={<TrendingUp className="w-4 h-4 text-muted-foreground" />}

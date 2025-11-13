@@ -6,7 +6,7 @@ export const bankSchema = z.object({
   name: validationSchemas.nameSchema({ label: "Full Name" }),
   factoryId: validationSchemas.textSchema({ label: "Factory Owner Id" }),
   accountNo: validationSchemas.textSchema({ label: "Account No" }),
-  branchAddress: validationSchemas.textSchema({
+  branch: validationSchemas.textSchema({
     label: "Branch Address",
     required: false,
   }),

@@ -104,19 +104,20 @@ export default function TakeDueDialog({
                   labelName="Type"
                   placeholder="Type"
                 />
-                <CustomField.SelectField
-                  form={form}
-                  optional={false}
-                  name="transactionType"
-                  labelName="Transaction Type"
-                  options={[
-                    { value: "CASH", label: "Cash" },
-                    { value: "ONLINE", label: "Online" },
-                  ]}
-                  placeholder="Transaction Type"
-                />
               </>
             )}
+
+            <CustomField.SelectField
+              form={form}
+              optional={false}
+              name="transactionType"
+              labelName="Transaction Type"
+              options={[
+                { value: "CASH", label: "Cash" },
+                { value: "ONLINE", label: "Online" },
+              ]}
+              placeholder="Transaction Type"
+            />
 
             {form.watch("transactionType") === "ONLINE" && (
               <CustomField.SelectField

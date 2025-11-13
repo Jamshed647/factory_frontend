@@ -65,6 +65,7 @@ export default function TakeDueDialog({
       form.setValue("bankId", "");
     }
   }, [transactionType, type, form]);
+
   // if (form.watch("transactionType") === "CASH") {
   //   form.setValue("bankId", "");
   // }
@@ -92,7 +93,7 @@ export default function TakeDueDialog({
       }
       open={open}
       handleOpen={() => setOpen(!open)}
-      title={`Take Due - ${data?.name}`}
+      title={`${type} Due - ${data?.name}`}
     >
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, onFormError)}>
@@ -118,19 +119,20 @@ export default function TakeDueDialog({
                   labelName="Type"
                   placeholder="Type"
                 />
-                <CustomField.SelectField
-                  form={form}
-                  optional={false}
-                  name="transactionType"
-                  labelName="Transaction Type"
-                  options={[
-                    { value: "CASH", label: "Cash" },
-                    { value: "ONLINE", label: "Online" },
-                  ]}
-                  placeholder="Transaction Type"
-                />
               </>
             )}
+
+            <CustomField.SelectField
+              form={form}
+              optional={false}
+              name="transactionType"
+              labelName="Transaction Type"
+              options={[
+                { value: "CASH", label: "Cash" },
+                { value: "ONLINE", label: "Online" },
+              ]}
+              placeholder="Transaction Type"
+            />
 
             {form.watch("transactionType") === "ONLINE" && (
               <CustomField.SelectField

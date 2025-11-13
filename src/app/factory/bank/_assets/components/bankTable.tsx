@@ -56,12 +56,12 @@ const BankTable = ({ factoryId, switchUser = false }: TableProps) => {
               {
                 key: "name",
                 header: "Name",
-                render: (item) => (
-                  <Link href={`/factory/customer/${item.id}`}>{item.name}</Link>
-                ),
+                // render: (item) => (
+                //   <Link href={`/factory/customer/${item.id}`}>{item.name}</Link>
+                // ),
               },
               { key: "accountNo", header: "Account No" },
-              { key: "branchAddress", header: "Branch Address" },
+              { key: "branch", header: "Branch Address" },
               { key: "balance", header: "Balance" },
 
               // {

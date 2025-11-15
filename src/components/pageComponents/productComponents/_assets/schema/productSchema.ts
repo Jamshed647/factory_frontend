@@ -21,10 +21,16 @@ export const createProductSchema = z.object({
   category: z.string().min(1, "Category is required"),
   quantity: z.string().min(1, "Quantity is required"),
   quantityType: z.string().min(1, "Quantity type is required"),
-  buyPrice: z.number().min(0).default(0),
-  sellPrice: z.number().min(0).default(0),
+  buyPrice: validationSchemas.numberSchema({
+    type: "number",
+    label: "Buy Price",
+  }),
+  sellPrice: validationSchemas.numberSchema({
+    type: "number",
+    label: "Sell Price",
+  }),
   note: z.string().optional().nullable(),
-  status: z.enum(["ACTIVE", "INACTIVE"]).optional().default("ACTIVE"),
+  status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
   factoryId: z.string().uuid("Invalid factory ID"),
 });
 

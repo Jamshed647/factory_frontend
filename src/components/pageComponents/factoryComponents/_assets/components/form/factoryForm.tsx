@@ -31,8 +31,8 @@ export default function FactoryFormComponent<T extends Record<string, any>>({
       >
         <CustomField.Text
           name="name"
-          labelName="Company Name"
-          placeholder="Enter your company name"
+          labelName="Factory Name"
+          placeholder="Enter your Factory name"
           form={form}
           optional={false}
         />

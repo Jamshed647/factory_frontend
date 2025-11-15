@@ -26,7 +26,7 @@ const CreateFactoryModal = () => {
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getCompanyData"] });
+      queryClient.invalidateQueries({ queryKey: ["getFactoryData"] });
       setOpen(false);
     },
   });

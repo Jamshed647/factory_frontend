@@ -33,9 +33,9 @@ const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
-      productForm.reset({});
       showToast("success", data);
       queryClient.invalidateQueries({ queryKey: ["getProductDataByFactory"] });
+      productForm.reset({});
       setOpen(false);
     },
   });

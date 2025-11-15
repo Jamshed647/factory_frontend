@@ -5,7 +5,10 @@ import { z } from "zod";
 export const managerSchema = z
   .object({
     firstName: validationSchemas.nameSchema({ label: "First Name" }),
-    lastName: validationSchemas.nameSchema({ label: "Last Name" }),
+    lastName: validationSchemas.nameSchema({
+      label: "Last Name",
+      required: false,
+    }),
     email: validationSchemas.emailSchema({ label: "Email", required: false }),
     phone: validationSchemas.numberSchema({
       label: "Contact Info",

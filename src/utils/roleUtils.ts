@@ -1,6 +1,6 @@
 import { UserRole } from "@/types/user";
 
-const ROLE_GROUPS = {
+export const ROLE_GROUPS = {
   worker: ["MANAGER", "SALESMAN", "EMPLOYEE"],
   access: ["MANAGER", "PROJECT_OWNER", "COMPANY_OWNER"],
   admin: ["COMPANY_OWNER", "PROJECT_OWNER"],

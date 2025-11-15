@@ -8,6 +8,7 @@ import { RegisterFormPayload } from "@/components/auth/schema/register-schema";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import type { User } from "@/types/user";
 import { getAccessToken, getRole } from "@/utils/cookie/tokenHandler";
+import { ROLE_GROUPS } from "@/utils/roleUtils";
 
 export const useAuth = () => {
   const router = useRouter();
@@ -113,7 +114,12 @@ export const useAuth = () => {
       // Wait for profile to load before redirecting
       queryClient.refetchQueries({ queryKey: ["currentUser"] }).then(() => {
         showToast("success", "Login successful");
-        router.replace(target || `/${portal}/dashboard`);
+        const path = (
+          target ||
+          `/${portal}/${ROLE_GROUPS.admin.includes(data?.role) ? "" : data.role.toLowerCase()}/dashboard`
+        ).replace(/\/+/g, "/");
+
+        router.replace(path);
       });
     },
     onError: (err: Error) => showToast("error", err.message),

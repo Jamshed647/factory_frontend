@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { MetricCard } from "@/components/ui/metric-card";
-import { Users, UserCheck, Package, TrendingUp } from "lucide-react";
+import { Users, UserCheck, TrendingUp, ShoppingCart } from "lucide-react";
 import { factoryAdminData } from "@/lib/data/demo-data";
 import { AttendanceChart } from "@/components/common/charts/attendance-chart";
 import { ProductionChart } from "@/components/common/charts/production-chart";
+import ActionButton from "@/components/common/button/actionButton";
+import Link from "next/link";
 
 export function ManagerDashboard({ cash }: { cash: any }) {
   return (
@@ -45,6 +47,17 @@ export function ManagerDashboard({ cash }: { cash: any }) {
           description="Available units"
           icon={<TrendingUp className="w-4 h-4 text-muted-foreground" />}
         />
+        <div>
+          <Link href="/factory/sell">
+            <ActionButton
+              buttonContent="Sell Product"
+              type="button"
+              isPending={false}
+              icon={<ShoppingCart className="w-5 h-5" />}
+              btnStyle="bg-blue-500 text-white"
+            />
+          </Link>
+        </div>
       </div>
 
       {/* Charts Section */}

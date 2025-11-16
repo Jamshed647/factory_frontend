@@ -50,16 +50,8 @@ export const SelectProductComponent = ({
     name: string,
     sellPrice: number,
     stock: number,
-    updateSellPrice?: number,
   ) => {
-    const updated = cart.update(
-      id,
-      limit,
-      name,
-      sellPrice,
-      stock,
-      updateSellPrice as number,
-    );
+    const updated = cart.update(id, limit, name, sellPrice, stock);
     setSelectedProducts(updated);
   };
 
@@ -93,11 +85,6 @@ export const SelectProductComponent = ({
           {products.map((p) => {
             const selected = isSelected(p?.id);
             const limit = getLimit(p?.id);
-
-            const total =
-              p?.updateSellPrice != null && p.updateSellPrice !== ""
-                ? Number(p.updateSellPrice) * limit
-                : Number(p?.sellPrice) * limit;
 
             return (
               <Card
@@ -135,54 +122,41 @@ export const SelectProductComponent = ({
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Price:</span>
                       <span className="font-semibold text-emerald-600">
-                        ৳{p?.updateSellPrice ?? p?.sellPrice}
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Total:</span>
-                      <span className="font-semibold text-emerald-600">
-                        ৳{total}
+                        ৳{p?.sellPrice}
                       </span>
                     </div>
                   </div>
 
                   <div className="flex justify-between mt-2">
                     <ActionButton
-                      type="button"
                       icon={<MinusIcon className="w-5 h-5" />}
                       tooltipContent="Decrease"
-                      handleOpen={(e: any) => {
+                      handleOpen={() =>
                         updateLimit(
                           p.id,
                           limit - 1,
                           p?.name,
                           p?.sellPrice,
-                          p?.quantity ?? p?.stock,
-                          p?.updateSellPrice,
-                        );
-                        e.stopPropagation();
-                      }}
+                          p?.quantity,
+                        )
+                      }
                       btnStyle="bg-red-500 text-white"
                     />
 
                     <span className="px-2 font-semibold">{limit}</span>
 
                     <ActionButton
-                      type="button"
                       icon={<PlusIcon className="w-5 h-5" />}
                       tooltipContent="Increase"
-                      handleOpen={(e: any) => {
+                      handleOpen={() =>
                         updateLimit(
                           p.id,
                           limit + 1,
                           p?.name,
                           p?.sellPrice,
                           p?.quantity ?? p?.stock,
-                          p?.updateSellPrice,
-                        );
-                        e.stopPropagation();
-                      }}
+                        )
+                      }
                       btnStyle="bg-green-500 text-white"
                     />
                   </div>

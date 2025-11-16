@@ -43,7 +43,9 @@ interface ButtonTooltipProps
   isPending?: boolean;
   imageAlt?: string;
   imageSize?: number;
-  handleOpen?: () => void;
+  // handleOpen?: () => void;
+
+  handleOpen?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   side?: "top" | "right" | "bottom" | "left";
   loadingContent?: React.ReactNode;
   disabled?: boolean;

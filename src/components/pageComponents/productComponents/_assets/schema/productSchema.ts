@@ -19,7 +19,10 @@ export const createProductSchema = z.object({
   name: validationSchemas.nameSchema({ label: "Product Name" }),
   productType: z.string().optional().nullable(),
   category: z.string().min(1, "Category is required"),
-  quantity: z.string().min(1, "Quantity is required"),
+  quantity: validationSchemas.numberSchema({
+    type: "string",
+    label: "Quantity",
+  }),
   quantityType: z.string().min(1, "Quantity type is required"),
   buyPrice: validationSchemas.numberSchema({
     type: "number",

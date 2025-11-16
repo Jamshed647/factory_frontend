@@ -8,7 +8,9 @@ const CommonSearch = ({
   width,
   searchText,
   setSearchText,
+  placeholder,
 }: {
+  placeholder?: string;
   width?: string;
   searchText: string;
   setSearchText: (text: string) => void;
@@ -53,7 +55,7 @@ const CommonSearch = ({
       <Search size={16} />
       <input
         type="text"
-        placeholder="Search"
+        placeholder={placeholder ?? "Search"}
         onChange={(e) => setInputValue(e.target.value)} // Update local state
         value={inputValue}
         className="flex-grow w-full text-black bg-transparent outline-none placeholder:text-gray-500"

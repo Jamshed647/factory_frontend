@@ -31,7 +31,7 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
     onSuccess: (data) => {
       customerForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getEmployeeData"] });
+      queryClient.invalidateQueries({ queryKey: ["getCustomerData"] });
       setOpen(false);
     },
   });

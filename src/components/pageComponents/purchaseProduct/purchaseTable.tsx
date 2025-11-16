@@ -11,14 +11,14 @@ import React from "react";
 // import CreateProductModal from "./_assets/components/create/createProductModal";
 // import UpdateProductModal from "./_assets/components/update/updateProductModal";
 
-const SalesTable = ({ factoryId }: { factoryId: string }) => {
+const PurchaseTable = ({ factoryId }: { factoryId: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/sale/factory/${factoryId}`,
-    queryKey: "getSalesDataByFactory",
+    path: `factory/purchase/factory/${factoryId}`,
+    queryKey: "getPurchaseDataByFactory",
     filterData: {
       search: searchText,
       page: currentPage,
@@ -30,7 +30,7 @@ const SalesTable = ({ factoryId }: { factoryId: string }) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Sells List</h2>
+          <h2 className="text-2xl font-bold">Purchase List</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
@@ -38,9 +38,9 @@ const SalesTable = ({ factoryId }: { factoryId: string }) => {
               setSearchText={setSearchText}
             />
 
-            <Link href="/factory/sell/createSell">
+            <Link href="/factory/purchase/createPurchase">
               <ActionButton
-                buttonContent="Sell Product"
+                buttonContent="Purchase Product"
                 type="button"
                 isPending={false}
                 icon={<ShoppingCart className="w-5 h-5" />}
@@ -107,4 +107,4 @@ const SalesTable = ({ factoryId }: { factoryId: string }) => {
   );
 };
 
-export default SalesTable;
+export default PurchaseTable;

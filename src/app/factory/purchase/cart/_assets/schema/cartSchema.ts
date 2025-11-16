@@ -13,7 +13,7 @@ const cartSchema = z.object({
     type: "number",
     label: "Paid Amount",
   }),
-  discountType: z.enum(["amount", "percent"]),
+  discountType: z.enum(["CASH", "PERCENTAGE"]),
   discountPercentage: validationSchemas.numberSchema({
     type: "number",
     label: "Discount Percentage",

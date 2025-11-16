@@ -63,34 +63,14 @@ export const CookieCart = (key: string) => ({
     this.set(cart);
     return cart;
   },
-  // update(
-  //   id: string,
-  //   limit: number,
-  //   name: string,
-  //   sellPrice: number,
-  //   stock: number,
-  // ) {
-  //   let cart = this.get();
-  //
-  //   // remove item
-  //   if (limit <= 0) {
-  //     cart = cart.filter((item: any) => item.id !== id);
-  //     this.set(cart);
-  //     return cart;
-  //   }
-  //
-  //   // update item
-  //   const exists = cart.find((item: any) => item.id === id);
-  //   if (exists) {
-  //     cart = cart.map((item: any) =>
-  //       item.id === id ? { ...item, limit, name, sellPrice, stock } : item,
-  //     );
-  //   } else {
-  //     // add new item
-  //     cart.push({ id, limit, name, sellPrice, stock });
-  //   }
-  //
-  //   this.set(cart);
-  //   return cart;
-  // },
+
+  remove() {
+    // Clear the data from the cookie (set an empty array)
+    this.set([]);
+
+    // Delete the cookie completely
+    document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+
+    return []; // return empty cart
+  },
 });

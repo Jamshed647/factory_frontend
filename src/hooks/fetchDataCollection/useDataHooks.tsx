@@ -103,3 +103,30 @@ export function fetchBankAccounts({
 
   return { options, data, isLoading, isError };
 }
+
+/* Fetch Product Categories */
+export function fetchProductCategories({
+  filter,
+  path,
+}: {
+  filter?: any;
+  path?: string;
+}) {
+  const { data, isLoading, isError } = useFetchData({
+    method: "GET",
+    path:
+      path ??
+      `factory/category/factory/ef2187d3-9afc-4c99-ac0e-b95476252148?type=sell-product`,
+    queryKey: "fetch-product-categories",
+    filterData: { ...filter },
+    //enabled: !!sessionId,
+  });
+
+  const options = data?.data?.map((item: any) => ({
+    label: item?.name || item?.title || "Unknown",
+    value: item?.id,
+    code: item?.code,
+  }));
+
+  return { options, data, isLoading, isError };
+}

@@ -134,9 +134,15 @@ export const SelectProductComponent = ({
 
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Price:</span>
-                      <span className="font-semibold text-emerald-600">
-                        ৳{p?.updateSellPrice ?? p?.sellPrice}
-                      </span>
+                      <div className="font-semibold text-emerald-600">
+                        {p?.updateSellPrice &&
+                          p?.updateSellPrice != p?.sellPrice && (
+                            <span className="mr-1 line-through text-muted-foreground">
+                              ৳{p?.sellPrice}
+                            </span>
+                          )}
+                        <span>৳{p?.updateSellPrice ?? p?.sellPrice}</span>
+                      </div>
                     </div>
 
                     <div className="flex justify-between items-center p-2 bg-emerald-50 rounded-md">

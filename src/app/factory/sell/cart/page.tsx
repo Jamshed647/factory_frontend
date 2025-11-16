@@ -78,9 +78,9 @@ const CartPage = () => {
     totalPrice + Number(values.extraCharge || 0) - discountAmount;
 
   // Due
-  const due =
-    grandTotal - Number(values.paidAmount || 0) + customer?.totalDueAmount || 0;
-
+  const due = Number(
+    grandTotal - Number(values.paidAmount || 0) + customer?.totalDueAmount || 0,
+  );
   // update values AFTER user/customer loads
   useEffect(() => {
     if (user) {
@@ -100,6 +100,10 @@ const CartPage = () => {
     method: "POST",
     onSuccess: (data: any) => {
       showToast("success", data);
+      form.reset({});
+      cart.remove();
+      customerCart.remove();
+      window.location.reload();
     },
   });
 
@@ -242,7 +246,8 @@ const CartPage = () => {
 
             <div className="flex justify-between text-lg font-bold text-gray-900">
               <span>Due (Bokeya)</span>
-              <span>{due}</span>
+              {/* <span>{due.toFixed(2)}</span> */}
+              <span>৳{due}</span>
             </div>
 
             <ActionButton

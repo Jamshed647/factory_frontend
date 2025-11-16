@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import CreateSupplierModal from "@/app/factory/supplier/_assets/components/create/createSupplierModal";
+import CreateCustomerModal from "@/app/factory/customer/_assets/components/create/createCustomerModal";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 // import ActionButton from "@/components/common/button/actionButton";
 // import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
@@ -20,12 +20,12 @@ const SelectSupplier = ({
 }) => {
   // const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const cart = CookieCart("supplierInfo");
+  const cart = CookieCart("customerInfo");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/supplier/factory/${factoryId}`,
-    queryKey: "getSupplierData",
+    queryKey: "getSupplierDataByFactory",
     filterData: {
       search: searchTerm,
     },
@@ -60,7 +60,7 @@ const SelectSupplier = ({
           />
         </div>
 
-        <CreateSupplierModal factoryId={factoryId} />
+        <CreateCustomerModal factoryId={factoryId} />
       </div>
 
       {/* Customer List */}

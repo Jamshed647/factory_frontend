@@ -7,7 +7,7 @@ const cartDefaultValue = (v: Partial<CartFormType> = {}) => {
     paymentMethod: v?.paymentMethod ?? "CASH",
     totalSaleAmount: v?.totalSaleAmount ?? 0,
     paidAmount: v?.paidAmount ?? 0,
-    discountType: v?.discountType ?? "amount",
+    discountType: v?.discountType ?? "CASH",
     discountPercentage: v?.discountPercentage ?? 0,
     discountAmount: v?.discountAmount ?? 0,
     extraCharge: v?.extraCharge ?? 0,

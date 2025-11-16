@@ -48,7 +48,7 @@ export function ManagerDashboard({ cash }: { cash: any }) {
           icon={<TrendingUp className="w-4 h-4 text-muted-foreground" />}
         />
         <div>
-          <Link href="/factory/sell">
+          <Link href="/factory/sell/createSell">
             <ActionButton
               buttonContent="Sell Product"
               type="button"

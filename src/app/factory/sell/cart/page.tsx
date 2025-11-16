@@ -57,18 +57,6 @@ const CartPage = () => {
 
   const values = form.watch();
 
-  // update values AFTER user/customer loads
-  useEffect(() => {
-    if (user) {
-      form.setValue("factoryId", user.factoryId as string);
-      form.setValue("sellerId", user.id as string);
-      form.setValue(
-        "sellerName",
-        user?.name || user?.firstName + " " + user?.lastName,
-      );
-    }
-  }, [user, form, values?.discountType]);
-
   // Total Price
   const totalPrice = selectedProducts?.reduce((sum, item) => {
     const price =
@@ -78,12 +66,6 @@ const CartPage = () => {
     const quantity = item.limit ?? 0;
     return sum + price * quantity;
   }, 0);
-
-  // Total Qty
-  // const totalQty = selectedProducts.reduce(
-  //   (sum, item) => sum + (item.limit || 0),
-  //   0,
-  // );
 
   // Discount logic
   const discountAmount =
@@ -99,6 +81,20 @@ const CartPage = () => {
   const due =
     grandTotal - Number(values.paidAmount || 0) + customer?.totalDueAmount || 0;
 
+  // update values AFTER user/customer loads
+  useEffect(() => {
+    if (user) {
+      form.setValue("factoryId", user.factoryId as string);
+      form.setValue("discountAmount", discountAmount);
+      form.setValue("sellerId", user.id as string);
+      form.setValue("totalSaleAmount", grandTotal);
+      form.setValue(
+        "sellerName",
+        user?.name || user?.firstName + " " + user?.lastName,
+      );
+    }
+  }, [user, form, values.discountType, discountAmount, grandTotal]);
+
   const sellProduct = useApiMutation({
     path: "factory/sale",
     method: "POST",
@@ -108,12 +104,13 @@ const CartPage = () => {
   });
 
   const handleSubmit = (data: CartFormType) => {
-    sellProduct.mutate(data);
-    // const submitData =
-    //   data.discountType === "percent"
-    //     ? { ...data, discountAmount: undefined }
-    //     : { ...data, discountPercentage: undefined };
-    //
+    const { discountPercentage, ...restData } = data;
+
+    if (data?.discountType === "CASH") {
+      sellProduct.mutate(restData);
+    } else {
+      sellProduct.mutate(data);
+    }
   };
 
   return (
@@ -217,8 +214,7 @@ const CartPage = () => {
             <h3 className="pb-3 text-xl font-semibold border-b">Summary</h3>
 
             <div className="space-y-3 text-sm">
-              {/* <SummaryItem label="Total Quantity" value={totalQty} /> */}
-              <SummaryItem label="Total Price" value={totalPrice} />
+              <SummaryItem label="Total Product Price" value={totalPrice} />
               <SummaryItem
                 label="Extra Charge"
                 value={values.extraCharge || 0}
@@ -238,6 +234,8 @@ const CartPage = () => {
                 label="Previous Due"
                 value={customer?.totalDueAmount || 0}
               />
+
+              <SummaryItem label="Total Sell Price" value={grandTotal} />
             </div>
 
             <hr className="my-2" />

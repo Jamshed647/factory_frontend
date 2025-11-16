@@ -139,9 +139,16 @@ export const SelectProductComponent = ({
                       </span>
                     </div>
 
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Total:</span>
-                      <span className="font-semibold text-emerald-600">
+                    <div className="flex justify-between items-center p-2 bg-emerald-50 rounded-md">
+                      <div className="flex gap-2 items-baseline">
+                        <span className="text-sm font-medium text-emerald-800">
+                          Total
+                        </span>
+                        <span className="text-xs text-emerald-600">
+                          (৳{p?.updateSellPrice ?? p?.sellPrice} × {limit})
+                        </span>
+                      </div>
+                      <span className="font-semibold text-emerald-700">
                         ৳{total}
                       </span>
                     </div>

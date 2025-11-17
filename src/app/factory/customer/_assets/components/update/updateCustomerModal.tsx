@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import React from "react";
 import ActionButton from "@/components/common/button/actionButton";
@@ -7,37 +8,37 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
+import { CustomerFormType, customerSchema } from "../../schema/customerSchema";
 import { customerDefaultValue } from "../../utils/customerDefaultValue";
-import BankFormComponent from "../form/bankForm";
-import { BankFormType, bankSchema } from "../../schema/bankSchema";
+import CustomerFormComponent from "../form/customerForm";
 
-const CreateBankModal = ({ factoryId }: { factoryId?: string }) => {
+const UpdateCustomerModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const customerForm = useForm<BankFormType>({
-    resolver: zodResolver(bankSchema),
-    defaultValues: customerDefaultValue({ factoryId: factoryId }),
+  const customerForm = useForm<CustomerFormType>({
+    resolver: zodResolver(customerSchema),
+    defaultValues: customerDefaultValue(data),
   });
 
-  if (factoryId) {
-    customerForm.setValue("factoryId", factoryId);
+  if (data?.factoryId) {
+    customerForm.setValue("factoryId", data?.factoryId);
   }
 
-  const createBank = useApiMutation({
-    path: "factory/bank",
-    method: "POST",
+  const updateCustomer = useApiMutation({
+    path: `factory/customer/${data?.id}`,
+    method: "PATCH",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
       customerForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getBankDataByFactory"] });
+      queryClient.invalidateQueries({ queryKey: ["getCustomerData"] });
       setOpen(false);
     },
   });
 
-  const onSubmit = async (data: BankFormType) => {
-    createBank.mutate({ ...data });
+  const onSubmit = async (data: CustomerFormType) => {
+    updateCustomer.mutate(data);
   };
 
   return (
@@ -46,21 +47,22 @@ const CreateBankModal = ({ factoryId }: { factoryId?: string }) => {
         <ActionButton
           btnStyle="bg-blue-500 text-white"
           icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Add Bank"
+          tooltipContent="Update Customer"
         />
       }
       open={open}
       handleOpen={setOpen}
-      title="Add Bank"
+      title="Create Customer"
     >
-      <BankFormComponent
-        selectFactory={!factoryId ? true : false}
+      <CustomerFormComponent
+        operation="update"
+        selectFactory={!data?.factoryId ? true : false}
         form={customerForm}
-        isPending={createBank.isPending}
+        isPending={updateCustomer.isPending}
         onSubmit={onSubmit}
       />
     </DialogWrapper>
   );
 };
 
-export default CreateBankModal;
+export default UpdateCustomerModal;

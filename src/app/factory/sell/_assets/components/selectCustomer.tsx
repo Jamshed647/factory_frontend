@@ -75,18 +75,24 @@ const SelectCustomer = ({
             href={`/factory/sell/cart`}
             onClick={() => handleCustomerId(c)}
           >
-            <Card className="flex flex-col gap-2 p-2 cursor-pointer">
-              <h3 className="text-base font-semibold break-words">
-                Name: {c?.name}
-              </h3>
+            <Card>
+              <div className="flex justify-between items-center px-4">
+                <div className="flex flex-col gap-2 p-2 cursor-pointer">
+                  <h3 className="text-base font-semibold break-words">
+                    Name: {c?.name}
+                  </h3>
 
-              <p className="text-sm text-gray-700 break-words">📞 {c?.phone}</p>
+                  <p className="text-sm text-gray-700 break-words">
+                    📞 {c?.phone}
+                  </p>
 
-              <div className="flex gap-2 justify-between items-start">
-                <span className="text-xs text-gray-500 break-words max-w-[70%]">
-                  📍 {c?.address}
-                </span>
-                {/* <StatusWithIcon status={c?.status} /> */}
+                  <div className="flex gap-2 justify-between items-start">
+                    <span className="text-xs text-gray-500 break-words max-w-[70%]">
+                      📍 {c?.address}
+                    </span>
+                  </div>
+                </div>
+                <p>৳{c?.totalDueAmount}</p>
               </div>
             </Card>
           </Link>

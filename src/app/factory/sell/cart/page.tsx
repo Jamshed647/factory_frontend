@@ -73,27 +73,54 @@ const CartPage = () => {
       ? (totalPrice * (Number(values.discountPercentage) || 0)) / 100
       : Number(values.discountAmount) || 0;
 
+  const sellPrice = totalPrice - discountAmount;
+
+  const total = sellPrice + Number(values.extraCharge || 0);
+
+  const isBigAmount =
+    Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
+    customer?.totalDueAmount < 0;
+
+  //  console.log("isBigAmount", isBigAmount);
+
   // Grand total
-  const grandTotal =
-    totalPrice + Number(values.extraCharge || 0) - discountAmount;
+  const grandTotal = isBigAmount
+    ? total
+    : total + Number(customer?.totalDueAmount || 0);
 
   // Due
-  const due = Number(
-    grandTotal - Number(values.paidAmount || 0) + customer?.totalDueAmount || 0,
-  );
+  // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
+  const due = Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
+
   // update values AFTER user/customer loads
   useEffect(() => {
+    form.setValue("totalSaleAmount", sellPrice);
+    form.setValue("totalAmount", grandTotal);
+    form.setValue("currentDueAmount", due);
+    form.setValue("discountAmount", discountAmount);
+    if (isBigAmount) {
+      form.setValue("paidAmount", total);
+    }
     if (user) {
       form.setValue("factoryId", user.factoryId as string);
-      form.setValue("discountAmount", discountAmount);
       form.setValue("sellerId", user.id as string);
-      form.setValue("totalSaleAmount", grandTotal);
       form.setValue(
         "sellerName",
         user?.name || user?.firstName + " " + user?.lastName,
       );
     }
-  }, [user, form, values.discountType, discountAmount, grandTotal]);
+  }, [
+    user,
+    form,
+    values.discountType,
+    discountAmount,
+    grandTotal,
+    due,
+    isBigAmount,
+    total,
+    totalPrice,
+    sellPrice,
+  ]);
 
   const sellProduct = useApiMutation({
     path: "factory/sale",
@@ -103,12 +130,14 @@ const CartPage = () => {
       form.reset({});
       cart.remove();
       customerCart.remove();
-      window.location.reload();
+      // window.location.reload();
     },
   });
 
   const handleSubmit = (data: CartFormType) => {
     const { discountPercentage, ...restData } = data;
+
+    //    console.log("TanstackQueries", data);
 
     if (data?.discountType === "CASH") {
       sellProduct.mutate(restData);
@@ -198,7 +227,7 @@ const CartPage = () => {
             {form.watch("paymentMethod") === "BANK" && (
               <CustomField.SelectField
                 form={form}
-                name="bankAccount"
+                name="bankId"
                 isLoading={isLoadingBank}
                 options={bankOptions}
                 placeholder="Select bank account"
@@ -218,7 +247,7 @@ const CartPage = () => {
             <h3 className="pb-3 text-xl font-semibold border-b">Summary</h3>
 
             <div className="space-y-3 text-sm">
-              <SummaryItem label="Total Product Price" value={totalPrice} />
+              <SummaryItem label="Total Product Price" value={sellPrice} />
               <SummaryItem
                 label="Extra Charge"
                 value={values.extraCharge || 0}

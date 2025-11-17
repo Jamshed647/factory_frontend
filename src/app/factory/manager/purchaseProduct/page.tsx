@@ -1,5 +1,5 @@
 "use client";
-import ProductTable from "@/components/pageComponents/productComponents/productTable";
+import PurchaseProductTable from "@/components/pageComponents/productComponents/purchaseProduct/PurchaseProductTable";
 import { useAuth } from "@/hooks/hooks";
 import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
 
@@ -14,7 +14,7 @@ const ProductPage = () => {
 
   return (
     <div>
-      <ProductTable id={id as string} />
+      <PurchaseProductTable id={id as string} />
     </div>
   );
 };

@@ -3,7 +3,6 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
-import Link from "next/link";
 import CreateBankModal from "./create/createBankModal";
 
 interface TableProps {
@@ -14,7 +13,6 @@ interface TableProps {
 const BankTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
-  console.log(factoryId);
 
   const path = factoryId ? `factory/bank/factory/${factoryId}` : `factory/bank`;
 

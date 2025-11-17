@@ -49,9 +49,20 @@ export default function FactoryLayout({
             ),
           },
           {
-            key: "/factory/manager/product",
+            key: "/factory/manager/sellProduct",
             icon: <PackageSearch />,
-            label: <Link href="/factory/manager/product">Product</Link>,
+            label: (
+              <Link href="/factory/manager/sellProduct">Sell Product</Link>
+            ),
+          },
+          {
+            key: "/factory/manager/purchaseProduct",
+            icon: <PackageSearch />,
+            label: (
+              <Link href="/factory/manager/purchaseProduct">
+                Purchase Product
+              </Link>
+            ),
           },
           {
             key: "/factory/manager/employee",

@@ -3,29 +3,22 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
-import CreateCustomerModal from "./create/createCustomerModal";
-import Link from "next/link";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
-import UpdateCustomerModal from "./update/updateCustomerModal";
+import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
+import CreateProductModal from "./_assets/components/create/createProductModal";
+import UpdateProductModal from "./_assets/components/update/updateProductModal";
 
-interface TableProps {
-  factoryId?: string;
-  switchUser?: boolean;
-}
-
-const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
+const SellProductTable = ({ id }: { id?: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
-  const path = factoryId
-    ? `factory/customer/factory/${factoryId}`
-    : `factory/customer`;
-
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: path,
-    queryKey: "getCustomerData",
+    path: `factory/product/factory/${id}`,
+    queryKey: "getProductDataByFactory",
     filterData: {
+      // ['ROW', 'FINISHED'];
+      type: "FINISHED",
       search: searchText,
       page: currentPage,
     },
@@ -36,14 +29,14 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Customer List</h2>
+          <h2 className="text-2xl font-bold">Sell Product List</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateCustomerModal factoryId={factoryId} />
+            <CreateProductModal factoryId={id as string} />
           </div>
         </div>
 
@@ -56,19 +49,14 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
           setCurrentPage={setCurrentPage}
           config={{
             columns: [
-              {
-                key: "name",
-                header: "Name",
-                render: (item) => (
-                  <Link href={`/factory/customer/${item.id}`}>{item.name}</Link>
-                ),
-              },
+              { key: "name", header: "Name" },
               { key: "phone", header: "Contact Info" },
-              { key: "address", header: "Address" },
-              { key: "totalDueAmount", header: "Total Due Amount" },
+              { key: "status", header: "Status" },
+              { key: "buyPrice", header: "Buy Price" },
+              { key: "sellPrice", header: "Sell Price" },
               {
                 key: "factoryName",
-                header: "Factory Name",
+                header: "Factory Owner Id",
                 render: (item) => item?.factory?.name,
               },
               {
@@ -76,8 +64,8 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
                 header: "Action",
                 render: (user) => (
                   <ResponsiveButtonGroup>
-                    <UpdateCustomerModal data={user} />
-                    {/* <DeleteEmployeeModal data={user} /> */}
+                    <UpdateProductModal data={user} />
+                    <DeleteSalesmanModal data={user} />
                   </ResponsiveButtonGroup>
                 ),
               },
@@ -89,4 +77,4 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
   );
 };
 
-export default CustomerTable;
+export default SellProductTable;

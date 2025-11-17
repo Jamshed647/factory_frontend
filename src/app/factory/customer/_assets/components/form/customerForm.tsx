@@ -24,6 +24,8 @@ export default function CustomerFormComponent<T extends Record<string, any>>({
 }: CustomerFormComponentProps<T>) {
   const { options: factoryOption, isLoading } = DataFetcher.fetchFactories({});
 
+  const enabled = operation === "update";
+
   return (
     <FormProvider {...form}>
       <form
@@ -49,13 +51,16 @@ export default function CustomerFormComponent<T extends Record<string, any>>({
           placeholder="Enter your address"
           form={form}
           optional={false}
+          viewOnly={enabled}
         />
-        <CustomField.Text
-          name="initialDue"
-          labelName="Initial Due"
-          placeholder="Enter your initial due"
-          form={form}
-        />
+        {!enabled && (
+          <CustomField.Text
+            name="initialDue"
+            labelName="Initial Due"
+            placeholder="Enter your initial due"
+            form={form}
+          />
+        )}
 
         {selectFactory && (
           <CustomField.SelectField
@@ -65,6 +70,7 @@ export default function CustomerFormComponent<T extends Record<string, any>>({
             form={form}
             options={factoryOption}
             isLoading={isLoading}
+            viewOnly={enabled}
           />
         )}
 

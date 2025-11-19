@@ -156,7 +156,7 @@ const CartPage = () => {
           <div className="-mt-4 space-y-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">
-                Price Calculation
+                Purchase Price Calculation
               </h2>
               {/* <p className="text-sm text-gray-600"> */}
               {/*   Extra charge, discount & advance */}

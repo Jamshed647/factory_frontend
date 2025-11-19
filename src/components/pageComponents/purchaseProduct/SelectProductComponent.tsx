@@ -34,7 +34,7 @@ export const SelectProductComponent = ({
   mode = "single",
   isClickable = false,
 }: SelectProductComponentProps) => {
-  const cart = CookieCart("selected_products");
+  const cart = CookieCart("purchase_products");
   const [open, setOpen] = useState(false);
   const [updateProduct, setUpdateProduct] = useState<Item>();
 

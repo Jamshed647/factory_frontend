@@ -93,6 +93,7 @@ export const SelectProductComponent = ({
           {products.map((p) => {
             const selected = isSelected(p?.id);
             const limit = getLimit(p?.id);
+            const isStock = (p?.quantity ?? p?.stock) > 0;
 
             const total =
               p?.updateSellPrice != null && p.updateSellPrice !== ""
@@ -110,7 +111,7 @@ export const SelectProductComponent = ({
                     : undefined
                 }
                 key={p?.id}
-                className={`transition-all duration-200 ${isClickable ? "cursor-pointer" : ""} hover:shadow-lg ${
+                className={`transition-all  duration-200 ${isClickable ? "cursor-pointer" : ""} hover:shadow-lg ${
                   selected ? " bg-blue-100 shadow-md" : ""
                 }`}
               >
@@ -163,6 +164,7 @@ export const SelectProductComponent = ({
                   <div className="flex justify-between mt-2">
                     <ActionButton
                       type="button"
+                      disabled={!isStock}
                       icon={<MinusIcon className="w-5 h-5" />}
                       tooltipContent="Decrease"
                       handleOpen={(e: any) => {
@@ -183,6 +185,7 @@ export const SelectProductComponent = ({
 
                     <ActionButton
                       type="button"
+                      disabled={!isStock}
                       icon={<PlusIcon className="w-5 h-5" />}
                       tooltipContent="Increase"
                       handleOpen={(e: any) => {

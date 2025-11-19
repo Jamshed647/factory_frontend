@@ -20,6 +20,7 @@ const PurchaseTable = ({ factoryId }: { factoryId: string }) => {
     path: `factory/purchase/factory/${factoryId}`,
     queryKey: "getPurchaseDataByFactory",
     filterData: {
+      // type: "RAW",
       search: searchText,
       page: currentPage,
     },

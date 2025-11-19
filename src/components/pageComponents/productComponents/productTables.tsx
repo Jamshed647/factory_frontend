@@ -14,7 +14,6 @@ const ProductTable = ({ id }: { id?: string }) => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    // path: `auth/salesman/factory/${id}`,
     path: `factory/product`,
     queryKey: "getProductDataByFactory",
     filterData: {

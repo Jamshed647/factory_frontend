@@ -45,6 +45,10 @@ const cartSchema = z
     }),
     sellerId: z.string(),
     sellerName: z.string(),
+    note: validationSchemas.textSchema({
+      label: "Note",
+      required: false,
+    }),
     items: z.array(
       z.object({
         productId: z.string(),
@@ -72,13 +76,20 @@ const cartSchema = z
   .refine(
     (data) => {
       if (data.paymentMethod === "BANK") {
-        return !!data.bankId; // must not be null/empty
+        return !!data.bankId;
       }
       return true;
     },
     {
       message: "Bank is required when payment method is BANK",
-      path: ["bankId"], // attach error to bankId field
+      path: ["bankId"],
+    },
+  )
+  .refine(
+    (data) => Number(data.paidAmount || 0) <= Number(data.totalAmount || 0),
+    {
+      message: "Paid amount cannot be greater than total sell amount",
+      path: ["paidAmount"],
     },
   );
 

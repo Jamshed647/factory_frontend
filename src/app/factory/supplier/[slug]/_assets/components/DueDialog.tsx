@@ -14,6 +14,7 @@ import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import { useAuth } from "@/hooks/hooks";
 
 interface TakeDueDialogProps {
   data: any;
@@ -28,7 +29,9 @@ export default function TakeDueDialog({
 }: TakeDueDialogProps) {
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
-  const factoryId = getFactoryId();
+  // const factoryId = getFactoryId();
+  const { user } = useAuth();
+  const factoryId = user?.factoryId;
 
   const takeDue = useApiMutation({
     path: `factory/supplier/${data?.id}/due`,

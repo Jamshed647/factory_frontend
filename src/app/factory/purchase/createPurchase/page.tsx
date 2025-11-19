@@ -2,13 +2,13 @@
 
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { CustomField } from "@/components/common/fields/cusField";
-import { SelectProductComponent } from "@/components/pageComponents/sellProduct/SelectProductComponent";
 import { CookieCart } from "@/utils/cookie/cart-utils";
 import { useState } from "react";
 import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import { useAuth } from "@/hooks/hooks";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
 import SelectSupplier from "../_assets/components/selectSupplier";
+import { SelectProductComponent } from "@/components/pageComponents/purchaseProduct/SelectProductComponent";
 
 const CreateSellPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,7 +17,7 @@ const CreateSellPage = () => {
   const { user } = useAuth();
   const factoryId = user?.factoryId || getFactoryId();
 
-  const cart = CookieCart("selected_products");
+  const cart = CookieCart("purchase_products");
 
   const [selectedProducts, setSelectedProducts] = useState<
     {
@@ -31,9 +31,9 @@ const CreateSellPage = () => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: "factory/product",
+    path: `factory/product/factory/${factoryId}`,
     queryKey: "getProductDataByFactory",
-    filterData: { search: searchTerm, page },
+    filterData: { type: "RAW", search: searchTerm, page },
   });
 
   return (
@@ -41,7 +41,9 @@ const CreateSellPage = () => {
       <div className="col-span-1 lg:col-span-2">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold tracking-tight">Select Products</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Select Products to Purchase
+          </h1>
         </div>
 
         {/* Search */}
@@ -71,7 +73,7 @@ const CreateSellPage = () => {
       <div>
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold tracking-tight">Select Customer</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Select Supplier</h1>
         </div>
 
         <SelectSupplier

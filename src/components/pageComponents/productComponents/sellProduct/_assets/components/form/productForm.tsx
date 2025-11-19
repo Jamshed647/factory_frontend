@@ -67,8 +67,8 @@ export default function ProductFormComponent<T extends Record<string, any>>({
         />
         <CustomField.SelectField
           name="quantityType"
-          labelName="Quantity Type"
-          placeholder="Select Quantity Type"
+          labelName="Unit Type"
+          placeholder="Select Unit Type"
           form={form}
           options={[
             { value: "kg", label: "Kg" },

@@ -2,10 +2,14 @@ import { validationSchemas } from "@/types/SchemaType/validationSchema";
 import z from "zod";
 
 const cartSchema = z.object({
-  customerId: z.string(),
+  supplierId: z.string(),
   factoryId: z.string(),
   paymentMethod: z.enum(["CASH", "BANK"]),
-  totalSaleAmount: validationSchemas.numberSchema({
+  totalPurchaseAmount: validationSchemas.numberSchema({
+    type: "number",
+    label: "Total Purchase Amount",
+  }),
+  totalAmount: validationSchemas.numberSchema({
     type: "number",
     label: "Total Price",
   }),
@@ -28,8 +32,17 @@ const cartSchema = z.object({
     type: "number",
     label: "Extra Charge",
   }),
-  sellerId: z.string(),
-  sellerName: z.string(),
+  currentDueAmount: validationSchemas.numberSchema({
+    type: "number",
+    label: "Current Due Amount",
+    //required: false,
+  }),
+  note: validationSchemas.textSchema({
+    label: "Note",
+    required: false,
+  }),
+  purchaserId: z.string(),
+  purchaserName: z.string(),
   items: z.array(
     z.object({
       productId: z.string(),
@@ -37,11 +50,11 @@ const cartSchema = z.object({
         type: "number",
         label: "Quantity",
       }),
-      sellPrice: validationSchemas.numberSchema({
+      buyPrice: validationSchemas.numberSchema({
         type: "number",
         label: "Sell Price",
       }),
-      updateSellPrice: validationSchemas.numberSchema({
+      updateBuyPrice: validationSchemas.numberSchema({
         type: "number",
         label: "Update Sell Price",
         required: false,

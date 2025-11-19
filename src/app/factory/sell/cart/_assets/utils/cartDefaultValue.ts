@@ -16,6 +16,7 @@ const cartDefaultValue = (v: Partial<CartFormType> = {}) => {
     currentDueAmount: v?.currentDueAmount ?? 0,
     sellerId: v?.sellerId ?? "",
     sellerName: v?.sellerName ?? "",
+    note: v?.note ?? "",
     items: v?.items ?? [],
   };
 };

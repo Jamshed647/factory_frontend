@@ -17,9 +17,9 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 
 const CartPage = () => {
-  const cart = CookieCart("selected_products");
-  const customerCart = CookieCart("customerInfo");
-  const customer = customerCart.get();
+  const cart = CookieCart("purchase_products");
+  const supplierCart = CookieCart("supplierInfo");
+  const supplier = supplierCart.get();
   const { user } = useAuth();
 
   const { options: bankOptions, isLoading: isLoadingBank } =
@@ -39,8 +39,8 @@ const CartPage = () => {
   const products = selectedProducts.map((item) => ({
     productId: item.id,
     quantity: item.limit,
-    sellPrice: item.sellPrice,
-    updateSellPrice: item?.updateSellPrice ?? item.sellPrice,
+    buyPrice: item.sellPrice,
+    updateBuyPrice: item?.updateSellPrice ?? item.sellPrice,
     totalPrice: item.sellPrice * item.limit,
   }));
 
@@ -48,9 +48,9 @@ const CartPage = () => {
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
       factoryId: user?.factoryId,
-      customerId: customer?.id,
-      sellerId: user?.id,
-      sellerName: user?.name,
+      supplierId: supplier?.id,
+      purchaserId: user?.id,
+      purchaserName: user?.name,
       items: products,
     }),
   });
@@ -73,42 +73,70 @@ const CartPage = () => {
       ? (totalPrice * (Number(values.discountPercentage) || 0)) / 100
       : Number(values.discountAmount) || 0;
 
+  const purchasePrice = totalPrice - discountAmount;
+
+  const total = purchasePrice + Number(values.extraCharge || 0);
+
+  const isBigAmount =
+    Math.abs(total) < Math.abs(supplier?.totalDueAmount || 0) &&
+    supplier?.totalDueAmount < 0;
+
   // Grand total
-  const grandTotal =
-    totalPrice + Number(values.extraCharge || 0) - discountAmount;
+  // const grandTotal = total + Number(customer?.totalDueAmount || 0);
+  const grandTotal = isBigAmount
+    ? total
+    : total + Number(supplier?.totalDueAmount || 0);
 
   // Due
-  const due = Number(
-    grandTotal - Number(values.paidAmount || 0) + customer?.totalDueAmount || 0,
-  );
+  // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
+  const due = Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
+
   // update values AFTER user/customer loads
   useEffect(() => {
+    form.setValue("totalPurchaseAmount", purchasePrice);
+    form.setValue("totalAmount", grandTotal);
+    form.setValue("currentDueAmount", due);
+    form.setValue("discountAmount", discountAmount);
+    // if (isBigAmount) {
+    //   form.setValue("paidAmount", total);
+    // }
     if (user) {
       form.setValue("factoryId", user.factoryId as string);
-      form.setValue("discountAmount", discountAmount);
-      form.setValue("sellerId", user.id as string);
-      form.setValue("totalSaleAmount", grandTotal);
+      form.setValue("purchaserId", user.id as string);
       form.setValue(
-        "sellerName",
+        "purchaserName",
         user?.name || user?.firstName + " " + user?.lastName,
       );
     }
-  }, [user, form, values.discountType, discountAmount, grandTotal]);
+  }, [
+    user,
+    form,
+    values.discountType,
+    discountAmount,
+    grandTotal,
+    due,
+    total,
+    totalPrice,
+    isBigAmount,
+    purchasePrice,
+  ]);
 
   const sellProduct = useApiMutation({
-    path: "factory/sale",
+    path: "factory/purchase",
     method: "POST",
     onSuccess: (data: any) => {
       showToast("success", data);
       form.reset({});
       cart.remove();
-      customerCart.remove();
-      window.location.reload();
+      supplierCart.remove();
+      // window.location.reload();
     },
   });
 
   const handleSubmit = (data: CartFormType) => {
     const { discountPercentage, ...restData } = data;
+
+    //    console.log("TanstackQueries", data);
 
     if (data?.discountType === "CASH") {
       sellProduct.mutate(restData);
@@ -125,14 +153,14 @@ const CartPage = () => {
           className="grid grid-cols-1 gap-10 p-8 bg-white rounded-2xl border shadow-lg lg:grid-cols-2"
         >
           {/* Left Fields */}
-          <div className="space-y-7">
+          <div className="-mt-4 space-y-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">
                 Price Calculation
               </h2>
-              <p className="text-sm text-gray-600">
-                Extra charge, discount & advance
-              </p>
+              {/* <p className="text-sm text-gray-600"> */}
+              {/*   Extra charge, discount & advance */}
+              {/* </p> */}
             </div>
 
             {/* Extra Charge */}
@@ -198,7 +226,7 @@ const CartPage = () => {
             {form.watch("paymentMethod") === "BANK" && (
               <CustomField.SelectField
                 form={form}
-                name="bankAccount"
+                name="bankId"
                 isLoading={isLoadingBank}
                 options={bankOptions}
                 placeholder="Select bank account"
@@ -211,6 +239,12 @@ const CartPage = () => {
               labelName="Advance"
               placeholder="Enter advance"
             />
+            <CustomField.Number
+              form={form}
+              name="note"
+              labelName="Note"
+              placeholder="Enter note"
+            />
           </div>
 
           {/* Summary Box */}
@@ -218,7 +252,7 @@ const CartPage = () => {
             <h3 className="pb-3 text-xl font-semibold border-b">Summary</h3>
 
             <div className="space-y-3 text-sm">
-              <SummaryItem label="Total Product Price" value={totalPrice} />
+              <SummaryItem label="Total Product Price" value={purchasePrice} />
               <SummaryItem
                 label="Extra Charge"
                 value={values.extraCharge || 0}
@@ -236,7 +270,7 @@ const CartPage = () => {
               <SummaryItem label="Advance" value={values.paidAmount || 0} />
               <SummaryItem
                 label="Previous Due"
-                value={customer?.totalDueAmount || 0}
+                value={supplier?.totalDueAmount || 0}
               />
 
               <SummaryItem label="Total Sell Price" value={grandTotal} />

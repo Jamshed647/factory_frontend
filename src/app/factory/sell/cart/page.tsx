@@ -81,9 +81,8 @@ const CartPage = () => {
     Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
     customer?.totalDueAmount < 0;
 
-  //  console.log("isBigAmount", isBigAmount);
-
   // Grand total
+  // const grandTotal = total + Number(customer?.totalDueAmount || 0);
   const grandTotal = isBigAmount
     ? total
     : total + Number(customer?.totalDueAmount || 0);
@@ -98,9 +97,9 @@ const CartPage = () => {
     form.setValue("totalAmount", grandTotal);
     form.setValue("currentDueAmount", due);
     form.setValue("discountAmount", discountAmount);
-    if (isBigAmount) {
-      form.setValue("paidAmount", total);
-    }
+    // if (isBigAmount) {
+    //   form.setValue("paidAmount", total);
+    // }
     if (user) {
       form.setValue("factoryId", user.factoryId as string);
       form.setValue("sellerId", user.id as string);
@@ -116,10 +115,10 @@ const CartPage = () => {
     discountAmount,
     grandTotal,
     due,
-    isBigAmount,
     total,
     totalPrice,
     sellPrice,
+    isBigAmount,
   ]);
 
   const sellProduct = useApiMutation({
@@ -154,14 +153,14 @@ const CartPage = () => {
           className="grid grid-cols-1 gap-10 p-8 bg-white rounded-2xl border shadow-lg lg:grid-cols-2"
         >
           {/* Left Fields */}
-          <div className="space-y-7">
+          <div className="-mt-4 space-y-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">
                 Price Calculation
               </h2>
-              <p className="text-sm text-gray-600">
-                Extra charge, discount & advance
-              </p>
+              {/* <p className="text-sm text-gray-600"> */}
+              {/*   Extra charge, discount & advance */}
+              {/* </p> */}
             </div>
 
             {/* Extra Charge */}
@@ -239,6 +238,12 @@ const CartPage = () => {
               name="paidAmount"
               labelName="Advance"
               placeholder="Enter advance"
+            />
+            <CustomField.Number
+              form={form}
+              name="note"
+              labelName="Note"
+              placeholder="Enter note"
             />
           </div>
 

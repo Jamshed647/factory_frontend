@@ -15,8 +15,11 @@ import cartDefaultValue from "./_assets/utils/cartDefaultValue";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
+import { useRouter } from "next/navigation";
+import usePurchaseInvoiceStore from "@/store/invoiceStore";
 
 const CartPage = () => {
+  const router = useRouter();
   const cart = CookieCart("purchase_products");
   const supplierCart = CookieCart("supplierInfo");
   const supplier = supplierCart.get();
@@ -129,7 +132,8 @@ const CartPage = () => {
       form.reset({});
       cart.remove();
       supplierCart.remove();
-      // window.location.reload();
+      usePurchaseInvoiceStore.getState().setAll(data.data);
+      router.push(`invoice/${data?.data?.invoiceNo}`);
     },
   });
 
@@ -239,7 +243,7 @@ const CartPage = () => {
               labelName="Advance"
               placeholder="Enter advance"
             />
-            <CustomField.Number
+            <CustomField.Text
               form={form}
               name="note"
               labelName="Note"

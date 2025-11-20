@@ -29,8 +29,8 @@ export const useAuthStore = create<AuthStore>()(
     (set) => ({
       isAuthenticated: false,
       isLoading: true,
-      accessToken: null,
       role: null,
+      accessToken: null,
       refreshToken: null,
       redirectFrom: null,
 
@@ -59,10 +59,10 @@ export const useAuthStore = create<AuthStore>()(
           });
         },
 
-        // 🔄 Toggle loading state
+        // Toggle loading state
         setLoading: (loading) => set({ isLoading: loading }),
 
-        // 🚀 Initialize from cookies on app load
+        //  Initialize from cookies on app load
         initAuth: () => {
           const tokens = getToken();
           set({

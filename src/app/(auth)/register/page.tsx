@@ -63,7 +63,7 @@ export default function RegisterPage() {
             optional={false}
           />
           <CustomField.Password
-            name="password"
+            name="pinCode"
             labelName="Password"
             placeholder="Enter your password"
             form={registerForm}

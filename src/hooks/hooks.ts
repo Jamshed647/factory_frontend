@@ -129,7 +129,7 @@ export const useAuth = () => {
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterFormPayload) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/owner/signup`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/owner/signup/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

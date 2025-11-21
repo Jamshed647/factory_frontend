@@ -55,7 +55,7 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
           <Table>
             <TableHeader className="bg-gray-100">
               <TableRow>
-                <TableHead className="w-12 text-center">#</TableHead>
+                <TableHead className="w-12 text-center">SL</TableHead>
                 <TableHead>Product</TableHead>
                 <TableHead className="w-24 text-right">Qty</TableHead>
                 <TableHead className="w-32 text-right">Buy Price</TableHead>

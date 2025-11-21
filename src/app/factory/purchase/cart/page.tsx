@@ -108,7 +108,12 @@ const CartPage = () => {
       form.setValue("purchaserId", user.id as string);
       form.setValue(
         "purchaserName",
-        user?.name || user?.firstName + " " + user?.lastName,
+        user?.name ??
+          (user?.firstName
+            ? user.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : user.firstName
+            : (user?.lastName ?? "")),
       );
     }
   }, [

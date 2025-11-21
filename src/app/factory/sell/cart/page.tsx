@@ -15,7 +15,6 @@ import cartDefaultValue from "./_assets/utils/cartDefaultValue";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
-import usePurchaseInvoiceStore from "@/store/invoiceStore";
 import { useRouter } from "next/navigation";
 import useSellInvoiceStore from "@/store/sellInvoiceStore";
 
@@ -109,7 +108,12 @@ const CartPage = () => {
       form.setValue("sellerId", user.id as string);
       form.setValue(
         "sellerName",
-        user?.name || user?.firstName + " " + user?.lastName,
+        user?.name ??
+          (user?.firstName
+            ? user.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : user.firstName
+            : (user?.lastName ?? "")),
       );
     }
   }, [

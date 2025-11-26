@@ -23,7 +23,7 @@ export default function ProductFormComponent<T extends Record<string, any>>({
   isFactoryId = true,
 }: ProductFormComponent<T>) {
   const { options } = DataFetcher.fetchFactories({});
-  const { options: productCategories } = DataFetcher.fetchProductCategories({});
+  // const { options: productCategories } = DataFetcher.fetchProductCategories({});
 
   return (
     <FormProvider {...form}>
@@ -106,13 +106,13 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           form={form}
           // optional={false}
         />
-        <CustomField.Number
-          name="sellPrice"
-          labelName="Sell Price"
-          placeholder="Enter your sell price"
-          form={form}
-          // optional={false}
-        />
+        {/* <CustomField.Number */}
+        {/*   name="sellPrice" */}
+        {/*   labelName="Sell Price" */}
+        {/*   placeholder="Enter your sell price" */}
+        {/*   form={form} */}
+        {/*   // optional={false} */}
+        {/* /> */}
         <CustomField.Text
           name="note"
           labelName="Note"

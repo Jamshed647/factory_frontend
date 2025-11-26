@@ -31,6 +31,7 @@ export const createProductSchema = z.object({
   sellPrice: validationSchemas.numberSchema({
     type: "number",
     label: "Sell Price",
+    required: false,
   }),
   note: z.string().optional().nullable(),
   status: z.enum(["ACTIVE", "INACTIVE"]).optional(),

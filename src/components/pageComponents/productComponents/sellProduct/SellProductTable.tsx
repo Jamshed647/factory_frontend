@@ -17,7 +17,6 @@ const SellProductTable = ({ id }: { id?: string }) => {
     path: `factory/product/factory/${id}`,
     queryKey: "getProductDataByFactory",
     filterData: {
-      // ['ROW', 'FINISHED'];
       type: "FINISHED",
       search: searchText,
       page: currentPage,

@@ -40,8 +40,6 @@ const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
   });
 
   const onSubmit = async (data: ProductType) => {
-    console.log("Create Product", data);
-
     createFactory.mutate(data);
   };
 

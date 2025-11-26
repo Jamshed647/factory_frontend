@@ -15,25 +15,56 @@ export enum ProductStatus {
   INACTIVE = "INACTIVE",
 }
 
+// export const createProductSchema = z.object({
+//   name: validationSchemas.nameSchema({ label: "Product Name" }),
+//   productType: z.string().optional().nullable(),
+//   category: z.string().min(1, "Category is required"),
+//   quantity: validationSchemas.numberSchema({
+//     type: "string",
+//     label: "Quantity",
+//   }),
+//   quantityType: z.string().min(1, "Quantity type is required"),
+//   buyPrice: validationSchemas.numberSchema({
+//     type: "number",
+//     label: "Buy Price",
+//   }),
+//   sellPrice: validationSchemas.numberSchema({
+//     type: "number",
+//     label: "Sell Price",
+//   }),
+//   note: z.string().optional().nullable(),
+//   status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
+//   factoryId: z.string().uuid("Invalid factory ID"),
+// });
+
 export const createProductSchema = z.object({
   name: validationSchemas.nameSchema({ label: "Product Name" }),
+
   productType: z.string().optional().nullable(),
+
   category: z.string().min(1, "Category is required"),
+
   quantity: validationSchemas.numberSchema({
-    type: "string",
+    type: "number",
     label: "Quantity",
   }),
+
   quantityType: z.string().min(1, "Quantity type is required"),
+
   buyPrice: validationSchemas.numberSchema({
     type: "number",
     label: "Buy Price",
   }),
+
   sellPrice: validationSchemas.numberSchema({
     type: "number",
     label: "Sell Price",
   }),
+
   note: z.string().optional().nullable(),
+
   status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
+
   factoryId: z.string().uuid("Invalid factory ID"),
 });
 

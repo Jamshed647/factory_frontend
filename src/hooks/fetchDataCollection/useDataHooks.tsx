@@ -130,3 +130,28 @@ export function fetchProductCategories({
 
   return { options, data, isLoading, isError };
 }
+
+/* Fetch Products */
+export function fetchProducts({
+  filter,
+  path,
+}: {
+  filter?: any;
+  path?: string;
+}) {
+  const { data, isLoading, isError } = useFetchData({
+    method: "GET",
+    path: path ?? `factory/product`,
+    queryKey: "fetch-products",
+    filterData: { ...filter },
+    //enabled: !!sessionId,
+  });
+
+  const options = data?.data?.map((item: any) => ({
+    label: item?.name || item?.title || "Unknown",
+    value: item?.id,
+    code: item?.code,
+  }));
+
+  return { options, data, isLoading, isError };
+}

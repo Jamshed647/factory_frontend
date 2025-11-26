@@ -6,7 +6,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { BanknoteX, Factory, PackageSearch } from "lucide-react";
+import { BanknoteX, Factory, PackageOpen, PackageSearch } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 import { useAuth } from "@/hooks/hooks";
 import { UserRole } from "@/types/user";
@@ -73,6 +73,11 @@ export default function FactoryLayout({
             key: "/factory/manager/salesman",
             icon: <Factory />,
             label: <Link href="/factory/manager/salesman">Salesman</Link>,
+          },
+          {
+            key: "/factory/manager/production",
+            icon: <PackageOpen />,
+            label: <Link href="/factory/manager/production">Production</Link>,
           },
         ] as AntdMenuItem[])
       : []),

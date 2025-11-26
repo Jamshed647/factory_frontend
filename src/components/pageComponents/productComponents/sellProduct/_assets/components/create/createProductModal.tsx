@@ -52,7 +52,7 @@ const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
         <ActionButton
           btnStyle="bg-blue-500 text-white"
           icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Create Product"
+          buttonContent="Add Product"
         />
       }
       open={open}

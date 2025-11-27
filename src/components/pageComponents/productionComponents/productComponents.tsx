@@ -90,19 +90,18 @@ const ProductionComponents = () => {
                 header: "Total Items",
                 render: (row) => row.items?.length ?? 0,
               },
-              // {
-              //   key: "action",
-              //   header: "Action",
-              //   className: "text-right",
-              //   render: (row) => (
-              //     <Link
-              //       href={`/production/addProduct/${row.id}`}
-              //       className="text-blue-600 hover:underline"
-              //     >
-              //       Edit
-              //     </Link>
-              //   ),
-              // },
+              {
+                key: "action",
+                header: "Action",
+                className: "text-right",
+                render: (row) => (
+                  <div>
+                    <Link href={`production/addProduct/${row.id}`}>
+                      Production to Product
+                    </Link>
+                  </div>
+                ),
+              },
             ],
           }}
         />

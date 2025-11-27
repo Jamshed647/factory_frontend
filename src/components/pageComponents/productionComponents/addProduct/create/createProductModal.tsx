@@ -8,13 +8,20 @@ import { useAuth } from "@/hooks/hooks";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 
-const CreateProductToProductionModal = () => {
+const CreateProductToProductionModal = ({
+  productionId,
+}: {
+  productionId: string;
+}) => {
   const { user } = useAuth();
   const factoryId = user?.factoryId;
 
   const form = useForm<ProductionFormType>({
     resolver: zodResolver(productionSchema),
-    defaultValues: productionDefaultValue({ factoryId: factoryId as string }),
+    defaultValues: productionDefaultValue({
+      factoryId: factoryId as string,
+      productionId: productionId,
+    }),
   });
 
   if (factoryId) {
@@ -22,7 +29,7 @@ const CreateProductToProductionModal = () => {
   }
 
   const addProduct = useApiMutation({
-    path: `factory/production`,
+    path: `factory/production-to-product`,
     method: "POST",
     onSuccess: (data) => {
       console.log("SUCCESS:", data);
@@ -33,16 +40,19 @@ const CreateProductToProductionModal = () => {
 
   const onSubmit = (data: ProductionFormType) => {
     addProduct.mutate(data);
+    console.log(data);
   };
 
   return (
     <div>
-      <h2 className="mb-4 text-lg font-semibold">Create Production</h2>
+      <h2 className="mb-4 text-lg font-semibold">
+        Create Production To Product
+      </h2>
 
       <AddProductForm
         form={form}
         onSubmit={onSubmit}
-        factoryId={factoryId}
+        //  factoryId={factoryId}
         isPending={addProduct.isPending}
       />
     </div>

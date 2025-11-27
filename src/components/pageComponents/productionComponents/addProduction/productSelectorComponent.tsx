@@ -19,21 +19,22 @@ const ProductSelectorGrid = ({
   updateLimit,
 }: Props) => {
   const isSelected = (id: string) =>
-    selectedProducts.some((item) => item.productId === id);
+    selectedProducts.some((item) => item?.productId === id);
 
   const getLimit = (id: string) =>
-    selectedProducts.find((item) => item.productId === id)?.limit ?? 0;
+    selectedProducts?.find((item) => item?.productId === id)?.limit ?? 0;
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {products.map((p: Product, index) => {
+      {products?.map((p: Product) => {
         const selected = isSelected(p.id);
-        const limit = getLimit(p.id);
+        const limit = getLimit(p.id ?? p.productId);
+
         const isStock = p.quantity > 0;
 
         return (
           <Card
-            key={p?.id + index}
+            key={`${p?.id}-${p?.name}`}
             className={`transition-all duration-200 cursor-pointer hover:shadow-lg ${
               selected ? "bg-blue-100 shadow-md" : ""
             }`}

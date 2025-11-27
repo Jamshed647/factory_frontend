@@ -2,13 +2,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ActionButton from "@/components/common/button/actionButton";
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
-import { Edit2Icon } from "lucide-react";
+import { Edit2Icon, MinusIcon } from "lucide-react";
 import React from "react";
 import ProductSelectorGrid from "./productSelectorComponent";
 import { Product, SelectedProduct } from "./schema/product-type";
 import CreateProductionModal from "./create/createProduction";
 
 interface ProductionModalProps {
+  allProducts?: any;
   productData?: any;
   selectedProducts: SelectedProduct[];
   updateLimit: (product: Product, limit: number) => void;
@@ -16,12 +17,13 @@ interface ProductionModalProps {
 }
 
 const ProductionModal = ({
+  allProducts,
   productData,
   selectedProducts,
   updateLimit,
   setSelectedProducts,
 }: ProductionModalProps) => {
-  console.log("data", productData);
+  const [seeMore, setSeeMore] = React.useState(true);
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -35,7 +37,7 @@ const ProductionModal = ({
       }
       open={open}
       handleOpen={setOpen}
-      title="Add Production"
+      title="Add To Production"
       style="!w-[70vw]"
     >
       <div>
@@ -47,14 +49,59 @@ const ProductionModal = ({
           />
         </div>
 
-        <h2 className="my-3">Select Production</h2>
+        <div>
+          {productData.length < 1 ? (
+            <div className="py-16 text-center">
+              <p className="text-lg text-muted-foreground">
+                No products selected
+              </p>
+            </div>
+          ) : (
+            <div>
+              <h2 className="p-2 my-4 text-lg font-semibold text-center bg-green-100 rounded-md">
+                Selected Production
+              </h2>
+
+              <ProductSelectorGrid
+                products={productData}
+                selectedProducts={selectedProducts}
+                updateLimit={updateLimit}
+              />
+            </div>
+          )}
+        </div>
 
         <div>
-          <ProductSelectorGrid
-            products={productData}
-            selectedProducts={selectedProducts}
-            updateLimit={updateLimit}
-          />
+          {seeMore ? (
+            <div className="flex justify-center mt-4">
+              <ActionButton
+                type="button"
+                variant="outline"
+                buttonContent="See More"
+                handleOpen={() => setSeeMore(false)}
+              />
+            </div>
+          ) : (
+            <div className="mt-4">
+              <div className="relative">
+                <h2 className="p-2 my-3 text-lg font-semibold text-center bg-blue-100 rounded-md">
+                  Select Production
+                </h2>
+
+                <MinusIcon
+                  className="absolute top-1.5 right-2 py-0 px-2 text-red-600 bg-white rounded-full cursor-pointer hover:text-red-800"
+                  size={28}
+                  strokeWidth={2}
+                  onClick={() => setSeeMore(true)}
+                />
+              </div>
+              <ProductSelectorGrid
+                products={allProducts}
+                selectedProducts={selectedProducts}
+                updateLimit={updateLimit}
+              />
+            </div>
+          )}
         </div>
       </div>
     </DialogWrapper>

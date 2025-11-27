@@ -6,10 +6,13 @@ export type Product = {
   quantityType: string;
   sellPrice: number;
   buyPrice: number;
+  limit?: number;
   totalPrice?: number;
+  productId?: string;
 };
 
 export type SelectedProduct = {
+  name?: string;
   productId: string;
   limit: number;
   buyPrice: number;

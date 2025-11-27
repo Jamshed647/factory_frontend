@@ -47,6 +47,7 @@ const AddProductForm = ({ isPending, form, onSubmit }: ProductionFormType) => {
               placeholder="Enter Total Production Amount"
               form={form}
               name="totalProductionAmount"
+              viewOnly={true}
             />
           </div>
 
@@ -60,19 +61,19 @@ const AddProductForm = ({ isPending, form, onSubmit }: ProductionFormType) => {
           </div>
 
           {/* STATUS */}
-          <div>
-            <CustomField.SelectField
-              labelName="Status"
-              placeholder="Select Status"
-              form={form}
-              name="status"
-              options={[
-                { value: "PENDING", label: "PENDING" },
-                { value: "COMPLETED", label: "COMPLETED" },
-                { value: "CANCELLED", label: "CANCELLED" },
-              ]}
-            />
-          </div>
+          {/* <div> */}
+          {/*   <CustomField.SelectField */}
+          {/*     labelName="Status" */}
+          {/*     placeholder="Select Status" */}
+          {/*     form={form} */}
+          {/*     name="status" */}
+          {/*     options={[ */}
+          {/*       { value: "PENDING", label: "PENDING" }, */}
+          {/*       { value: "COMPLETED", label: "COMPLETED" }, */}
+          {/*       { value: "CANCELLED", label: "CANCELLED" }, */}
+          {/*     ]} */}
+          {/*   /> */}
+          {/* </div> */}
 
           {/* NOTE */}
           <div>

@@ -7,19 +7,20 @@ import { FormProvider, useFieldArray, UseFormReturn } from "react-hook-form";
 import ProductionItemRow from "./productionItemRow";
 import { PlusIcon } from "lucide-react";
 import onFormError from "@/utils/formError";
+import { Button } from "@/components/ui/button";
 
 interface ProductionFormType {
   isPending: boolean;
   form: UseFormReturn<any>;
   onSubmit: (data: any) => void;
-  factoryId?: string;
+  // factoryId?: string;
 }
 
 const AddProductForm = ({
   isPending,
   form,
   onSubmit,
-  factoryId,
+  // factoryId,
 }: ProductionFormType) => {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -32,61 +33,29 @@ const AddProductForm = ({
         onSubmit={form.handleSubmit(onSubmit, onFormError)}
         className="space-y-6"
       >
-        {/* NAME */}
-        <div>
-          <CustomField.Text
-            labelName="Name"
-            placeholder="Enter Production Name"
-            form={form}
-            name="name"
-          />
-        </div>
+        <CustomField.Text
+          labelName="Total Weight"
+          placeholder="Enter Total Weight"
+          form={form}
+          name="totalWeight"
+        />
 
-        {/* AMOUNTS */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <CustomField.Number
-              labelName="Total Production Amount"
-              placeholder="Enter Total Production Amount"
-              form={form}
-              name="totalProductionAmount"
-            />
-          </div>
-
-          <div>
-            <CustomField.Number
-              labelName="Extra Cost"
-              placeholder="Enter Extra Cost"
-              form={form}
-              name="extraCost"
-            />
-          </div>
-        </div>
-
-        {/* STATUS */}
-        <div>
-          <CustomField.SelectField
-            labelName="Status"
-            placeholder="Select Status"
-            form={form}
-            name="status"
-            options={[
-              { value: "PENDING", label: "PENDING" },
-              { value: "COMPLETED", label: "COMPLETED" },
-              { value: "CANCELLED", label: "CANCELLED" },
-            ]}
-          />
-        </div>
+        <CustomField.Number
+          labelName="Packaging Type"
+          placeholder="Enter Packaging Type"
+          form={form}
+          name="packagingType"
+        />
 
         {/* NOTE */}
-        <div>
-          <CustomField.TextArea
-            labelName="Note"
-            placeholder="Enter Note"
-            form={form}
-            name="note"
-          />
-        </div>
+        {/* <div> */}
+        {/*   <CustomField.TextArea */}
+        {/*     labelName="Note" */}
+        {/*     placeholder="Enter Note" */}
+        {/*     form={form} */}
+        {/*     name="note" */}
+        {/*   /> */}
+        {/* </div> */}
 
         {/* DYNAMIC ITEMS */}
         <div className="space-y-4">
@@ -112,7 +81,7 @@ const AddProductForm = ({
 
           {fields.map((field, index) => (
             <ProductionItemRow
-              factoryId={factoryId}
+              // factoryId={factoryId}
               key={field.id}
               index={index}
               remove={() => remove(index)}
@@ -121,12 +90,16 @@ const AddProductForm = ({
         </div>
 
         {/* SUBMIT */}
-        <ActionButton
-          type="submit"
-          className="py-2 px-4 w-full font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-          buttonContent="Submit Production"
-          isPending={isPending}
-        />
+
+        <Button type="submit">Submit Production</Button>
+
+        {/* <ActionButton */}
+        {/*   //          className="py-2 px-4 w-full font-bold text-white bg-blue-500 rounded hover:bg-blue-700" */}
+        {/*   buttonContent="Submit Production" */}
+        {/*   handleOpen={() => form.handleSubmit(onSubmit, onFormError)} */}
+        {/*   // handleOpen={() => console.log("Submit")} */}
+        {/*   isPending={isPending} */}
+        {/* /> */}
       </form>
     </FormProvider>
   );

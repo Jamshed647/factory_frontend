@@ -27,7 +27,7 @@ export const productDefaultValue = (
     name: V.name ?? "",
     productType: V.productType ?? "FINISHED",
     category: V.category ?? "",
-    quantity: V.quantity ?? 0,
+    quantity: V.quantity ?? "",
     quantityType: V.quantityType ?? "",
     buyPrice: V.buyPrice ?? 0,
     sellPrice: V.sellPrice ?? 0,

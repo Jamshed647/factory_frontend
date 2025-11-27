@@ -41,7 +41,9 @@ export function ManagerDashboard({ cash }: { cash: any }) {
         {/*   icon={<Package className="w-4 h-4 text-muted-foreground" />} */}
         {/*   trend={{ value: 8, isPositive: true }} */}
         {/* /> */}
+
         <MetricCard
+          link={`/factory/cash`}
           title="Cash Balance"
           value={cash?.balance}
           description="Available units"

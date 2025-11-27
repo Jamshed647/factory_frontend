@@ -9,25 +9,34 @@ import ProductSelectorGrid from "./productSelectorComponent";
 import { Product, SelectedProduct } from "./schema/product-type";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
 
-interface Props {
-  selectedValue?: SelectedProduct[];
-}
-
-const AddProductionComponents = ({ selectedValue = [] }: Props) => {
+const AddProductionComponents = () => {
   const { user } = useAuth();
   const factoryId = user?.factoryId ?? "";
 
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const [selectedProducts, setSelectedProducts] =
-    useState<SelectedProduct[]>(selectedValue);
+
+  const { data, isLoading } = useFetchData({
+    method: "GET",
+    path: `factory/product/factory/${factoryId}`,
+    queryKey: "getProductDataByFactory",
+    filterData: { type: "RAW", search: searchTerm, page },
+  });
+
+  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
+    [],
+  );
 
   const updateLimit = (product: Product | SelectedProduct, limit: number) => {
     setSelectedProducts((prev) => {
       // --- Type narrowing ---
       const productId = "id" in product ? product.id : product.productId;
-      const name = "name" in product ? product.name : product.name || "";
-      const quantity = "quantity" in product ? Number(product.quantity) : 0;
+      const name = data?.data?.find((p: Product) => p.id === productId)?.name;
+      const quantity = data?.data?.find(
+        (p: Product) => p.id === productId,
+      )?.quantity;
+
+      console.log("product", quantity);
       const quantityType =
         "quantityType" in product ? product.quantityType : "";
       const buyPrice = Number(product.buyPrice);
@@ -76,13 +85,6 @@ const AddProductionComponents = ({ selectedValue = [] }: Props) => {
       return prev;
     });
   };
-
-  const { data, isLoading } = useFetchData({
-    method: "GET",
-    path: `factory/product/factory/${factoryId}`,
-    queryKey: "getProductDataByFactory",
-    filterData: { type: "RAW", search: searchTerm, page },
-  });
 
   const products: Product[] = (data?.data || []).map((p: any) => ({
     ...p,

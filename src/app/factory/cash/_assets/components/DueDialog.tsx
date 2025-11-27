@@ -6,35 +6,37 @@ import { DueFormType, dueSchema } from "../schema/dueSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { dueDefaultValue } from "../utils/dueDefaultValue";
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CustomField } from "@/components/common/fields/cusField";
 import ActionButton from "@/components/common/button/actionButton";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
-import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import onFormError from "@/utils/formError";
-import { useAuth } from "@/hooks/hooks";
+import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 
 interface TakeDueDialogProps {
-  data: any;
-  type: "TAKE" | "PAY";
+  factory: any;
+  type: "PAY" | "TAKE";
   transactionType?: "CASH" | "ONLINE";
 }
 
 export default function TakeDueDialog({
-  data,
+  factory,
   type,
-  transactionType,
+  transactionType = "CASH",
 }: TakeDueDialogProps) {
   const queryClient = useQueryClient();
-  const [open, setOpen] = React.useState(false);
-  const { user } = useAuth();
-  const factoryId = user?.factoryId;
+  const [open, setOpen] = useState(false);
+
+  const form = useForm<DueFormType>({
+    resolver: zodResolver(dueSchema),
+    defaultValues: dueDefaultValue({ type, factoryId: factory?.id }),
+  });
 
   const takeDue = useApiMutation({
-    path: `factory/customer/${data?.id}/due`,
-    method: "POST",
+    path: "factory/cash/transaction",
+    method: "PATCH",
     onSuccess: (data: any) => {
       form.reset({});
       queryClient.invalidateQueries({ queryKey: ["getSingleSupplierData"] });
@@ -44,104 +46,76 @@ export default function TakeDueDialog({
   });
 
   const { options: bankOptions } = DataFetcher.fetchBankAccounts({
-    path: `factory/bank/factory/${factoryId}`,
+    path: `factory/bank/factory/${factory?.id}`,
   });
 
-  const form = useForm<DueFormType>({
-    resolver: zodResolver(dueSchema),
-    defaultValues: dueDefaultValue({
-      type: type,
-      transactionType: transactionType,
-    }),
-  });
+  // Set default values and reset bankId if CASH
+  useEffect(() => {
+    form.setValue("factoryId", factory?.id ?? "");
+    form.setValue("type", type);
+    form.setValue("transactionType", transactionType || "CASH");
 
-  React.useEffect(() => {
-    if (transactionType) {
-      form.setValue("transactionType", transactionType);
-    }
-    if (type) {
-      form.setValue("type", type);
-    }
-    if (form.watch("transactionType") === "CASH") {
+    if (form.getValues("transactionType") === "CASH") {
       form.setValue("bankId", "");
     }
-  }, [transactionType, type, form]);
+  }, [factory?.id, type, transactionType, form]);
 
-  // if (form.watch("transactionType") === "CASH") {
-  //   form.setValue("bankId", "");
-  // }
-  //
-  // if (transactionType) {
-  //   form.setValue("transactionType", transactionType);
-  // }
-  //
-  // if (type) {
-  //   form.setValue("type", type);
-  // }
-
-  const handleSubmit = (payload: DueFormType) => {
-    takeDue.mutate(payload);
-    console.log("Take Due:", payload);
-  };
+  const handleSubmit = (payload: DueFormType) => takeDue.mutate(payload);
 
   return (
     <DialogWrapper
       triggerContent={
         <ActionButton
-          btnStyle={`${type === "PAY" ? "bg-green-500 text-white" : "bg-red-500"} text-white`}
-          buttonContent={type === "PAY" ? "Pay Due" : "Take Due"}
+          btnStyle={`${type === "PAY" ? "bg-green-500" : "bg-red-500"} text-white`}
+          buttonContent={type === "PAY" ? "Cash In" : "Cash Out"}
         />
       }
       open={open}
       handleOpen={() => setOpen(!open)}
-      title={`${type} Due - ${data?.name}`}
+      title={`${type === "PAY" ? "Cash In" : "Cash Out"} - ${factory?.name}`}
     >
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit, onFormError)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           <div className="space-y-3">
             <CustomField.Text
-              optional={false}
               form={form}
               name="amount"
               labelName="Amount"
               placeholder="Amount"
             />
-            {type === "PAY" && (
-              <>
-                <CustomField.SelectField
-                  form={form}
-                  optional={false}
-                  viewOnly={true}
-                  name="type"
-                  options={[
-                    { value: "TAKE", label: "Take" },
-                    { value: "PAY", label: "Pay" },
-                  ]}
-                  labelName="Type"
-                  placeholder="Type"
-                />
-              </>
-            )}
+
+            {/* {type === "PAY" && ( */}
+            {/*   <CustomField.SelectField */}
+            {/*     form={form} */}
+            {/*     placeholder="Type" */}
+            {/*     name="type" */}
+            {/*     labelName="Type" */}
+            {/*     options={[ */}
+            {/*       { value: "TAKE", label: "Take" }, */}
+            {/*       { value: "PAY", label: "Pay" }, */}
+            {/*     ]} */}
+            {/*     viewOnly */}
+            {/*   /> */}
+            {/* )} */}
 
             <CustomField.SelectField
               form={form}
-              optional={false}
               name="transactionType"
               labelName="Transaction Type"
+              placeholder="Transaction Type"
               options={[
                 { value: "CASH", label: "Cash" },
                 { value: "ONLINE", label: "Online" },
               ]}
-              placeholder="Transaction Type"
             />
 
             {form.watch("transactionType") === "ONLINE" && (
               <CustomField.SelectField
                 form={form}
-                options={bankOptions}
                 name="bankId"
                 labelName="Bank Account"
-                placeholder="Enter your bank account"
+                options={bankOptions}
+                placeholder="Select your bank account"
               />
             )}
 

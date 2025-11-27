@@ -31,9 +31,9 @@ const CreateSellPage = () => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: "factory/product",
+    path: `factory/product/factory/${factoryId}`,
     queryKey: "getProductDataByFactory",
-    filterData: { search: searchTerm, page },
+    filterData: { type: "FINISHED", search: searchTerm, page },
   });
 
   return (
@@ -75,7 +75,7 @@ const CreateSellPage = () => {
         </div>
 
         <SelectCustomer
-          enabled={selectedProducts.length > 0}
+          enabled={selectedProducts?.length > 0}
           factoryId={factoryId as string}
         />
       </div>

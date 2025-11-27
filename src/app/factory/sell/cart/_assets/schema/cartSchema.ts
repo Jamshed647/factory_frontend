@@ -3,7 +3,7 @@ import z from "zod";
 
 const cartSchema = z
   .object({
-    customerId: z.string(),
+    customerId: z.string().optional(),
     factoryId: z.string(),
     paymentMethod: z.enum(["CASH", "BANK"]),
     bankId: validationSchemas.textSchema({

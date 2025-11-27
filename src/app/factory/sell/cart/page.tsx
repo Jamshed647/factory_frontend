@@ -21,7 +21,13 @@ import useSellInvoiceStore from "@/store/sellInvoiceStore";
 const CartPage = () => {
   const cart = CookieCart("selected_products");
   const customerCart = CookieCart("customerInfo");
-  const customer = customerCart.get();
+  const customerInfo = customerCart.get();
+  const customer = Array.isArray(customerInfo)
+    ? customerInfo.length === 0
+      ? null
+      : customerInfo
+    : customerInfo && typeof customerInfo === "object" && customerInfo;
+
   const { user } = useAuth();
   const router = useRouter();
 
@@ -51,7 +57,7 @@ const CartPage = () => {
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
       factoryId: user?.factoryId,
-      customerId: customer?.id,
+      customerId: customer?.id ?? null,
       sellerId: user?.id,
       sellerName: user?.name,
       items: products,
@@ -92,20 +98,22 @@ const CartPage = () => {
 
   // Due
   // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
-  const due = Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
+  const due = customer
+    ? Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0))
+    : 0;
 
   // update values AFTER user/customer loads
+
   useEffect(() => {
     form.setValue("totalSaleAmount", sellPrice);
     form.setValue("totalAmount", grandTotal);
     form.setValue("currentDueAmount", due);
     form.setValue("discountAmount", discountAmount);
-    // if (isBigAmount) {
-    //   form.setValue("paidAmount", total);
-    // }
+
     if (user) {
       form.setValue("factoryId", user.factoryId as string);
       form.setValue("sellerId", user.id as string);
+
       form.setValue(
         "sellerName",
         user?.name ??
@@ -116,17 +124,19 @@ const CartPage = () => {
             : (user?.lastName ?? "")),
       );
     }
+
+    // If customer is empty array OR null
+    if (!customer || customer === "empty") {
+      form.setValue("paidAmount", total);
+    }
   }, [
-    user,
-    form,
-    values.discountType,
-    discountAmount,
+    // Only put STABLE values here
+    sellPrice,
     grandTotal,
     due,
+    discountAmount,
+    user,
     total,
-    totalPrice,
-    sellPrice,
-    isBigAmount,
   ]);
 
   const sellProduct = useApiMutation({

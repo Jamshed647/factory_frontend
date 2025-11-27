@@ -37,19 +37,6 @@ const SelectCustomer = ({
 
   return (
     <>
-      {/* <DialogWrapper */}
-      {/*   triggerContent={ */}
-      {/*     <ActionButton */}
-      {/*       btnStyle="bg-blue-500 text-white" */}
-      {/*       icon={<Edit2Icon className="w-5 h-5" />} */}
-      {/*       buttonContent="Select Customer" */}
-      {/*     /> */}
-      {/*   } */}
-      {/*   open={open} */}
-      {/*   handleOpen={setOpen} */}
-      {/*   title="Select Customer" */}
-      {/* > */}
-
       <div className="mb-4 space-y-2">
         <div>
           <CustomField.CommonSearch
@@ -60,7 +47,17 @@ const SelectCustomer = ({
           />
         </div>
 
-        <CreateCustomerModal factoryId={factoryId} />
+        <div className="flex justify-between items-center">
+          <CreateCustomerModal factoryId={factoryId} />
+
+          <Link
+            href={`cart`}
+            className={`${enabled ? "" : "opacity-50 pointer-events-none "} p-2 text-blue-500 rounded border border-blue-500 hover:text-white hover:border-white`}
+            onClick={() => cart.remove()}
+          >
+            Quick Sell
+          </Link>
+        </div>
       </div>
 
       {/* Customer List */}
@@ -98,7 +95,6 @@ const SelectCustomer = ({
           </Link>
         ))}
       </div>
-      {/* </DialogWrapper> */}
     </>
   );
 };

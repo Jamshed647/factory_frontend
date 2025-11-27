@@ -39,10 +39,10 @@ export const SelectProductComponent = ({
   const [updateProduct, setUpdateProduct] = useState<Item>();
 
   const isSelected = (id: string) =>
-    selectedProducts.some((item) => item.id === id);
+    selectedProducts?.some((item) => item.id === id);
 
   const getLimit = (id: string) =>
-    selectedProducts.find((item) => item.id === id)?.limit || 0;
+    selectedProducts?.find((item) => item.id === id)?.limit || 0;
 
   const updateLimit = (
     id: string,
@@ -65,7 +65,7 @@ export const SelectProductComponent = ({
 
   return (
     <div className="py-4 space-y-6">
-      {mode === "multiple" && selectedProducts.length > 0 && (
+      {mode === "multiple" && selectedProducts?.length > 0 && (
         <Card className="bg-blue-50 border-blue-200">
           <CardContent className="px-4">
             <p className="mb-3 text-sm font-semibold text-blue-900">

@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/hooks";
 import { ArrowRightFromLine } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import ProductionUpdateModal from "./addProduction/update/updateProductModal";
 
 const ProductionComponents = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,8 +96,15 @@ const ProductionComponents = () => {
                 header: "Action",
                 className: "text-right",
                 render: (row) => (
-                  <div>
-                    <Link href={`production/addProduct/${row.id}`}>
+                  <div className="flex justify-between items-center">
+                    <ProductionUpdateModal
+                      factoryId={factoryId as string}
+                      productData={row.items}
+                    />
+                    <Link
+                      href={`production/addProduct/${row.id}`}
+                      className="py-1 px-2 rounded-md border"
+                    >
                       Production to Product
                     </Link>
                   </div>

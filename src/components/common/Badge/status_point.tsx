@@ -9,6 +9,7 @@ const statusColorMap: Record<string, string> = {
   pass: "#22C55E", // green
   passed: "#22C55E", // green
   success: "#10B981", // teal
+  complete: "#10B981", // teal
   temporarily_active: "#81f9ad", // green
   pending: "#EAB308", // amber
   upcoming: "#EAB308", // orange

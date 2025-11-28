@@ -18,20 +18,20 @@ import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 interface TakeDueDialogProps {
   factory: any;
   type: "PAY" | "TAKE";
-  transactionType?: "CASH" | "ONLINE";
+  // transactionType?: "CASH" | "ONLINE";
 }
 
 export default function TakeDueDialog({
   factory,
   type,
-  transactionType = "CASH",
+  //  transactionType = "CASH",
 }: TakeDueDialogProps) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
   const form = useForm<DueFormType>({
     resolver: zodResolver(dueSchema),
-    defaultValues: dueDefaultValue({ type, factoryId: factory?.id }),
+    defaultValues: dueDefaultValue({ type: type, factoryId: factory?.id }),
   });
 
   const takeDue = useApiMutation({
@@ -39,26 +39,30 @@ export default function TakeDueDialog({
     method: "PATCH",
     onSuccess: (data: any) => {
       form.reset({});
-      queryClient.invalidateQueries({ queryKey: ["getSingleSupplierData"] });
+      queryClient.invalidateQueries({ queryKey: ["getCashDataByFactory"] });
       showToast("success", data);
       setOpen(false);
     },
   });
 
-  const { options: bankOptions } = DataFetcher.fetchBankAccounts({
-    path: `factory/bank/factory/${factory?.id}`,
-  });
+  if (factory?.id) {
+    form.setValue("factoryId", factory?.id);
+  }
+
+  // const { options: bankOptions } = DataFetcher.fetchBankAccounts({
+  //   path: `factory/bank/factory/${factory?.id}`,
+  // });
 
   // Set default values and reset bankId if CASH
-  useEffect(() => {
-    form.setValue("factoryId", factory?.id ?? "");
-    form.setValue("type", type);
-    form.setValue("transactionType", transactionType || "CASH");
-
-    if (form.getValues("transactionType") === "CASH") {
-      form.setValue("bankId", "");
-    }
-  }, [factory?.id, type, transactionType, form]);
+  // useEffect(() => {
+  //   form.setValue("factoryId", factory?.id ?? "");
+  //   form.setValue("type", type);
+  //   form.setValue("transactionType", transactionType || "CASH");
+  //
+  //   if (form.getValues("transactionType") === "CASH") {
+  //     form.setValue("bankId", "");
+  //   }
+  // }, [factory?.id, type, transactionType, form]);
 
   const handleSubmit = (payload: DueFormType) => takeDue.mutate(payload);
 
@@ -66,8 +70,8 @@ export default function TakeDueDialog({
     <DialogWrapper
       triggerContent={
         <ActionButton
-          btnStyle={`${type === "PAY" ? "bg-green-500" : "bg-red-500"} text-white`}
-          buttonContent={type === "PAY" ? "Cash In" : "Cash Out"}
+          btnStyle={`${type === "TAKE" ? "bg-green-500" : "bg-red-500"} text-white`}
+          buttonContent={type === "TAKE" ? "Cash In" : "Cash Out"}
         />
       }
       open={open}
@@ -75,7 +79,7 @@ export default function TakeDueDialog({
       title={`${type === "PAY" ? "Cash In" : "Cash Out"} - ${factory?.name}`}
     >
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form onSubmit={form.handleSubmit(handleSubmit, onFormError)}>
           <div className="space-y-3">
             <CustomField.Text
               form={form}
@@ -98,26 +102,26 @@ export default function TakeDueDialog({
             {/*   /> */}
             {/* )} */}
 
-            <CustomField.SelectField
-              form={form}
-              name="transactionType"
-              labelName="Transaction Type"
-              placeholder="Transaction Type"
-              options={[
-                { value: "CASH", label: "Cash" },
-                { value: "ONLINE", label: "Online" },
-              ]}
-            />
+            {/* <CustomField.SelectField */}
+            {/*   form={form} */}
+            {/*   name="transactionType" */}
+            {/*   labelName="Transaction Type" */}
+            {/*   placeholder="Transaction Type" */}
+            {/*   options={[ */}
+            {/*     { value: "CASH", label: "Cash" }, */}
+            {/*     { value: "ONLINE", label: "Online" }, */}
+            {/*   ]} */}
+            {/* /> */}
 
-            {form.watch("transactionType") === "ONLINE" && (
-              <CustomField.SelectField
-                form={form}
-                name="bankId"
-                labelName="Bank Account"
-                options={bankOptions}
-                placeholder="Select your bank account"
-              />
-            )}
+            {/* {form.watch("transactionType") === "ONLINE" && ( */}
+            {/*   <CustomField.SelectField */}
+            {/*     form={form} */}
+            {/*     name="bankId" */}
+            {/*     labelName="Bank Account" */}
+            {/*     options={bankOptions} */}
+            {/*     placeholder="Select your bank account" */}
+            {/*   /> */}
+            {/* )} */}
 
             <CustomField.TextArea
               form={form}

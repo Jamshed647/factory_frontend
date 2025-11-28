@@ -2,8 +2,6 @@
 "use client";
 import CreateCustomerModal from "@/app/factory/customer/_assets/components/create/createCustomerModal";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-// import ActionButton from "@/components/common/button/actionButton";
-// import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import { CustomField } from "@/components/common/fields/cusField";
 import { Card } from "@/components/ui/card";
 import { CookieCart } from "@/utils/cookie/cart-utils";

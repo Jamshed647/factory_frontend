@@ -7,16 +7,21 @@ import React from "react";
 import ProductSelectorGrid from "./productSelectorComponent";
 import { Product, SelectedProduct } from "./schema/product-type";
 import CreateProductionModal from "./create/createProduction";
+import { CustomField } from "@/components/common/fields/cusField";
 
 interface ProductionModalProps {
   allProducts?: any;
   productData?: any;
   selectedProducts: SelectedProduct[];
+  setSearchTerm: (searchTerm: string) => void;
+  searchTerm: string;
   updateLimit: (product: Product, limit: number) => void;
   setSelectedProducts: (items: SelectedProduct[]) => void;
 }
 
 const ProductionModal = ({
+  setSearchTerm,
+  searchTerm,
   allProducts,
   productData,
   selectedProducts,
@@ -95,6 +100,16 @@ const ProductionModal = ({
                   onClick={() => setSeeMore(true)}
                 />
               </div>
+
+              <div className="flex justify-between mb-4">
+                <CustomField.CommonSearch
+                  placeholder="Search product"
+                  width="w-full"
+                  searchText={searchTerm}
+                  setSearchText={setSearchTerm}
+                />
+              </div>
+
               <ProductSelectorGrid
                 products={allProducts}
                 selectedProducts={selectedProducts}

@@ -8,10 +8,13 @@ import { ArrowRightFromLine } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import ProductionUpdateModal from "./addProduction/update/updateProductModal";
+import dateFormat from "@/utils/formatter/DateFormatter";
+import { StatusWithIcon } from "@/components/common/Badge/status_point";
 
 const ProductionComponents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("");
   const { user } = useAuth();
   const factoryId = user?.factoryId;
 
@@ -20,10 +23,16 @@ const ProductionComponents = () => {
     path: `factory/production/factory/${factoryId}`,
     queryKey: "getProductionDataByFactory",
     filterData: {
+      type: status,
       search: searchText,
       page: currentPage,
     },
   });
+
+  const handleStatusChange = (newStatus: string) => {
+    setStatus(newStatus);
+    setCurrentPage(1);
+  };
 
   return (
     <div>
@@ -37,16 +46,27 @@ const ProductionComponents = () => {
               width="full"
             />
           </div>
-          <Link href="production/addProduction">
-            <ActionButton
-              type="button"
-              variant="outline"
-              handleOpen={() => console.log("open")}
-              buttonContent="Add Production"
-              lastIcon={<ArrowRightFromLine />}
-              className="py-2 px-4 font-bold text-white bg-blue-400 rounded hover:bg-blue-300"
+
+          <div className="flex gap-2 justify-between">
+            <CustomField.SingleSelectField
+              name="status"
+              options={["COMPLETE", "PENDING"]}
+              placeholder="Select Status"
+              onValueChange={handleStatusChange}
+              defaultValue={status}
             />
-          </Link>
+
+            <Link href="production/addProduction">
+              <ActionButton
+                type="button"
+                variant="outline"
+                handleOpen={() => console.log("open")}
+                buttonContent="Add Production"
+                lastIcon={<ArrowRightFromLine />}
+                className="py-2 px-4 font-bold text-white bg-blue-400 rounded hover:bg-blue-300"
+              />
+            </Link>
+          </div>
         </div>
 
         <DynamicTableWithPagination
@@ -58,8 +78,10 @@ const ProductionComponents = () => {
           config={{
             columns: [
               {
-                key: "name",
-                header: "Name",
+                key: "date",
+                header: "Date",
+                render: (row) =>
+                  dateFormat.fullDateTime(row?.createdAt, { showTime: false }),
               },
               {
                 key: "batchNo",
@@ -67,7 +89,7 @@ const ProductionComponents = () => {
               },
               {
                 key: "totalProductionAmount",
-                header: "Total Production Amount",
+                header: "Total Amount",
               },
               {
                 key: "extraCost",
@@ -76,27 +98,30 @@ const ProductionComponents = () => {
               {
                 key: "status",
                 header: "Status",
+                render: (row) => <StatusWithIcon status={row?.status} />,
               },
-              {
-                key: "note",
-                header: "Note",
-              },
-              {
-                key: "factory",
-                header: "Factory",
-                render: (row) => row.factory?.name || "—",
-              },
-              {
-                key: "items",
-                header: "Total Items",
-                render: (row) => row.items?.length ?? 0,
-              },
+              // {
+              //   key: "note",
+              //   header: "Note",
+              // },
+              // {
+              //   key: "factory",
+              //   header: "Factory",
+              //   render: (row) => row.factory?.name || "—",
+              // },
+              // {
+              //   key: "items",
+              //   header: "Total Items",
+              //   render: (row) => row.items?.length ?? 0,
+              // },
               {
                 key: "action",
                 header: "Action",
                 className: "text-right",
                 render: (row) => (
-                  <div className="flex justify-between items-center">
+                  <div
+                    className={`flex gap-3 justify-between items-center ${row.status === "COMPLETE" ? "opacity-60 pointer-events-none select-none" : ""}`}
+                  >
                     <ProductionUpdateModal
                       factoryId={factoryId as string}
                       productData={row.items}

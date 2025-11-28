@@ -7,12 +7,14 @@ import AddProductForm from "../form/addProductForm";
 import { useAuth } from "@/hooks/hooks";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
+import { useRouter } from "next/navigation";
 
 const CreateProductToProductionModal = ({
   productionId,
 }: {
   productionId: string;
 }) => {
+  const router = useRouter();
   const { user } = useAuth();
   const factoryId = user?.factoryId;
 
@@ -35,6 +37,7 @@ const CreateProductToProductionModal = ({
       console.log("SUCCESS:", data);
       showToast("success", data);
       form.reset({});
+      router.push(`/factory/manager/production`);
     },
   });
 

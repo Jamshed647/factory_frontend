@@ -6,24 +6,27 @@ import { CustomField } from "@/components/common/fields/cusField";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-// import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
-// import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
-// import CreateProductModal from "./_assets/components/create/createProductModal";
-// import UpdateProductModal from "./_assets/components/update/updateProductModal";
 
 const SalesTable = ({ factoryId }: { factoryId: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const [status, setStatus] = React.useState("");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/sale/factory/${factoryId}`,
     queryKey: "getSalesDataByFactory",
     filterData: {
+      type: status,
       search: searchText,
       page: currentPage,
     },
   });
+
+  const handleStatusChange = (newStatus: string) => {
+    setStatus(newStatus);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="mt-10">
@@ -38,15 +41,25 @@ const SalesTable = ({ factoryId }: { factoryId: string }) => {
               setSearchText={setSearchText}
             />
 
-            <Link href="/factory/sell/createSell">
-              <ActionButton
-                buttonContent="Sell Product"
-                type="button"
-                isPending={false}
-                icon={<ShoppingCart className="w-5 h-5" />}
-                btnStyle="bg-blue-500 text-white"
+            <div className="flex gap-2 justify-between">
+              <CustomField.SingleSelectField
+                name="status"
+                options={["Quick", "Normal"]}
+                placeholder="Select Status"
+                onValueChange={handleStatusChange}
+                defaultValue={status}
               />
-            </Link>
+
+              <Link href="/factory/sell/createSell">
+                <ActionButton
+                  buttonContent="Sell Product"
+                  type="button"
+                  isPending={false}
+                  icon={<ShoppingCart className="w-5 h-5" />}
+                  btnStyle="bg-blue-500 text-white"
+                />
+              </Link>
+            </div>
           </div>
         </div>
 

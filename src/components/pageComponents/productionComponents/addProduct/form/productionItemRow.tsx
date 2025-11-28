@@ -54,10 +54,10 @@ const ProductionItemRow = ({
 
         <div>
           <CustomField.Number
-            labelName="Quantity"
-            placeholder="Enter Quantity"
+            labelName="Sell Price"
+            placeholder="Enter sellPrice"
             form={form}
-            name={`items.${index}.quantity`}
+            name={`items.${index}.sellPrice`}
           />
         </div>
 
@@ -72,10 +72,10 @@ const ProductionItemRow = ({
 
         <div>
           <CustomField.Number
-            labelName="Sell Price"
-            placeholder="Enter sellPrice"
+            labelName="Quantity"
+            placeholder="Enter Quantity"
             form={form}
-            name={`items.${index}.sellPrice`}
+            name={`items.${index}.quantity`}
           />
         </div>
       </div>

@@ -16,14 +16,14 @@ export const dueSchema = z.object({
     type: "number",
   }),
   type: validationSchemas.textSchema({ label: "Type" }),
-  transactionType: validationSchemas.textSchema({
-    label: "Transaction Type",
-  }),
   note: validationSchemas.textSchema({ label: "Note", required: false }),
-  bankId: validationSchemas.textSchema({
-    label: "Bank Account Id",
-    required: false,
-  }),
+  // transactionType: validationSchemas.textSchema({
+  //   label: "Transaction Type",
+  // }),
+  // bankId: validationSchemas.textSchema({
+  //   label: "Bank Account Id",
+  //   required: false,
+  // }),
 });
 // .refine(
 //   (data) => {

@@ -28,8 +28,6 @@ const ProductionUpdateModal = ({
     ...productData,
   ]);
 
-  console.log("selectedProducts", selectedProducts);
-
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/product/factory/${factoryId}`,

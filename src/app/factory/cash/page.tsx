@@ -16,6 +16,8 @@ const CashPage = () => {
     queryKey: "getCashDataByFactory",
   });
 
+  const balanceInfo = data?.data[0];
+
   return (
     <div>
       <div className="space-y-4">
@@ -43,12 +45,12 @@ const CashPage = () => {
                     : "text-green-500"
                 }`}
               >
-                ৳ {data?.data?.balance ?? 0}
+                ৳ {balanceInfo?.balance ?? 0}
               </p>
             </div>
             <div className="flex gap-2">
-              <DueDialog factory={factory} type="PAY" />
               <DueDialog factory={factory} type="TAKE" />
+              <DueDialog factory={factory} type="PAY" />
             </div>
           </CardContent>
         </Card>

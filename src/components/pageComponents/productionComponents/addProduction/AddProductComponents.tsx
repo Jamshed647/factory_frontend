@@ -103,6 +103,8 @@ const AddProductionComponents = () => {
 
         <ProductionModal
           allProducts={data?.data}
+          setSearchTerm={setSearchTerm}
+          searchTerm={searchTerm}
           productData={selectedProducts}
           selectedProducts={selectedProducts}
           setSelectedProducts={setSelectedProducts}

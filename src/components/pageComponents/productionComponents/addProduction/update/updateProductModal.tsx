@@ -35,14 +35,14 @@ const ProductionUpdateModal = ({
     filterData: { type: "RAW", search: searchTerm, page },
   });
 
-  console.log("data", data?.data);
-
-  const updateLimit = (product: Product | SelectedProduct, limit: number) => {
+  const updateLimit = (
+    product: Product | SelectedProduct,
+    productionQuantity: number,
+  ) => {
     setSelectedProducts((prev) => {
       // --- Type narrowing ---
       const productId = "id" in product ? product.id : product.productId;
       const name = data?.data?.find((p: Product) => p.id === productId);
-      console.log("product", name);
       const quantity = data?.data?.find(
         (p: Product) => p.id === productId,
       )?.quantity;
@@ -57,27 +57,31 @@ const ProductionUpdateModal = ({
       }
 
       // Validate limit against stock
-      if (limit < 0 || limit > quantity) return prev;
+      if (productionQuantity < 0 || productionQuantity > quantity) return prev;
 
       const exists = prev.find((p) => p.productId === productId);
 
       // --- UPDATE Case ---
       if (exists) {
         // Remove if limit is zero
-        if (limit === 0) {
+        if (productionQuantity === 0) {
           return prev.filter((p) => p.productId !== productId);
         }
 
         // Update existing
         return prev.map((p) =>
           p.productId === productId
-            ? { ...p, limit, totalPrice: buyPrice * limit }
+            ? {
+                ...p,
+                productionQuantity,
+                totalPrice: buyPrice * productionQuantity,
+              }
             : p,
         );
       }
 
       // --- ADD Case ---
-      if (limit > 0) {
+      if (productionQuantity > 0) {
         return [
           ...prev,
           {
@@ -85,9 +89,9 @@ const ProductionUpdateModal = ({
             name,
             quantity,
             quantityType,
-            limit,
+            productionQuantity,
             buyPrice,
-            totalPrice: buyPrice * limit,
+            totalPrice: buyPrice * productionQuantity,
           },
         ];
       }

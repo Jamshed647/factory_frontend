@@ -19,7 +19,9 @@ export const productionSchema = z.object({
     .array(
       z.object({
         productId: validationSchemas.textSchema({ label: "Product" }),
-        quantity: validationSchemas.numberSchema({ label: "Quantity" }),
+        productionQuantity: validationSchemas.numberSchema({
+          label: "Production Quantity",
+        }),
         buyPrice: validationSchemas.numberSchema({ label: "Buy Price" }),
         totalPrice: validationSchemas.numberSchema({ label: "Total Price" }),
       }),

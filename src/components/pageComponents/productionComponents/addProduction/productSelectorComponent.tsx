@@ -21,14 +21,22 @@ const ProductSelectorGrid = ({
   const isSelected = (id: string) =>
     selectedProducts.some((item) => item?.productId === id);
 
-  const getLimit = (id: string) =>
-    selectedProducts?.find((item) => item?.productId === id)?.limit ?? 0;
+  const getProductionQuantity = (id: string) =>
+    selectedProducts.find((item) => item?.productId === id);
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {products?.map((p: Product) => {
-        const selected = isSelected(p.id);
-        const limit = getLimit(p.id ?? p.productId);
+        const selected = isSelected(p.id ?? p.productId);
+        const matchedProduct = getProductionQuantity(p?.id);
+        const productionQuantity =
+          p?.productionQuantity ?? matchedProduct?.productionQuantity ?? 0;
+
+        console.log(
+          "Production_Quantity Check",
+          productionQuantity,
+          matchedProduct,
+        );
 
         const isStock = p.quantity > 0;
 
@@ -53,8 +61,10 @@ const ProductSelectorGrid = ({
                   </span>
                 </div>
 
+                {productionQuantity}
                 <div className="flex justify-between">
                   <span>Price:</span>
+
                   <span className="font-semibold text-emerald-600">
                     ৳{p.buyPrice}
                   </span>
@@ -62,9 +72,11 @@ const ProductSelectorGrid = ({
 
                 <div className="flex justify-between items-center p-2 bg-emerald-50 rounded-md">
                   <span>
-                    Total (৳{p?.buyPrice} × {limit})
+                    Total (৳{p?.buyPrice} × {productionQuantity})
                   </span>
-                  <span className="font-semibold">৳{p.buyPrice * limit}</span>
+                  <span className="font-semibold">
+                    ৳{p?.buyPrice * productionQuantity}
+                  </span>
                 </div>
               </div>
 
@@ -76,12 +88,12 @@ const ProductSelectorGrid = ({
                   tooltipContent="Decrease"
                   handleOpen={(e: any) => {
                     e.stopPropagation();
-                    updateLimit(p, limit - 1);
+                    updateLimit(p, productionQuantity - 1);
                   }}
                   btnStyle="bg-red-500 text-white"
                 />
 
-                <span className="px-2 font-semibold">{limit}</span>
+                <span className="px-2 font-semibold">{productionQuantity}</span>
 
                 <ActionButton
                   type="button"
@@ -90,7 +102,7 @@ const ProductSelectorGrid = ({
                   tooltipContent="Increase"
                   handleOpen={(e: any) => {
                     e.stopPropagation();
-                    updateLimit(p, limit + 1);
+                    updateLimit(p, productionQuantity + 1);
                   }}
                   btnStyle="bg-green-500 text-white"
                 />

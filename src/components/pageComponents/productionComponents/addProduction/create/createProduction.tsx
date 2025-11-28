@@ -32,7 +32,7 @@ const CreateProductionModal = ({
       factoryId,
       items: (product ?? []).map((p: any) => ({
         productId: p.productId,
-        quantity: p.limit,
+        productionQuantity: p.productionQuantity,
         buyPrice: Number(p.buyPrice),
         totalPrice: Number(p.totalPrice),
       })),

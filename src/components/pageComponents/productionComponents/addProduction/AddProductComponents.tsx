@@ -27,8 +27,13 @@ const AddProductionComponents = () => {
     [],
   );
 
-  const updateLimit = (product: Product | SelectedProduct, limit: number) => {
+  const updateLimit = (
+    product: Product | SelectedProduct,
+    productionQuantity: number,
+  ) => {
     setSelectedProducts((prev) => {
+      console.log("productionQuantity Click", productionQuantity);
+
       // --- Type narrowing ---
       const productId = "id" in product ? product.id : product.productId;
       const name = data?.data?.find((p: Product) => p.id === productId)?.name;
@@ -36,7 +41,6 @@ const AddProductionComponents = () => {
         (p: Product) => p.id === productId,
       )?.quantity;
 
-      console.log("product", quantity);
       const quantityType =
         "quantityType" in product ? product.quantityType : "";
       const buyPrice = Number(product.buyPrice);
@@ -47,27 +51,33 @@ const AddProductionComponents = () => {
       }
 
       // Validate limit against stock
-      if (limit < 0 || limit > quantity) return prev;
+      if (productionQuantity < 0 || productionQuantity > quantity) return prev;
 
       const exists = prev.find((p) => p.productId === productId);
 
       // --- UPDATE Case ---
       if (exists) {
         // Remove if limit is zero
-        if (limit === 0) {
+        if (productionQuantity === 0) {
           return prev.filter((p) => p.productId !== productId);
         }
 
         // Update existing
         return prev.map((p) =>
           p.productId === productId
-            ? { ...p, limit, totalPrice: buyPrice * limit }
+            ? {
+                ...p,
+                productionQuantity,
+                totalPrice: buyPrice * productionQuantity,
+              }
             : p,
         );
       }
 
+      console.log("Checking", productionQuantity, quantity);
+
       // --- ADD Case ---
-      if (limit > 0) {
+      if (productionQuantity > 0) {
         return [
           ...prev,
           {
@@ -75,9 +85,9 @@ const AddProductionComponents = () => {
             name,
             quantity,
             quantityType,
-            limit,
+            productionQuantity,
             buyPrice,
-            totalPrice: buyPrice * limit,
+            totalPrice: buyPrice * productionQuantity,
           },
         ];
       }

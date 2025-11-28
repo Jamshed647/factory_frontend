@@ -50,7 +50,7 @@ const ProductionComponents = () => {
           <div className="flex gap-2 justify-between">
             <CustomField.SingleSelectField
               name="status"
-              options={["COMPLETE", "PENDING"]}
+              options={["COMPLETE", "QUICK"]}
               placeholder="Select Status"
               onValueChange={handleStatusChange}
               defaultValue={status}
@@ -87,13 +87,14 @@ const ProductionComponents = () => {
                 key: "batchNo",
                 header: "Batch No",
               },
-              {
-                key: "totalProductionAmount",
-                header: "Total Amount",
-              },
+
               {
                 key: "extraCost",
                 header: "Extra Cost",
+              },
+              {
+                key: "totalProductionAmount",
+                header: "Total Amount",
               },
               {
                 key: "status",

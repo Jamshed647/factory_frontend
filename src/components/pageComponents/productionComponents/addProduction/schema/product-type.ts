@@ -6,7 +6,7 @@ export type Product = {
   quantityType: string;
   sellPrice: number;
   buyPrice: number;
-  limit?: number;
+  productionQuantity?: number;
   totalPrice?: number;
   productId?: string;
 };
@@ -14,7 +14,7 @@ export type Product = {
 export type SelectedProduct = {
   name?: string;
   productId: string;
-  limit: number;
+  productionQuantity: number;
   buyPrice: number;
   totalPrice: number;
 };

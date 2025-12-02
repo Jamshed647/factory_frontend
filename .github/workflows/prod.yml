@@ -1,0 +1,68 @@
+name: Docker Image CI/CD for Production
+
+on:
+  push:
+    branches: ["production", "main"]
+
+
+env:
+  SSH_HOST: ${{ secrets.SSH_HOST }}
+  SSH_USER: ${{ secrets.SSH_USER }}
+  SSH_KEY: ${{ secrets.SSH_KEY }}
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Branch name
+        run: echo running on branch ${GITHUB_REF##*/}
+
+  deployment:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    steps:
+      - name: Deploy to Production via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key: ${{ env.SSH_KEY }}
+          script: |
+            cd /home/murifactory/
+
+            # Check if repo exists
+            if [ ! -d "factory_frontend/.git" ]; then
+              echo "Repository not found. Cloning..."
+              git clone git@github.com:Jamshed647/factory_frontend.git factory_frontend
+            else
+              echo "Repository exists. Pulling latest changes..."
+              cd /home/murifactory/factory_frontend
+              git reset --hard
+              git pull origin production || git pull origin main
+            fi
+
+            cd /home/murifactory/factory_frontend
+
+            echo "Updating .env file"
+            echo "${{ secrets.ENV_FILE }}" | sed 's/\\n/\n/g' > .env
+
+            echo "Stopping running containers..."
+            docker compose down
+
+            echo "Rebuilding & starting containers..."
+            docker compose up -d --build
+
+            echo "Restarting nginx..."
+            sudo systemctl restart nginx

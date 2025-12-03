@@ -50,6 +50,7 @@ export const SelectProductComponent = ({
     name: string,
     sellPrice: number,
     stock: number,
+    buyPrice?: number,
     updateSellPrice?: number,
   ) => {
     const updated = cart.update(
@@ -58,8 +59,10 @@ export const SelectProductComponent = ({
       name,
       sellPrice,
       stock,
+      buyPrice as number,
       updateSellPrice as number,
     );
+
     setSelectedProducts(updated);
   };
 
@@ -89,7 +92,7 @@ export const SelectProductComponent = ({
           <p className="text-lg text-muted-foreground">No products found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {products.map((p) => {
             const selected = isSelected(p?.id);
             const limit = getLimit(p?.id);
@@ -101,7 +104,7 @@ export const SelectProductComponent = ({
                 : Number(p?.sellPrice) * limit;
 
             return (
-              <Card
+              <div
                 onClick={
                   isClickable
                     ? () => {
@@ -110,100 +113,121 @@ export const SelectProductComponent = ({
                       }
                     : undefined
                 }
-                key={p?.id}
-                className={`transition-all  duration-200 ${isClickable ? "cursor-pointer" : ""} hover:shadow-lg ${
-                  selected ? " bg-blue-100 shadow-md" : ""
-                }`}
+                key={p.id}
+                className="flex flex-col h-full"
               >
-                <CardContent className="space-y-3">
-                  <div>
-                    <h3 className="text-base font-semibold truncate">
-                      {p?.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {p?.category}
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Stock:</span>
-                      <span className="font-medium">
-                        {p?.quantity ?? p?.stock} {p?.quantityType}
-                      </span>
+                <Card
+                  className={`flex flex-col h-full transition-all  duration-200 ${isClickable ? "cursor-pointer" : ""} hover:shadow-lg ${
+                    selected ? " bg-blue-100 shadow-md" : ""
+                  }`}
+                >
+                  <CardContent className="flex flex-col flex-grow p-4 space-y-3">
+                    {/* Name and Category - Fixed height */}
+                    <div className="min-h-[3.5rem]">
+                      <h3 className="text-base font-semibold truncate">
+                        {p?.name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {p?.category}
+                      </p>
                     </div>
 
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Price:</span>
-                      <div className="font-semibold text-emerald-600">
-                        {p?.updateSellPrice &&
-                          p?.updateSellPrice != p?.sellPrice && (
-                            <span className="mr-1 line-through text-muted-foreground">
-                              ৳{p?.sellPrice}
-                            </span>
-                          )}
-                        <span>৳{p?.updateSellPrice ?? p?.sellPrice}</span>
+                    {/* Pricing Info - Fixed height */}
+                    <div className="flex-grow space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Stock:</span>
+                        <span className="font-medium">
+                          {p?.quantity ?? p?.stock} {p?.quantityType}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">
+                          Cost Price:
+                        </span>
+                        <div className="font-semibold text-emerald-600">
+                          <span>৳{p?.buyPrice}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">
+                          Sell Price:
+                        </span>
+                        <div className="font-semibold text-emerald-600">
+                          {p?.updateSellPrice &&
+                            p?.updateSellPrice != p?.sellPrice && (
+                              <span className="mr-1 line-through text-muted-foreground">
+                                ৳{p?.sellPrice}
+                              </span>
+                            )}
+                          <span>৳{p?.updateSellPrice ?? p?.sellPrice}</span>
+                        </div>
+                      </div>
+
+                      {/* Total Section - Fixed at bottom */}
+                      <div className="flex justify-between items-center p-2 mt-auto bg-emerald-50 rounded-md">
+                        <div className="flex gap-2 items-baseline">
+                          <span className="text-sm font-medium text-emerald-800">
+                            Total
+                          </span>
+                          <span className="text-xs text-emerald-600">
+                            (৳{p?.updateSellPrice ?? p?.sellPrice} × {limit})
+                          </span>
+                        </div>
+                        <span className="font-semibold text-emerald-700">
+                          ৳{total}
+                        </span>
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-center p-2 bg-emerald-50 rounded-md">
-                      <div className="flex gap-2 items-baseline">
-                        <span className="text-sm font-medium text-emerald-800">
-                          Total
-                        </span>
-                        <span className="text-xs text-emerald-600">
-                          (৳{p?.updateSellPrice ?? p?.sellPrice} × {limit})
-                        </span>
-                      </div>
-                      <span className="font-semibold text-emerald-700">
-                        ৳{total}
-                      </span>
+                    {/* Quantity Controls - Fixed position */}
+                    <div className="flex justify-between pt-2 mt-2 border-t">
+                      <ActionButton
+                        type="button"
+                        disabled={!isStock}
+                        icon={<MinusIcon className="w-5 h-5" />}
+                        tooltipContent="Decrease"
+                        handleOpen={(e: any) => {
+                          updateLimit(
+                            p.id,
+                            limit - 1,
+                            p?.name,
+                            p?.sellPrice,
+                            p?.quantity ?? p?.stock,
+                            p?.buyPrice,
+                            p?.updateSellPrice,
+                          );
+                          e.stopPropagation();
+                        }}
+                        btnStyle="bg-red-500 text-white"
+                      />
+
+                      <span className="px-2 font-semibold">{limit}</span>
+
+                      <ActionButton
+                        type="button"
+                        disabled={!isStock}
+                        icon={<PlusIcon className="w-5 h-5" />}
+                        tooltipContent="Increase"
+                        handleOpen={(e: any) => {
+                          updateLimit(
+                            p.id,
+                            limit + 1,
+                            p?.name,
+                            p?.sellPrice,
+                            p?.quantity ?? p?.stock,
+                            p?.buyPrice,
+                            p?.updateSellPrice,
+                          );
+                          e.stopPropagation();
+                        }}
+                        btnStyle="bg-green-500 text-white"
+                      />
                     </div>
-                  </div>
-
-                  <div className="flex justify-between mt-2">
-                    <ActionButton
-                      type="button"
-                      disabled={!isStock}
-                      icon={<MinusIcon className="w-5 h-5" />}
-                      tooltipContent="Decrease"
-                      handleOpen={(e: any) => {
-                        updateLimit(
-                          p.id,
-                          limit - 1,
-                          p?.name,
-                          p?.sellPrice,
-                          p?.quantity ?? p?.stock,
-                          p?.updateSellPrice,
-                        );
-                        e.stopPropagation();
-                      }}
-                      btnStyle="bg-red-500 text-white"
-                    />
-
-                    <span className="px-2 font-semibold">{limit}</span>
-
-                    <ActionButton
-                      type="button"
-                      disabled={!isStock}
-                      icon={<PlusIcon className="w-5 h-5" />}
-                      tooltipContent="Increase"
-                      handleOpen={(e: any) => {
-                        updateLimit(
-                          p.id,
-                          limit + 1,
-                          p?.name,
-                          p?.sellPrice,
-                          p?.quantity ?? p?.stock,
-                          p?.updateSellPrice,
-                        );
-                        e.stopPropagation();
-                      }}
-                      btnStyle="bg-green-500 text-white"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })}
         </div>

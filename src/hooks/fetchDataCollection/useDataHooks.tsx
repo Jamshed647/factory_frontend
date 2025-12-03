@@ -155,3 +155,13 @@ export function fetchProducts({
 
   return { options, data, isLoading, isError };
 }
+
+export function fetchProductById({ id }: { id: string }) {
+  const { data, isLoading } = useFetchData({
+    method: "GET",
+    path: `factory/product/${id}`,
+    queryKey: "getSingleProduct",
+  });
+
+  return { data, isLoading };
+}

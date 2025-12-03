@@ -14,6 +14,7 @@ export type Product = {
 export type SelectedProduct = {
   name?: string;
   productId: string;
+  quantity?: number;
   productionQuantity: number;
   buyPrice: number;
   totalPrice: number;

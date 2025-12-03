@@ -1,61 +1,61 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-import { StatusWithIcon } from "@/components/common/Badge/status_point";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuth } from "@/hooks/hooks";
-import { Separator } from "@radix-ui/react-select";
-import DueDialog from "./_assets/components/DueDialog";
+import { CashHistoryViewer } from "./_assets/components/cash-history-viewer";
+import { CashOverview } from "./_assets/components/cash-overview";
+import CashHistoryDialog from "./_assets/components/cash-history-dialog";
+import { CustomField } from "@/components/common/fields/cusField";
+import { useState } from "react";
 
 const CashPage = () => {
+  const [rangeType, setRangeType] = useState<"DAILY" | "WEEKLY" | "MONTHLY">(
+    "DAILY",
+  );
   const { user } = useAuth();
   const factory = user?.factory;
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/cash/factory/${factory?.id}`,
+    path: `factory/cash/history/${factory?.id}`,
     queryKey: "getCashDataByFactory",
   });
 
   const balanceInfo = data?.data[0];
 
   return (
-    <div>
-      <div className="space-y-4">
-        <Card>
-          <CardHeader>
-            <p className="text-xl font-bold"> Name: {factory?.name}</p>
+    <main className="min-h-screen from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+      <div className="mx-auto space-y-6 max-w-6xl">
+        <CashOverview
+          transactions={balanceInfo?.cashAmountHistories}
+          factory={factory}
+          currentBalance={balanceInfo?.balance}
+        />
 
-            <p className="text-sm">Address: {factory?.address}</p>
-            <div>
-              Status:
-              <StatusWithIcon status={factory?.status as string} />
-            </div>
-          </CardHeader>
+        <div className="p-3 space-y-3 rounded-lg border shadow-md">
+          <div className="flex gap-3 justify-between items-center">
+            <h2 className="text-lg font-bold text-foreground">
+              {rangeType === "DAILY" ? "Today" : rangeType}
+            </h2>
+            <CustomField.SingleSelectField
+              name="cashHistory"
+              placeholder="Select Range"
+              options={["DAILY", "WEEKLY", "MONTHLY"]}
+              defaultValue={rangeType}
+              onValueChange={(value: any) => setRangeType(value)}
+            />
+          </div>
 
-          <Separator />
+          <div className="flex gap-3 justify-center">
+            <CashHistoryDialog type="cashIn" rangeType={rangeType} />
+            <CashHistoryDialog type="cashOut" rangeType={rangeType} />
+          </div>
+        </div>
 
-          <CardContent className="flex justify-between items-center">
-            <div>
-              <p className="text-sm text-muted-foreground">Current Balance</p>
-
-              <p
-                className={`text-2xl font-bold ${
-                  (data?.data?.balance ?? 0) < 0
-                    ? "text-red-500"
-                    : "text-green-500"
-                }`}
-              >
-                ৳ {balanceInfo?.balance ?? 0}
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <DueDialog factory={factory} type="TAKE" />
-              <DueDialog factory={factory} type="PAY" />
-            </div>
-          </CardContent>
-        </Card>
+        {/* Transaction History */}
+        <CashHistoryViewer transactions={balanceInfo?.cashAmountHistories} />
       </div>
-    </div>
+    </main>
   );
 };
 

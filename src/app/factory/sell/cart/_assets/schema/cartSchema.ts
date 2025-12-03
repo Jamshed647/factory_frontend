@@ -86,7 +86,14 @@ const cartSchema = z
     },
   )
   .refine(
-    (data) => Number(data.paidAmount || 0) <= Number(data.totalAmount || 0),
+    (data) => {
+      const hasCustomer = data?.customerId?.toString().trim() !== "";
+
+      if (!hasCustomer) return true; // skip validation when seller is not selected
+
+      // run the paidAmount validation only when seller exists
+      return Number(data.paidAmount || 0) <= Number(data.totalAmount || 0);
+    },
     {
       message: "Paid amount cannot be greater than total sell amount",
       path: ["paidAmount"],

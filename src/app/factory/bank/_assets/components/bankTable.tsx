@@ -4,6 +4,7 @@ import DynamicTableWithPagination from "@/components/common/DynamicTable/Dynamic
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
 import CreateBankModal from "./create/createBankModal";
+import Link from "next/link";
 
 interface TableProps {
   factoryId?: string;
@@ -54,9 +55,9 @@ const BankTable = ({ factoryId, switchUser = false }: TableProps) => {
               {
                 key: "name",
                 header: "Name",
-                // render: (item) => (
-                //   <Link href={`/factory/customer/${item.id}`}>{item.name}</Link>
-                // ),
+                render: (item) => (
+                  <Link href={`/factory/bank/${item.id}`}>{item.name}</Link>
+                ),
               },
               { key: "accountNo", header: "Account No" },
               { key: "branch", header: "Branch Address" },

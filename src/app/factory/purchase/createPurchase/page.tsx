@@ -24,8 +24,9 @@ const CreateSellPage = () => {
       id: string;
       limit: number;
       name: string;
-      sellPrice: number;
+      buyPrice: number;
       stock: number;
+      updateBuyPrice?: number;
     }[]
   >(cart.get());
 

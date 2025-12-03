@@ -14,8 +14,9 @@ interface Item {
   limit: number;
   name: string;
   sellPrice: number;
-  updateSellPrice?: number;
   stock: number;
+  buyPrice?: number;
+  updateSellPrice?: number;
 }
 
 interface CreateSalesmanModalProps {
@@ -28,6 +29,7 @@ interface CreateSalesmanModalProps {
     name: string,
     sellPrice: number,
     stock: number,
+    buyPrice?: number,
     updateSellPrice?: number,
   ) => void;
 }
@@ -38,6 +40,7 @@ const productModalSchema = z.object({
   sellPrice: z.number(),
   stock: z.number(),
   limit: z.number(),
+  buyPrice: z.number(),
   updateSellPrice: z.number().optional(),
 });
 
@@ -47,7 +50,8 @@ const ProductModal = ({
   productData,
   updateLimit,
 }: CreateSalesmanModalProps) => {
-  const { id, limit, name, sellPrice, stock } = (productData as Item) || {};
+  const { id, limit, name, sellPrice, stock, buyPrice, updateSellPrice } =
+    productData || {};
 
   const form = useForm<z.infer<typeof productModalSchema>>({
     resolver: zodResolver(productModalSchema),
@@ -57,6 +61,7 @@ const ProductModal = ({
       sellPrice: sellPrice,
       stock: stock,
       limit: Math.min(limit || 0, stock || 0),
+      buyPrice: buyPrice,
       updateSellPrice: sellPrice,
     },
   });
@@ -71,19 +76,23 @@ const ProductModal = ({
       id: id,
       name: name,
       sellPrice: productData?.updateSellPrice ?? productData?.sellPrice,
-      stock: Number(productData?.stock ?? 0),
       limit: Math.min(limit ?? 0, stock ?? 0),
+      stock: Number(productData?.stock ?? 0),
+      buyPrice: productData?.buyPrice ?? 0,
       updateSellPrice: productData?.updateSellPrice ?? productData?.sellPrice,
     });
   }, [productData, id, name, sellPrice, stock, limit, form]);
 
   const onSubmit = async (data: z.infer<typeof productModalSchema>) => {
+    // console.log("TEst updateLimit", data);
+
     updateLimit(
-      id,
+      id as string,
       data.limit,
       data?.name,
       productData?.sellPrice as number,
       data?.stock,
+      data?.buyPrice,
       data?.updateSellPrice,
     );
     setOpen(false);

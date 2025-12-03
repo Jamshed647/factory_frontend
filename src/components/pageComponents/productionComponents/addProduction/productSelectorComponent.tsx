@@ -6,11 +6,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import ActionButton from "@/components/common/button/actionButton";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { Product, SelectedProduct } from "./schema/product-type";
+import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 
 interface Props {
   products: Product[];
   selectedProducts: SelectedProduct[];
-  updateLimit: (product: Product, limit: number) => void;
+  updateLimit: (product: Product, limit: number, stock?: number) => void;
 }
 
 const ProductSelectorGrid = ({
@@ -27,18 +28,26 @@ const ProductSelectorGrid = ({
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {products?.map((p: Product) => {
+        const { data } = DataFetcher.fetchProductById({
+          id: p?.productId ?? p?.id,
+        });
+        const product = data?.data;
+
         const selected = isSelected(p.id ?? p.productId);
-        const matchedProduct = getProductionQuantity(p?.id);
+
+        const matchedProduct = getProductionQuantity(p?.productId ?? p?.id);
+
         const productionQuantity =
-          p?.productionQuantity ?? matchedProduct?.productionQuantity ?? 0;
+          matchedProduct?.productionQuantity ?? p?.productionQuantity ?? 0;
 
-        console.log(
-          "Production_Quantity Check",
-          productionQuantity,
-          matchedProduct,
-        );
+        const stock = p?.quantity ?? product?.quantity;
 
-        const isStock = p.quantity > 0;
+        const unit = p?.quantityType ?? product?.quantityType;
+        const productName = p?.name ?? product?.name;
+        const category = p?.category ?? product?.category;
+        const buyPrice = p?.buyPrice ?? product?.buyPrice;
+
+        const isStock = stock > 0;
 
         return (
           <Card
@@ -49,33 +58,34 @@ const ProductSelectorGrid = ({
           >
             <CardContent className="space-y-3">
               <div>
-                <h3 className="text-base font-semibold truncate">{p?.name}</h3>
-                <p className="text-sm text-muted-foreground">{p?.category}</p>
+                <h3 className="text-base font-semibold truncate">
+                  {productName}
+                </h3>
+                <p className="text-sm text-muted-foreground">{category}</p>
               </div>
 
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Stock:</span>
                   <span className="font-medium">
-                    {p?.quantity} {p?.quantityType}
+                    {stock} {unit}
                   </span>
                 </div>
 
-                {productionQuantity}
                 <div className="flex justify-between">
                   <span>Price:</span>
 
                   <span className="font-semibold text-emerald-600">
-                    ৳{p.buyPrice}
+                    ৳{buyPrice}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center p-2 bg-emerald-50 rounded-md">
                   <span>
-                    Total (৳{p?.buyPrice} × {productionQuantity})
+                    Total (৳{buyPrice} × {productionQuantity})
                   </span>
                   <span className="font-semibold">
-                    ৳{p?.buyPrice * productionQuantity}
+                    ৳{buyPrice * productionQuantity}
                   </span>
                 </div>
               </div>
@@ -88,7 +98,7 @@ const ProductSelectorGrid = ({
                   tooltipContent="Decrease"
                   handleOpen={(e: any) => {
                     e.stopPropagation();
-                    updateLimit(p, productionQuantity - 1);
+                    updateLimit(p, productionQuantity - 1, stock);
                   }}
                   btnStyle="bg-red-500 text-white"
                 />
@@ -102,7 +112,7 @@ const ProductSelectorGrid = ({
                   tooltipContent="Increase"
                   handleOpen={(e: any) => {
                     e.stopPropagation();
-                    updateLimit(p, productionQuantity + 1);
+                    updateLimit(product, productionQuantity + 1, stock);
                   }}
                   btnStyle="bg-green-500 text-white"
                 />

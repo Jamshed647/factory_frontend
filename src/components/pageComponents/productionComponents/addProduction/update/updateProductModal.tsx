@@ -3,13 +3,20 @@
 import ActionButton from "@/components/common/button/actionButton";
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import { Edit2Icon, MinusIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductSelectorGrid from "../productSelectorComponent";
 import { Product, SelectedProduct } from "../schema/product-type";
-import CreateProductionModal from "../create/createProduction";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { CustomField } from "@/components/common/fields/cusField";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
+import { showToast } from "@/components/common/TostMessage/customTostMessage";
+import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { ProductionFormType, productionSchema } from "../schema/product-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { productionDefaultValue } from "../schema/productDefaultValue";
+import CreateProductionForm from "../form/createProductionForm";
 
 interface ProductionModalProps {
   factoryId: string;
@@ -20,67 +27,72 @@ const ProductionUpdateModal = ({
   factoryId,
   productData,
 }: ProductionModalProps) => {
+  const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [seeMore, setSeeMore] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([
-    ...productData,
+    ...productData?.items,
   ]);
 
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/product/factory/${factoryId}`,
-    queryKey: "getProductDataByFactory",
+    queryKey: "getProductDataByFactoryForAdd",
     filterData: { type: "RAW", search: searchTerm, page },
+  });
+
+  // console.log("Test Production", selectedProducts);
+
+  const form = useForm<ProductionFormType>({
+    resolver: zodResolver(productionSchema),
+    defaultValues: productionDefaultValue(productData),
   });
 
   const updateLimit = (
     product: Product | SelectedProduct,
     productionQuantity: number,
+    stock?: number,
   ) => {
     setSelectedProducts((prev) => {
-      // --- Type narrowing ---
-      const productId = "id" in product ? product.id : product.productId;
-      const name = data?.data?.find((p: Product) => p.id === productId);
-      const quantity = data?.data?.find(
-        (p: Product) => p.id === productId,
-      )?.quantity;
+      const productId = "productId" in product ? product.productId : product.id;
+      if (!productId) return prev;
 
-      const quantityType =
-        "quantityType" in product ? product.quantityType : "";
-      const buyPrice = Number(product.buyPrice);
+      const name = product.name ?? "";
+      const quantity = stock ?? Number(product.quantity ?? 0);
+      const buyPrice = Number(product.buyPrice ?? 0);
 
-      if (!productId) {
-        console.error("❌ productId is missing!", product);
+      if (productionQuantity < 0 || productionQuantity > quantity) {
+        console.log(
+          "Stock",
+          productionQuantity,
+          "Quantity",
+          quantity,
+          product.quantity,
+        );
+        showToast("error", "Production quantity is invalid");
         return prev;
       }
 
-      // Validate limit against stock
-      if (productionQuantity < 0 || productionQuantity > quantity) return prev;
+      const existsIndex = prev.findIndex((p) => p.productId === productId);
 
-      const exists = prev.find((p) => p.productId === productId);
-
-      // --- UPDATE Case ---
-      if (exists) {
-        // Remove if limit is zero
+      // <CHANGE> Check if product exists FIRST
+      if (existsIndex !== -1) {
+        // UPDATE existing product
         if (productionQuantity === 0) {
           return prev.filter((p) => p.productId !== productId);
         }
-
-        // Update existing
-        return prev.map((p) =>
-          p.productId === productId
-            ? {
-                ...p,
-                productionQuantity,
-                totalPrice: buyPrice * productionQuantity,
-              }
-            : p,
-        );
+        const updated = [...prev];
+        updated[existsIndex] = {
+          ...updated[existsIndex],
+          productionQuantity,
+          totalPrice: buyPrice * productionQuantity,
+        };
+        return updated;
       }
 
-      // --- ADD Case ---
+      // <CHANGE> Only add if it doesn't exist AND quantity > 0
       if (productionQuantity > 0) {
         return [
           ...prev,
@@ -88,7 +100,6 @@ const ProductionUpdateModal = ({
             productId,
             name,
             quantity,
-            quantityType,
             productionQuantity,
             buyPrice,
             totalPrice: buyPrice * productionQuantity,
@@ -98,6 +109,32 @@ const ProductionUpdateModal = ({
 
       return prev;
     });
+  };
+
+  const addProduct = useApiMutation({
+    path: `factory/production/${productData?.id}`,
+    method: "PATCH",
+    onSuccess: (data) => {
+      showToast("success", data);
+      queryClient.invalidateQueries({
+        queryKey: ["getProductionDataByFactory"],
+      });
+      setOpen(false);
+      setSelectedProducts([]);
+      form.reset({});
+    },
+  });
+
+  useEffect(() => {
+    if (selectedProducts) {
+      form.setValue("items", selectedProducts);
+    }
+  }, [form, selectedProducts, setSelectedProducts]);
+
+  const onSubmit = (data: ProductionFormType) => {
+    const { factoryId, ...rest } = data;
+    addProduct.mutate(rest);
+    // console.log("Test data", data);
   };
 
   return (
@@ -111,15 +148,15 @@ const ProductionUpdateModal = ({
       }
       open={open}
       handleOpen={setOpen}
-      title="Add To Production"
+      title="Update Production"
       style="!w-[70vw]"
     >
       <div>
         <div>
-          <CreateProductionModal
-            product={productData}
-            setOpen={setOpen}
-            setSelectedProducts={setSelectedProducts}
+          <CreateProductionForm
+            form={form}
+            onSubmit={onSubmit}
+            isPending={addProduct.isPending}
           />
         </div>
 
@@ -137,7 +174,7 @@ const ProductionUpdateModal = ({
               </h2>
 
               <ProductSelectorGrid
-                products={productData}
+                products={productData?.items}
                 selectedProducts={selectedProducts}
                 updateLimit={updateLimit}
               />

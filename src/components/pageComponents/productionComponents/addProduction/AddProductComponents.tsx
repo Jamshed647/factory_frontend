@@ -8,6 +8,7 @@ import ProductionModal from "./ProductionModal";
 import ProductSelectorGrid from "./productSelectorComponent";
 import { Product, SelectedProduct } from "./schema/product-type";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
+import { showToast } from "@/components/common/TostMessage/customTostMessage";
 
 const AddProductionComponents = () => {
   const { user } = useAuth();
@@ -32,14 +33,10 @@ const AddProductionComponents = () => {
     productionQuantity: number,
   ) => {
     setSelectedProducts((prev) => {
-      console.log("productionQuantity Click", productionQuantity);
-
       // --- Type narrowing ---
       const productId = "id" in product ? product.id : product.productId;
-      const name = data?.data?.find((p: Product) => p.id === productId)?.name;
-      const quantity = data?.data?.find(
-        (p: Product) => p.id === productId,
-      )?.quantity;
+      const name = product?.name;
+      const quantity = product?.quantity ?? 0;
 
       const quantityType =
         "quantityType" in product ? product.quantityType : "";
@@ -51,9 +48,24 @@ const AddProductionComponents = () => {
       }
 
       // Validate limit against stock
-      if (productionQuantity < 0 || productionQuantity > quantity) return prev;
+      //      if (productionQuantity < 0 || productionQuantity > quantity) return prev;
+      // Validate productionQuantity
+      if (productionQuantity < 0 || productionQuantity > quantity) {
+        showToast("error", "Production quantity is invalid");
+        return prev;
+      }
 
       const exists = prev.find((p) => p.productId === productId);
+
+      console.log({
+        productId: productId,
+        name: name,
+        quantity: quantity,
+        quantityType: quantityType,
+        productionQuantity: productionQuantity,
+        buyPrice: buyPrice,
+        exists: exists,
+      });
 
       // --- UPDATE Case ---
       if (exists) {
@@ -73,8 +85,6 @@ const AddProductionComponents = () => {
             : p,
         );
       }
-
-      console.log("Checking", productionQuantity, quantity);
 
       // --- ADD Case ---
       if (productionQuantity > 0) {

@@ -6,16 +6,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import ActionButton from "@/components/common/button/actionButton";
-import { CookieCart } from "@/utils/cookie/cart-utils";
 import { useState } from "react";
 import ProductModal from "./productModal";
+import { CookieCart } from "@/utils/cookie/purchase-cart";
 
 interface Item {
   id: string;
   limit: number;
   name: string;
-  sellPrice: number;
-  updateSellPrice?: number;
+  buyPrice: number;
+  updateBuyPrice?: number;
   stock: number;
 }
 
@@ -48,10 +48,18 @@ export const SelectProductComponent = ({
     id: string,
     limit: number,
     name: string,
-    sellPrice: number,
+    buyPrice: number,
     stock: number,
+    updateBuyPrice?: number,
   ) => {
-    const updated = cart.update(id, limit, name, sellPrice, stock);
+    const updated = cart.update(
+      id,
+      limit,
+      name,
+      buyPrice,
+      stock,
+      updateBuyPrice,
+    );
     setSelectedProducts(updated);
   };
 
@@ -81,87 +89,138 @@ export const SelectProductComponent = ({
           <p className="text-lg text-muted-foreground">No products found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {products.map((p) => {
             const selected = isSelected(p?.id);
             const limit = getLimit(p?.id);
+            const total =
+              p?.updateBuyPrice != null && p.updateBuyPrice !== ""
+                ? Number(p.updateBuyPrice) * limit
+                : Number(p?.buyPrice) * limit;
 
             return (
-              <Card
-                onClick={
-                  isClickable
-                    ? () => {
-                        setOpen(true);
-                        setUpdateProduct(p);
-                      }
-                    : undefined
-                }
-                key={p?.id}
-                className={`transition-all duration-200 ${isClickable ? "cursor-pointer" : ""} hover:shadow-lg ${
-                  selected ? " bg-blue-100 shadow-md" : ""
-                }`}
+              <div
+                // onClick={
+                //   isClickable
+                //     ? () => {
+                //         setOpen(true);
+                //         setUpdateProduct(p);
+                //       }
+                //     : undefined
+                // }
+                key={p.id}
+                className="flex flex-col h-full"
               >
-                <CardContent className="space-y-3">
-                  <div>
-                    <h3 className="text-base font-semibold truncate">
-                      {p?.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {p?.category}
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Stock:</span>
-                      <span className="font-medium">
-                        {p?.quantity ?? p?.stock} {p?.quantityType}
-                      </span>
+                <Card
+                  className={`flex flex-col h-full transition-all  duration-200 ${isClickable ? "cursor-pointer" : ""} hover:shadow-lg ${
+                    selected ? " bg-blue-100 shadow-md" : ""
+                  }`}
+                >
+                  <CardContent className="flex flex-col flex-grow p-4 space-y-3">
+                    {/* Name and Category - Fixed height */}
+                    <div className="min-h-[3.5rem]">
+                      <h3 className="text-base font-semibold truncate">
+                        {p?.name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {p?.category}
+                      </p>
                     </div>
 
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Price:</span>
-                      <span className="font-semibold text-emerald-600">
-                        ৳{p?.sellPrice}
-                      </span>
+                    {/* Pricing Info - Fixed height */}
+                    <div className="flex-grow space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Stock:</span>
+                        <span className="font-medium">
+                          {p?.quantity ?? p?.stock} {p?.quantityType}
+                        </span>
+                      </div>
+
+                      {/* <div className="flex justify-between"> */}
+                      {/*   <span className="text-muted-foreground"> */}
+                      {/*     Cost Price: */}
+                      {/*   </span> */}
+                      {/*   <div className="font-semibold text-emerald-600"> */}
+                      {/*     <span>৳{p?.buyPrice}</span> */}
+                      {/*   </div> */}
+                      {/* </div> */}
+
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">
+                          Buy Price:
+                        </span>
+                        <div className="font-semibold text-emerald-600">
+                          {p?.updateBuyPrice &&
+                            p?.updateBuyPrice != p?.buyPrice && (
+                              <span className="mr-1 line-through text-muted-foreground">
+                                ৳{p?.buyPrice}
+                              </span>
+                            )}
+                          <span>৳{p?.updateBuyPrice ?? p?.buyPrice}</span>
+                        </div>
+                      </div>
+
+                      {/* Total Section - Fixed at bottom */}
+                      <div className="flex justify-between items-center p-2 mt-auto bg-emerald-50 rounded-md">
+                        <div className="flex gap-2 items-baseline">
+                          <span className="text-sm font-medium text-emerald-800">
+                            Total
+                          </span>
+                          <span className="text-xs text-emerald-600">
+                            (৳{p?.updateBuyPrice ?? p?.buyPrice} × {limit})
+                          </span>
+                        </div>
+                        <span className="font-semibold text-emerald-700">
+                          ৳{total}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex justify-between mt-2">
-                    <ActionButton
-                      icon={<MinusIcon className="w-5 h-5" />}
-                      tooltipContent="Decrease"
-                      handleOpen={() =>
-                        updateLimit(
-                          p.id,
-                          limit - 1,
-                          p?.name,
-                          p?.sellPrice,
-                          p?.quantity,
-                        )
-                      }
-                      btnStyle="bg-red-500 text-white"
-                    />
+                    {/* Quantity Controls - Fixed position */}
+                    <div className="flex justify-between pt-2 mt-2 border-t">
+                      <ActionButton
+                        type="button"
+                        //  disabled={!isStock}
+                        icon={<MinusIcon className="w-5 h-5" />}
+                        tooltipContent="Decrease"
+                        handleOpen={(e: any) => {
+                          updateLimit(
+                            p.id,
+                            limit - 1,
+                            p?.name,
+                            p?.buyPrice,
+                            p?.quantity ?? p?.stock,
+                            //p?.updateSellPrice,
+                          );
+                          e.stopPropagation();
+                        }}
+                        btnStyle="bg-red-500 text-white"
+                      />
 
-                    <span className="px-2 font-semibold">{limit}</span>
+                      <span className="px-2 font-semibold">{limit}</span>
 
-                    <ActionButton
-                      icon={<PlusIcon className="w-5 h-5" />}
-                      tooltipContent="Increase"
-                      handleOpen={() =>
-                        updateLimit(
-                          p.id,
-                          limit + 1,
-                          p?.name,
-                          p?.sellPrice,
-                          p?.quantity ?? p?.stock,
-                        )
-                      }
-                      btnStyle="bg-green-500 text-white"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+                      <ActionButton
+                        type="button"
+                        // disabled={!isStock}
+                        icon={<PlusIcon className="w-5 h-5" />}
+                        tooltipContent="Increase"
+                        handleOpen={(e: any) => {
+                          updateLimit(
+                            p.id,
+                            limit + 1,
+                            p?.name,
+                            p?.buyPrice,
+                            p?.quantity ?? p?.stock,
+                            p?.updateSellPrice,
+                          );
+                          e.stopPropagation();
+                        }}
+                        btnStyle="bg-green-500 text-white"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })}
         </div>

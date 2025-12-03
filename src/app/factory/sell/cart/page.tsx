@@ -4,7 +4,7 @@
 import { CustomField } from "@/components/common/fields/cusField";
 import { SelectProductComponent } from "@/components/pageComponents/sellProduct/SelectProductComponent";
 import { CookieCart } from "@/utils/cookie/cart-utils";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import cartSchema, { CartFormType } from "./_assets/schema/cartSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,6 @@ import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useRouter } from "next/navigation";
-import useSellInvoiceStore from "@/store/sellInvoiceStore";
 
 const CartPage = () => {
   const cart = CookieCart("selected_products");
@@ -45,19 +44,23 @@ const CartPage = () => {
     }[]
   >(cart.get() || []);
 
-  const products = selectedProducts.map((item) => ({
-    productId: item.id,
-    quantity: item.limit,
-    sellPrice: item.sellPrice,
-    updateSellPrice: item?.updateSellPrice ?? item.sellPrice,
-    totalPrice: item.sellPrice * item.limit,
-  }));
+  const products = useMemo(
+    () =>
+      selectedProducts.map((item) => ({
+        productId: item.id,
+        quantity: item.limit,
+        sellPrice: item.sellPrice,
+        updateSellPrice: item?.updateSellPrice ?? item.sellPrice,
+        totalPrice: item.sellPrice * item.limit,
+      })),
+    [selectedProducts],
+  );
 
   const form = useForm<CartFormType>({
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
       factoryId: user?.factoryId,
-      customerId: customer?.id ?? null,
+      customerId: customer?.id,
       sellerId: user?.id,
       sellerName: user?.name,
       items: products,
@@ -66,78 +69,82 @@ const CartPage = () => {
 
   const values = form.watch();
 
-  // Total Price
-  const totalPrice = selectedProducts?.reduce((sum, item) => {
-    const price =
-      item.updateSellPrice != null
-        ? item.updateSellPrice
-        : (item.sellPrice ?? 0);
-    const quantity = item.limit ?? 0;
-    return sum + price * quantity;
-  }, 0);
+  const totalPrice = useMemo(
+    () =>
+      selectedProducts?.reduce((sum, item) => {
+        const price =
+          item.updateSellPrice != null
+            ? item.updateSellPrice
+            : (item.sellPrice ?? 0);
+        const quantity = item.limit ?? 0;
+        return sum + price * quantity;
+      }, 0),
+    [selectedProducts],
+  );
 
-  // Discount logic
-  const discountAmount =
-    values.discountType === "PERCENTAGE"
-      ? (totalPrice * (Number(values.discountPercentage) || 0)) / 100
-      : Number(values.discountAmount) || 0;
+  const discountAmount = useMemo(
+    () =>
+      values.discountType === "PERCENTAGE"
+        ? (totalPrice * (Number(values.discountPercentage) || 0)) / 100
+        : Number(values.discountAmount) || 0,
+    [
+      totalPrice,
+      values.discountType,
+      values.discountPercentage,
+      values.discountAmount,
+    ],
+  );
 
-  const sellPrice = totalPrice - discountAmount;
+  const sellPrice = useMemo(
+    () => totalPrice - discountAmount,
+    [totalPrice, discountAmount],
+  );
 
-  const total = sellPrice + Number(values.extraCharge || 0);
+  const total = useMemo(
+    () => sellPrice + Number(values.extraCharge || 0),
+    [sellPrice, values.extraCharge],
+  );
 
-  const isBigAmount =
-    Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
-    customer?.totalDueAmount < 0;
+  const isBigAmount = useMemo(
+    () =>
+      Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
+      customer?.totalDueAmount < 0,
+    [total, customer?.totalDueAmount],
+  );
 
-  // Grand total
-  // const grandTotal = total + Number(customer?.totalDueAmount || 0);
-  const grandTotal = isBigAmount
-    ? total
-    : total + Number(customer?.totalDueAmount || 0);
+  const grandTotal = useMemo(
+    () => (isBigAmount ? total : total + Number(customer?.totalDueAmount || 0)),
+    [isBigAmount, total, customer?.totalDueAmount],
+  );
 
-  // Due
-  // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
-  const due = customer
-    ? Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0))
-    : 0;
+  const due = useMemo(
+    () =>
+      customer
+        ? Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0))
+        : 0,
+    [customer, grandTotal, values.paidAmount],
+  );
 
-  // update values AFTER user/customer loads
-
+  // Effect 1: Initialize user data on mount only
   useEffect(() => {
-    form.setValue("totalSaleAmount", sellPrice);
-    form.setValue("totalAmount", grandTotal);
-    form.setValue("currentDueAmount", due);
-    form.setValue("discountAmount", discountAmount);
-
-    if (user) {
+    if (user && !form.getValues("sellerId")) {
       form.setValue("factoryId", user.factoryId as string);
       form.setValue("sellerId", user.id as string);
 
       form.setValue(
         "sellerName",
-        user?.name ??
-          (user?.firstName
-            ? user.lastName
-              ? `${user.firstName} ${user.lastName}`
-              : user.firstName
-            : (user?.lastName ?? "")),
+        user?.name?.trim() ||
+          [user?.firstName, user?.lastName].filter(Boolean).join(" "),
       );
     }
+  }, [user, form]);
 
-    // If customer is empty array OR null
+  // Effect 2: Set initial paidAmount for empty customer
+  useEffect(() => {
     if (!customer || customer === "empty") {
       form.setValue("paidAmount", total);
     }
-  }, [
-    // Only put STABLE values here
-    sellPrice,
-    grandTotal,
-    due,
-    discountAmount,
-    user,
-    total,
-  ]);
+  }, [customer, total, form]);
 
   const sellProduct = useApiMutation({
     path: "factory/sale",
@@ -147,20 +154,31 @@ const CartPage = () => {
       form.reset({});
       cart.remove();
       customerCart.remove();
-      useSellInvoiceStore.getState().setAll(data.data);
-      router.push(`invoice/${data?.data?.invoiceNo}`);
+      router.push(`invoice/${data?.data?.id}`);
     },
   });
 
-  const handleSubmit = (data: CartFormType) => {
+  const onSubmit = (data: CartFormType) => {
     const { discountPercentage, ...restData } = data;
 
-    //    console.log("TanstackQueries", data);
+    const submissionData = {
+      ...restData,
+      sellerName:
+        user?.name?.trim() ||
+        [user?.firstName, user?.lastName].filter(Boolean).join(" "),
+      totalSaleAmount: sellPrice,
+      totalAmount: grandTotal,
+      currentDueAmount: due,
+      discountAmount: discountAmount,
+      items: products,
+    };
+
+    // console.log("Test SelectProductComponent", selectedProducts);
 
     if (data?.discountType === "CASH") {
-      sellProduct.mutate(restData);
+      sellProduct.mutate(submissionData);
     } else {
-      sellProduct.mutate(data);
+      sellProduct.mutate({ ...submissionData, discountPercentage });
     }
   };
 
@@ -168,7 +186,7 @@ const CartPage = () => {
     <>
       <FormProvider {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => handleSubmit(data))}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="grid grid-cols-1 gap-10 p-8 bg-white rounded-2xl border shadow-lg lg:grid-cols-2"
         >
           {/* Left Fields */}
@@ -177,9 +195,6 @@ const CartPage = () => {
               <h2 className="text-2xl font-semibold tracking-tight">
                 Sell Price Calculation
               </h2>
-              {/* <p className="text-sm text-gray-600"> */}
-              {/*   Extra charge, discount & advance */}
-              {/* </p> */}
             </div>
 
             {/* Extra Charge */}
@@ -230,7 +245,7 @@ const CartPage = () => {
               </div>
             </div>
 
-            {/* Advance */}
+            {/* Payment Method */}
             <CustomField.SelectField
               placeholder="Select payment method"
               form={form}
@@ -278,11 +293,7 @@ const CartPage = () => {
               />
 
               <SummaryItem
-                label={`Discount ${
-                  values.discountType === "PERCENTAGE"
-                    ? `(${values.discountPercentage || 0}%)`
-                    : ""
-                }`}
+                label={`Discount ${values.discountType === "PERCENTAGE" ? `(${values.discountPercentage || 0}%)` : ""}`}
                 value={`-${discountAmount}`}
               />
 
@@ -299,7 +310,6 @@ const CartPage = () => {
 
             <div className="flex justify-between text-lg font-bold text-gray-900">
               <span>Due (Bokeya)</span>
-              {/* <span>{due.toFixed(2)}</span> */}
               <span>৳{due}</span>
             </div>
 
@@ -307,9 +317,8 @@ const CartPage = () => {
               isPending={sellProduct.isPending}
               buttonContent="Sell"
               btnStyle="w-full font-medium text-white bg-blue-600 rounded-lg transition hover:bg-blue-400 !cursor-pointer"
-              handleOpen={() =>
-                form.handleSubmit((data) => handleSubmit(data), onFormError)
-              }
+              type="submit"
+              handleOpen={form.handleSubmit(onSubmit, onFormError)}
             />
           </div>
         </form>

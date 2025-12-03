@@ -1,7 +1,5 @@
 import { MetricCard } from "@/components/ui/metric-card";
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,

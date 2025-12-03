@@ -4,20 +4,22 @@ import DynamicTableWithPagination from "@/components/common/DynamicTable/Dynamic
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
-import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
-import CreateProductModal from "./_assets/components/create/createProductModal";
-import UpdateProductModal from "./_assets/components/update/updateProductModal";
+import { useAuth } from "@/hooks/hooks";
+import CreateProductNameModal from "./_assets/component/createProductModal";
+import dateFormat from "@/utils/formatter/DateFormatter";
+import UpdateProductNameModal from "./_assets/component/updateProductNameModal";
 
-const PurchaseProductTable = ({ id }: { id?: string }) => {
+const ProductNamePage = () => {
+  const { user } = useAuth();
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/product/factory/${id}`,
-    queryKey: "getProductDataByFactory",
+    path: `factory/category/factory/${user?.factoryId}`,
+    queryKey: "getProductNameData",
     filterData: {
-      type: "RAW",
+      type: "sell-product",
       search: searchText,
       page: currentPage,
     },
@@ -28,14 +30,14 @@ const PurchaseProductTable = ({ id }: { id?: string }) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Purchase Product List</h2>
+          <h2 className="text-2xl font-bold"> Product Name List</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateProductModal factoryId={id as string} />
+            <CreateProductNameModal factoryId={user?.factoryId as string} />
           </div>
         </div>
 
@@ -48,23 +50,25 @@ const PurchaseProductTable = ({ id }: { id?: string }) => {
           setCurrentPage={setCurrentPage}
           config={{
             columns: [
-              { key: "name", header: "Name" },
-              { key: "phone", header: "Contact Info" },
-              { key: "status", header: "Status" },
-              { key: "buyPrice", header: "Buy Price" },
-              // { key: "sellPrice", header: "Sell Price" },
-              // {
-              //   key: "factoryName",
-              //   header: "Factory Owner Id",
-              //   render: (item) => item?.factory?.name,
-              // },
+              { key: "categoryName", header: "Name" },
+              { key: "categoryType", header: "Type" },
+              {
+                key: "date",
+                header: "Created At",
+                render: (user) =>
+                  dateFormat.fullDateTime(user.createdAt, { showTime: false }),
+              },
               {
                 key: "action",
                 header: "Action",
                 render: (user) => (
                   <ResponsiveButtonGroup>
-                    <UpdateProductModal data={user} />
-                    <DeleteSalesmanModal data={user} />
+                    <UpdateProductNameModal
+                      factoryId={user?.factoryId as string}
+                      data={user}
+                      componentType="edit"
+                    />
+                    {/* <DeleteSalesmanModal data={user} /> */}
                   </ResponsiveButtonGroup>
                 ),
               },
@@ -76,4 +80,4 @@ const PurchaseProductTable = ({ id }: { id?: string }) => {
   );
 };
 
-export default PurchaseProductTable;
+export default ProductNamePage;

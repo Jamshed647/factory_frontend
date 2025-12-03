@@ -2,6 +2,7 @@ import {
   fetchBankAccounts,
   fetchCompanies,
   fetchFactories,
+  fetchProductById,
   fetchProductCategories,
 } from "./useDataHooks";
 
@@ -10,6 +11,7 @@ const DataFetcher = {
   fetchCompanies,
   fetchBankAccounts,
   fetchProductCategories,
+  fetchProductById,
 };
 
 export default DataFetcher;

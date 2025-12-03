@@ -2,7 +2,6 @@
 "use client";
 
 import { CustomField } from "@/components/common/fields/cusField";
-import { SelectProductComponent } from "@/components/pageComponents/sellProduct/SelectProductComponent";
 import { CookieCart } from "@/utils/cookie/cart-utils";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -17,6 +16,7 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useRouter } from "next/navigation";
 import usePurchaseInvoiceStore from "@/store/invoiceStore";
+import { SelectProductComponent } from "@/components/pageComponents/purchaseProduct/SelectProductComponent";
 
 const CartPage = () => {
   const router = useRouter();
@@ -33,18 +33,18 @@ const CartPage = () => {
       id: string;
       limit: number;
       name: string;
-      sellPrice: number;
+      buyPrice: number;
       stock: number;
-      updateSellPrice?: number;
+      updateBuyPrice?: number;
     }[]
   >(cart.get() || []);
 
   const products = selectedProducts.map((item) => ({
     productId: item.id,
     quantity: item.limit,
-    buyPrice: item.sellPrice,
-    updateBuyPrice: item?.updateSellPrice ?? item.sellPrice,
-    totalPrice: item.sellPrice * item.limit,
+    buyPrice: item.buyPrice,
+    updateBuyPrice: item?.updateBuyPrice ?? item.buyPrice,
+    totalPrice: item.buyPrice * item.limit,
   }));
 
   const form = useForm<CartFormType>({
@@ -63,9 +63,8 @@ const CartPage = () => {
   // Total Price
   const totalPrice = selectedProducts?.reduce((sum, item) => {
     const price =
-      item.updateSellPrice != null
-        ? item.updateSellPrice
-        : (item.sellPrice ?? 0);
+      item.updateBuyPrice != null ? item.updateBuyPrice : (item.buyPrice ?? 0);
+
     const quantity = item.limit ?? 0;
     return sum + price * quantity;
   }, 0);

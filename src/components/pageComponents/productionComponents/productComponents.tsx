@@ -88,9 +88,17 @@ const ProductionComponents = () => {
                 header: "Batch No",
               },
 
+              // {
+              //   key: "extraCost",
+              //   header: "Extra Cost",
+              // },
               {
-                key: "extraCost",
-                header: "Extra Cost",
+                key: "totalProductionAmount",
+                header: "Total Production Cost",
+              },
+              {
+                key: "totalWeight",
+                header: "Total Weight",
               },
               {
                 key: "totalProductionAmount",
@@ -121,11 +129,11 @@ const ProductionComponents = () => {
                 className: "text-right",
                 render: (row) => (
                   <div
-                    className={`flex gap-3 justify-between items-center ${row.status === "COMPLETE" ? "opacity-60 pointer-events-none select-none" : ""}`}
+                    className={`flex gap-3 justify-end items-center ${row.status === "COMPLETE" ? "opacity-60 pointer-events-none select-none" : ""}`}
                   >
                     <ProductionUpdateModal
                       factoryId={factoryId as string}
-                      productData={row.items}
+                      productData={row}
                     />
                     <Link
                       href={`production/addProduct/${row.id}`}

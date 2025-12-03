@@ -26,10 +26,9 @@ export const CookieCart = (key: string) => ({
     id: string,
     limit: number,
     name: string,
-    sellPrice: number,
     buyPrice: number,
     stock: number,
-    updateSellPrice?: number,
+    updateBuyPrice?: number,
   ) {
     let cart = this.get();
 
@@ -57,10 +56,9 @@ export const CookieCart = (key: string) => ({
               ...item,
               limit,
               name,
-              sellPrice,
               buyPrice,
               stock,
-              updateSellPrice,
+              updateBuyPrice,
             }
           : item,
       );
@@ -70,10 +68,9 @@ export const CookieCart = (key: string) => ({
         id,
         limit,
         name,
-        sellPrice,
         buyPrice,
         stock,
-        updateSellPrice,
+        updateBuyPrice,
       });
     }
 

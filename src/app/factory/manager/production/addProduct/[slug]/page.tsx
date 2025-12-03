@@ -1,16 +1,19 @@
 import CreateProductToProductionModal from "@/components/pageComponents/productionComponents/addProduct/create/createProductModal";
 
-interface AddProductPageType {
-  params: {
-    slug: string;
-  };
+interface InvoicePageProps {
+  params: Promise<{ slug: string }>;
 }
 
-const AddProductPage = ({ params }: AddProductPageType) => {
-  console.log("params", params?.slug);
+// type Props = {
+//   params: Promise<{ slug: string }>;
+//   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+// };
+
+const AddProductPage = async ({ params }: InvoicePageProps) => {
+  const { slug } = await params;
   return (
     <div>
-      <CreateProductToProductionModal productionId={params?.slug} />
+      <CreateProductToProductionModal productionId={slug as string} />
     </div>
   );
 };

@@ -41,7 +41,7 @@ export function CashHistoryViewer({
   }, [transactions, filterType]);
 
   const sortedTransactions = useMemo(() => {
-    const sorted = [...filteredTransactions];
+    const sorted = [...(filteredTransactions || [])];
     if (sortBy === "date") {
       sorted.reverse();
     } else {
@@ -62,7 +62,7 @@ export function CashHistoryViewer({
                 Transaction History
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {sortedTransactions.length} of {transactions.length}{" "}
+                {sortedTransactions?.length} of {transactions?.length}{" "}
                 transactions
               </p>
             </div>

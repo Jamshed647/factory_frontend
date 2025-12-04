@@ -14,14 +14,12 @@ const EditCashNote = ({ note, cashId }: { note: string; cashId: string }) => {
   const queryClient = useQueryClient();
 
   const submitNote = useApiMutation({
-    path: `factory/cash/history/${cashId}`,
+    path: `factory/bank/bank-history/${cashId}`,
     method: "PATCH",
     onSuccess: (data) => {
       setOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["getCashDataByFactory"] });
-      queryClient.invalidateQueries({
-        queryKey: ["getCashDataByFactoryDashboard"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["getBankHistoryData"] });
+
       showToast("success", data);
     },
   });

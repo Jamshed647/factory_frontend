@@ -1,7 +1,7 @@
 import dateFormat from "@/utils/formatter/DateFormatter";
 import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
-import { Transaction } from "./cash-history-viewer";
 import EditCashNote from "./EditCashNote";
+import { Transaction } from "./bank-history-viewer";
 
 export function TransactionRow({ transaction }: { transaction: Transaction }) {
   const isPay = transaction.type === "PAY";

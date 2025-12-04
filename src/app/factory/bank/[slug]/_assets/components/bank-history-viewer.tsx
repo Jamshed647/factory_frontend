@@ -36,11 +36,11 @@ export function BankHistoryViewer({ bankId }: CashHistoryViewerProps) {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/bank/${bankId}/history`,
+    path: `factory/bank/history/${bankId}`,
     queryKey: "getBankHistoryData",
   });
 
-  const transactions = data?.data;
+  const transactions = data?.data?.data;
 
   const filteredTransactions = useMemo(() => {
     if (filterType === "all") return transactions;
@@ -48,7 +48,7 @@ export function BankHistoryViewer({ bankId }: CashHistoryViewerProps) {
   }, [transactions, filterType]);
 
   const sortedTransactions = useMemo(() => {
-    const sorted = [...filteredTransactions];
+    const sorted = [...(filteredTransactions || [])];
     if (sortBy === "date") {
       sorted.reverse();
     } else {
@@ -69,7 +69,7 @@ export function BankHistoryViewer({ bankId }: CashHistoryViewerProps) {
                 Transaction History
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {sortedTransactions.length} of {transactions.length}{" "}
+                {sortedTransactions?.length} of {transactions?.length}{" "}
                 transactions
               </p>
             </div>

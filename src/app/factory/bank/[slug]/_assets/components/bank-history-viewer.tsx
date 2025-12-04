@@ -31,13 +31,13 @@ interface CashHistoryViewerProps {
 }
 
 export function BankHistoryViewer({ bankId }: CashHistoryViewerProps) {
-  const [sortBy, setSortBy] = useState<"date" | "amount">("date");
+  const [sortBy, setSortBy] = useState<"createdAt" | "amount" | "">("");
   const [filterType, setFilterType] = useState<"all" | "PAY" | "TAKE">("all");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/bank/history/${bankId}`,
-    queryKey: "getBankHistoryData",
+    queryKey: "getSingleBankHistoryData",
   });
 
   const transactions = data?.data?.data;
@@ -49,8 +49,10 @@ export function BankHistoryViewer({ bankId }: CashHistoryViewerProps) {
 
   const sortedTransactions = useMemo(() => {
     const sorted = [...(filteredTransactions || [])];
-    if (sortBy === "date") {
-      sorted.reverse();
+    if (sortBy === "createdAt") {
+      sorted.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      );
     } else {
       sorted.sort((a, b) => b.amount - a.amount);
     }
@@ -93,10 +95,11 @@ export function BankHistoryViewer({ bankId }: CashHistoryViewerProps) {
                 onValueChange={(value: any) => setSortBy(value)}
               >
                 <SelectTrigger className="w-40">
-                  <SelectValue />
+                  <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
+
                 <SelectContent>
-                  <SelectItem value="date">Recent First</SelectItem>
+                  <SelectItem value="createdAt">Recent First</SelectItem>
                   <SelectItem value="amount">Largest First</SelectItem>
                 </SelectContent>
               </Select>

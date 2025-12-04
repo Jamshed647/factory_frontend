@@ -7,29 +7,29 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { CustomerFormType, customerSchema } from "../../schema/customerSchema";
-import { customerDefaultValue } from "../../utils/customerDefaultValue";
+import { bankSchema, CustomerFormType } from "../../schema/customerSchema";
+import { bankDefaultValue } from "../../utils/customerDefaultValue";
 import CustomerFormComponent from "../form/customerForm";
 
 const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const customerForm = useForm<CustomerFormType>({
-    resolver: zodResolver(customerSchema),
-    defaultValues: customerDefaultValue({ factoryId: factoryId }),
+  const bankForm = useForm<CustomerFormType>({
+    resolver: zodResolver(bankSchema),
+    defaultValues: bankDefaultValue({ factoryId: factoryId }),
   });
 
   if (factoryId) {
-    customerForm.setValue("factoryId", factoryId);
+    bankForm.setValue("factoryId", factoryId);
   }
 
   const createCustomer = useApiMutation({
-    path: "factory/customer",
+    path: "factory/bank",
     method: "POST",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
-      customerForm.reset({});
+      bankForm.reset({});
       showToast("success", data);
       queryClient.invalidateQueries({ queryKey: ["getCustomerData"] });
       setOpen(false);
@@ -55,7 +55,7 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
     >
       <CustomerFormComponent
         selectFactory={!factoryId ? true : false}
-        form={customerForm}
+        form={bankForm}
         isPending={createCustomer.isPending}
         onSubmit={onSubmit}
       />

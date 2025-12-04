@@ -3,9 +3,8 @@ import { CartFormType } from "../schema/cartSchema";
 const cartDefaultValue = (v: Partial<CartFormType> = {}) => {
   return {
     factoryId: v?.factoryId ?? "",
-    customerId: v?.customerId ?? "",
-    paymentMethod: v?.paymentMethod ?? "CASH",
     bankId: v?.bankId ?? "",
+    paymentMethod: v?.paymentMethod ?? "CASH",
     totalSaleAmount: v?.totalSaleAmount ?? 0,
     totalAmount: v?.totalAmount ?? 0,
     paidAmount: v?.paidAmount ?? 0,

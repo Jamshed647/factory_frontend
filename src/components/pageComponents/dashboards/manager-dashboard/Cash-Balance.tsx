@@ -17,7 +17,7 @@ const CashBalance = ({ factoryId }: { factoryId: string }) => {
         isLoading={isLoading}
         link={`/factory/cash`}
         title="Cash Balance"
-        value={cash?.balance}
+        value={cash?.balance ?? 0}
         description="Available units"
         icon={<TrendingUp className="w-4 h-4 text-muted-foreground" />}
       />

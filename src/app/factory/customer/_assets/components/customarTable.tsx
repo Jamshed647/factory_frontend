@@ -18,8 +18,8 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [searchText, setSearchText] = React.useState("");
 
   const path = factoryId
-    ? `factory/customer/factory/${factoryId}`
-    : `factory/customer`;
+    ? `factory/bank/factory/${factoryId}`
+    : `factory/bank`;
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -60,7 +60,7 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
                 key: "name",
                 header: "Name",
                 render: (item) => (
-                  <Link href={`/factory/customer/${item.id}`}>{item.name}</Link>
+                  <Link href={`/factory/bank/${item.id}`}>{item.name}</Link>
                 ),
               },
               { key: "phone", header: "Contact Info" },

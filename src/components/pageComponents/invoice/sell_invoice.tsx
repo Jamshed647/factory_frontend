@@ -65,23 +65,23 @@ export default function SellInvoicePreview({ data }: { data: any }) {
         <h2 className="mb-2 text-lg font-semibold">Customer Details</h2>
         <p className="text-sm">
           <span className="font-semibold">Name:</span>{" "}
-          {data?.customer?.name || "N/A"}
+          {data?.bank?.name || "N/A"}
         </p>
         <p className="text-sm">
           <span className="font-semibold">Phone:</span>{" "}
-          {data?.customer?.phone || "N/A"}
+          {data?.bank?.phone || "N/A"}
         </p>
         <p className="text-sm">
           <span className="font-semibold">Address:</span>{" "}
-          {data?.customer?.address || "N/A"}
+          {data?.bank?.address || "N/A"}
         </p>
         {/* <p className="text-sm"> */}
         {/*   <span className="font-semibold">Customer ID:</span>{" "} */}
-        {/*   {data?.customerId || "N/A"} */}
+        {/*   {data?.bankId || "N/A"} */}
         {/* </p> */}
         <p className="text-sm">
           <span className="font-semibold">Total Due:</span> ৳
-          {data?.customer?.totalDueAmount || 0}
+          {data?.bank?.totalDueAmount || 0}
         </p>
       </div>
 

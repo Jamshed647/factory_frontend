@@ -4,7 +4,7 @@ import { Separator } from "@radix-ui/react-select";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import React from "react";
 import DueDialog from "./_assets/components/DueDialog";
-import DueHistoryTable from "./_assets/components/DueHistoryTable";
+import { BankHistoryViewer } from "./_assets/components/bank-history-viewer";
 
 export default function SupplierPage({
   params,
@@ -15,21 +15,21 @@ export default function SupplierPage({
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/bank/history/${slug}`,
-    queryKey: "getSingleSupplierData",
+    path: `factory/bank/${slug}`,
+    queryKey: "getSingleBankData",
   });
 
-  const customer = data?.data;
+  const bank = data?.data;
 
   return (
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <p className="text-xl font-bold"> Name: {customer?.name}</p>
+          <p className="text-xl font-bold"> Name: {bank?.name}</p>
           <p className="text-sm text-muted-foreground">
-            Account No: {customer?.accountNo}
+            Account No: {bank?.accountNo}
           </p>
-          <p className="text-sm">Branch Name: {customer?.branch}</p>
+          <p className="text-sm">Branch Name: {bank?.branch}</p>
         </CardHeader>
 
         <Separator />
@@ -40,20 +40,20 @@ export default function SupplierPage({
 
             <p
               className={`text-2xl font-bold ${
-                customer?.balance < 0 ? "text-red-500" : "text-green-500"
+                bank?.balance < 0 ? "text-red-500" : "text-green-500"
               }`}
             >
-              ৳ {customer?.balance}
+              ৳ {bank?.balance}
             </p>
           </div>
           <div className="flex gap-2">
-            <DueDialog data={customer} type="PAY" />
-            <DueDialog data={customer} type="TAKE" transactionType="CASH" />
+            <DueDialog bank={bank} type="PAY" />
+            <DueDialog bank={bank} type="TAKE" />
           </div>
         </CardContent>
       </Card>
 
-      <DueHistoryTable history={customer?.dueHistory} />
+      <BankHistoryViewer bankId={slug as string} />
     </div>
   );
 }

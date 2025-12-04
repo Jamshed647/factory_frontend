@@ -60,7 +60,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
         isLoading={isLoading}
         title="Total Customers"
         value={data?.data?.totalCustomers}
-        description="Total active customers"
+        description="Total active banks"
         icon={<Users className="w-4 h-4 text-muted-foreground" />}
       />
 
@@ -68,7 +68,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
       <MetricCard
         isLoading={isLoading}
         title="Customers Due"
-        value={data?.data?.customersDue}
+        value={data?.data?.banksDue}
         description="Customers who owe money"
         icon={<UserMinus className="w-4 h-4 text-muted-foreground" />}
       />

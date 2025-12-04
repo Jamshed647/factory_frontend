@@ -1,6 +1,6 @@
 import { BankFormType } from "../schema/bankSchema";
 
-export const customerDefaultValue = (v: Partial<BankFormType>) => {
+export const bankDefaultValue = (v: Partial<BankFormType>) => {
   return {
     name: v?.name ?? "",
     accountNo: v?.accountNo ?? "",

@@ -84,7 +84,7 @@ const CartPage = () => {
     supplier?.totalDueAmount < 0;
 
   // Grand total
-  // const grandTotal = total + Number(customer?.totalDueAmount || 0);
+  // const grandTotal = total + Number(bank?.totalDueAmount || 0);
   const grandTotal = isBigAmount
     ? total
     : total + Number(supplier?.totalDueAmount || 0);
@@ -93,7 +93,7 @@ const CartPage = () => {
   // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
   const due = Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
 
-  // update values AFTER user/customer loads
+  // update values AFTER user/bank loads
   useEffect(() => {
     form.setValue("totalPurchaseAmount", purchasePrice);
     form.setValue("totalAmount", grandTotal);

@@ -33,7 +33,7 @@ export default function TakeDueDialog({
   const factoryId = user?.factoryId;
 
   const takeDue = useApiMutation({
-    path: `factory/customer/${data?.id}/due`,
+    path: `factory/bank/${data?.id}/due`,
     method: "POST",
     onSuccess: (data: any) => {
       form.reset({});

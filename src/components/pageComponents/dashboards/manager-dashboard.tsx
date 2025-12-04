@@ -18,24 +18,26 @@ export function ManagerDashboard({ factoryId }: { factoryId: string }) {
             <p className="text-muted-foreground">Muri Master - Dhaka Factory</p>
           </div>
 
-          <Link href="/factory/sell/createSell">
-            <ActionButton
-              buttonContent="Sell Product"
-              type="button"
-              isPending={false}
-              icon={<ShoppingCart className="w-5 h-5" />}
-              btnStyle="bg-blue-500 text-white"
-            />
-          </Link>
+          <div className="flex gap-x-4">
+            <Link href="/factory/sell/createSell">
+              <ActionButton
+                buttonContent="Sell Product"
+                type="button"
+                isPending={false}
+                icon={<ShoppingCart className="w-5 h-5" />}
+                btnStyle="bg-blue-500 text-white"
+              />
+            </Link>
 
-          <Link href="/factory/productName">
-            <ActionButton
-              buttonContent="Product Name"
-              type="button"
-              icon={<Boxes className="w-5 h-5" />}
-              btnStyle="bg-blue-500 text-white"
-            />
-          </Link>
+            <Link href="/factory/productName">
+              <ActionButton
+                buttonContent="Product Name"
+                type="button"
+                icon={<Boxes className="w-5 h-5" />}
+                btnStyle="bg-blue-500 text-white"
+              />
+            </Link>
+          </div>
         </div>
       </div>
 

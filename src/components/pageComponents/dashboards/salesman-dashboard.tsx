@@ -45,7 +45,7 @@ export function SalesmanDashboard() {
         <MetricCard
           title="Total Clients"
           value={salesmanData.summary.totalClients.toString()}
-          description="Active customers"
+          description="Active banks"
           icon={<Users className="w-4 h-4 text-muted-foreground" />}
         />
         <MetricCard

@@ -71,14 +71,14 @@ const PurchaseTable = ({ factoryId }: { factoryId: string }) => {
                 render: (item) => new Date(item.date).toLocaleString(),
               },
               {
-                key: "customer",
+                key: "bank",
                 header: "Customer Name",
-                render: (item) => item?.customer?.name,
+                render: (item) => item?.bank?.name,
               },
               {
                 key: "phone",
                 header: "Phone",
-                render: (item) => item?.customer?.phone,
+                render: (item) => item?.bank?.phone,
               },
               {
                 key: "totalSaleAmount",

@@ -18,11 +18,11 @@ const SelectCustomer = ({
 }) => {
   // const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const cart = CookieCart("customerInfo");
+  const cart = CookieCart("bankInfo");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/customer/factory/${factoryId}`,
+    path: `factory/bank/factory/${factoryId}`,
     queryKey: "getCustomerData",
     filterData: {
       search: searchTerm,
@@ -38,7 +38,7 @@ const SelectCustomer = ({
       <div className="mb-4 space-y-2">
         <div>
           <CustomField.CommonSearch
-            placeholder="Search customer"
+            placeholder="Search bank"
             width="w-full"
             searchText={searchTerm}
             setSearchText={setSearchTerm}

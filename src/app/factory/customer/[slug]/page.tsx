@@ -15,21 +15,21 @@ export default function SupplierPage({
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/customer/${slug}`,
+    path: `factory/bank/${slug}`,
     queryKey: "getSingleSupplierData",
   });
 
-  const customer = data?.data;
+  const bank = data?.data;
 
   return (
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <p className="text-xl font-bold"> Name: {customer?.name}</p>
+          <p className="text-xl font-bold"> Name: {bank?.name}</p>
           <p className="text-sm text-muted-foreground">
-            Phone: {customer?.phone}
+            Phone: {bank?.phone}
           </p>
-          <p className="text-sm">Address: {customer?.address}</p>
+          <p className="text-sm">Address: {bank?.address}</p>
         </CardHeader>
 
         <Separator />
@@ -40,22 +40,22 @@ export default function SupplierPage({
 
             <p
               className={`text-2xl font-bold ${
-                (customer?.totalDueAmount ?? 0) < 0
+                (bank?.totalDueAmount ?? 0) < 0
                   ? "text-red-500"
                   : "text-green-500"
               }`}
             >
-              ৳ {customer?.totalDueAmount ?? 0}
+              ৳ {bank?.totalDueAmount ?? 0}
             </p>
           </div>
           <div className="flex gap-2">
-            <DueDialog data={customer} type="PAY" />
-            <DueDialog data={customer} type="TAKE" transactionType="CASH" />
+            <DueDialog data={bank} type="PAY" />
+            <DueDialog data={bank} type="TAKE" transactionType="CASH" />
           </div>
         </CardContent>
       </Card>
 
-      <DueHistoryTable history={customer?.dueHistory} />
+      <DueHistoryTable history={bank?.dueHistory} />
     </div>
   );
 }

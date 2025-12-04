@@ -19,13 +19,13 @@ import { useRouter } from "next/navigation";
 
 const CartPage = () => {
   const cart = CookieCart("selected_products");
-  const customerCart = CookieCart("customerInfo");
-  const customerInfo = customerCart.get();
-  const customer = Array.isArray(customerInfo)
-    ? customerInfo.length === 0
+  const bankCart = CookieCart("bankInfo");
+  const bankInfo = bankCart.get();
+  const bank = Array.isArray(bankInfo)
+    ? bankInfo.length === 0
       ? null
-      : customerInfo
-    : customerInfo && typeof customerInfo === "object" && customerInfo;
+      : bankInfo
+    : bankInfo && typeof bankInfo === "object" && bankInfo;
 
   const { user } = useAuth();
   const router = useRouter();
@@ -60,7 +60,7 @@ const CartPage = () => {
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
       factoryId: user?.factoryId,
-      customerId: customer?.id,
+      bankId: bank?.id,
       sellerId: user?.id,
       sellerName: user?.name,
       items: products,
@@ -107,22 +107,22 @@ const CartPage = () => {
 
   const isBigAmount = useMemo(
     () =>
-      Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
-      customer?.totalDueAmount < 0,
-    [total, customer?.totalDueAmount],
+      Math.abs(total) < Math.abs(bank?.totalDueAmount || 0) &&
+      bank?.totalDueAmount < 0,
+    [total, bank?.totalDueAmount],
   );
 
   const grandTotal = useMemo(
-    () => (isBigAmount ? total : total + Number(customer?.totalDueAmount || 0)),
-    [isBigAmount, total, customer?.totalDueAmount],
+    () => (isBigAmount ? total : total + Number(bank?.totalDueAmount || 0)),
+    [isBigAmount, total, bank?.totalDueAmount],
   );
 
   const due = useMemo(
     () =>
-      customer
+      bank
         ? Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0))
         : 0,
-    [customer, grandTotal, values.paidAmount],
+    [bank, grandTotal, values.paidAmount],
   );
 
   // Effect 1: Initialize user data on mount only
@@ -139,12 +139,12 @@ const CartPage = () => {
     }
   }, [user, form]);
 
-  // Effect 2: Set initial paidAmount for empty customer
+  // Effect 2: Set initial paidAmount for empty bank
   useEffect(() => {
-    if (!customer || customer === "empty") {
+    if (!bank || bank === "empty") {
       form.setValue("paidAmount", total);
     }
-  }, [customer, total, form]);
+  }, [bank, total, form]);
 
   const sellProduct = useApiMutation({
     path: "factory/sale",
@@ -153,7 +153,7 @@ const CartPage = () => {
       showToast("success", data);
       form.reset({});
       cart.remove();
-      customerCart.remove();
+      bankCart.remove();
       router.push(`invoice/${data?.data?.id}`);
     },
   });
@@ -300,7 +300,7 @@ const CartPage = () => {
               <SummaryItem label="Advance" value={values.paidAmount || 0} />
               <SummaryItem
                 label="Previous Due"
-                value={customer?.totalDueAmount || 0}
+                value={bank?.totalDueAmount || 0}
               />
 
               <SummaryItem label="Total Sell Price" value={grandTotal} />

@@ -90,7 +90,7 @@ export default function FactoryLayout({
     {
       key: "/factory/customer",
       icon: <Factory />,
-      label: <Link href="/factory/customer">Customer</Link>,
+      label: <Link href="/factory/bank">Customer</Link>,
     },
     {
       key: "/factory/supplier",

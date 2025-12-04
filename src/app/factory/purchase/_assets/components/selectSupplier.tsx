@@ -53,7 +53,7 @@ const SelectSupplier = ({
       <div className="mb-4 space-y-2">
         <div>
           <CustomField.CommonSearch
-            placeholder="Search customer"
+            placeholder="Search bank"
             width="w-full"
             searchText={searchTerm}
             setSearchText={setSearchTerm}

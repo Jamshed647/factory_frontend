@@ -1,10 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import dateFormat from "@/utils/formatter/DateFormatter";
 
-export default function DueHistoryTable({ history }: { history: any }) {
+export default function TransactionHistoryTable({
+  bankId,
+}: {
+  bankId: string;
+}) {
+  const { data, isLoading } = useFetchData({
+    method: "GET",
+    path: `factory/bank/history/${bankId}`,
+    queryKey: "getSingleBankHistoryData",
+  });
+  const history = data?.data?.data;
+
   return (
     <div className="overflow-hidden rounded-lg border">
       <DynamicTableWithPagination
@@ -21,13 +32,10 @@ export default function DueHistoryTable({ history }: { history: any }) {
             { key: "type", header: "Type" },
             { key: "amount", header: "Amount (৳)" },
             { key: "balance", header: "Balance (৳)" },
-            {key: "transactionType", header: "Type"},
             {
               key: "transactionType",
               header: "Transaction Type",
-              render: (item) => item?.bank?.name,
             },
-
 
             { key: "note", header: "Note" },
           ],

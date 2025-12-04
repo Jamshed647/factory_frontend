@@ -20,7 +20,7 @@ export interface DashboardStats {
   todaySales: number;
   todayExpenses: number;
   cashBalance: number;
-  customerDues: number;
+  bankDues: number;
   supplierDues: number;
   monthlyProfit: number;
 }

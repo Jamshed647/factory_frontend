@@ -5,7 +5,6 @@ import { devtools } from "zustand/middleware";
 interface InvoiceStore {
   invoiceNo: string;
   date: string;
-  customerId: string;
   factoryId: string;
   totalSaleAmount: number;
   paidAmount: number;
@@ -31,7 +30,7 @@ interface InvoiceStore {
 const initialState = {
   invoiceNo: "",
   date: "",
-  customerId: "",
+  bankId: "",
   factoryId: "",
   totalSaleAmount: 0,
   paidAmount: 0,
@@ -44,7 +43,6 @@ const initialState = {
   totalAmount: 0,
   paymentMethod: "",
   note: null,
-  bankId: null,
   sellerId: "",
   sellerName: "",
   items: [],

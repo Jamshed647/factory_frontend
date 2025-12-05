@@ -24,8 +24,8 @@ const CashPage = () => {
   const balanceInfo = data?.data[0];
 
   return (
-    <main className="min-h-screen from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
-      <div className="mx-auto space-y-6 max-w-6xl">
+    <main>
+      <div className="mx-auto space-y-6">
         <CashOverview
           transactions={balanceInfo?.cashAmountHistories}
           factory={factory}

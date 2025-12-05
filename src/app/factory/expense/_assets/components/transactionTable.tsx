@@ -4,6 +4,8 @@
 
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import dateFormat from "@/utils/formatter/DateFormatter";
+import UpdateExpenseDialog from "./UpdateExpense";
+import { useAuth } from "@/hooks/hooks";
 
 interface TransactionTableProps {
   transactions: any[];
@@ -18,21 +20,8 @@ export default function TransactionTable({
   pagination,
   onPageChange,
 }: TransactionTableProps) {
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <div className="text-gray-500">Loading transactions...</div>
-      </div>
-    );
-  }
-
-  if (!transactions || transactions.length === 0) {
-    return (
-      <div className="flex justify-center items-center py-12">
-        <div className="text-gray-500">No transactions found</div>
-      </div>
-    );
-  }
+  const { user } = useAuth();
+  const factory = user?.factory;
 
   // Config for dynamic table
   const tableConfig = {
@@ -92,6 +81,13 @@ export default function TransactionTable({
           <span className="text-gray-500">
             {dateFormat.fullDateTime(row.createdAt)}
           </span>
+        ),
+      },
+      {
+        key: "action",
+        header: "Action",
+        render: (row: any) => (
+          <UpdateExpenseDialog factory={factory} value={row} />
         ),
       },
     ],

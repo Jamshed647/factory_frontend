@@ -10,7 +10,7 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import onFormError from "@/utils/formError";
-import { BadgeDollarSign } from "lucide-react";
+import { EditIcon } from "lucide-react";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { FormProvider, useForm } from "react-hook-form";
 import { ExpenseFormType, expenseSchema } from "../schema/dueSchema";
@@ -18,20 +18,23 @@ import { expenseDefaultValue } from "../utils/dueDefaultValue";
 
 interface Props {
   factory: any;
+  value: any;
 }
 
-export default function AddExpenseDialog({ factory }: Props) {
+export default function UpdateExpenseDialog({ factory, value }: Props) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
+  console.log(value);
+
   const form = useForm<ExpenseFormType>({
     resolver: zodResolver(expenseSchema),
-    defaultValues: expenseDefaultValue({ factoryId: factory?.id }),
+    defaultValues: expenseDefaultValue({ ...value }),
   });
 
   const takeDue = useApiMutation({
-    path: "factory/expense",
-    method: "POST",
+    path: `factory/expense/${value.id}`,
+    method: "PATCH",
     onSuccess: (data: any) => {
       form.reset({});
       queryClient.invalidateQueries({ queryKey: ["getExpenseDataByFactory"] });
@@ -40,25 +43,18 @@ export default function AddExpenseDialog({ factory }: Props) {
     },
   });
 
-  if (factory?.id) {
-    form.setValue("factoryId", factory?.id);
-  }
+  // if (factory?.id) {
+  //   form.setValue("factoryId", factory?.id);
+  // }
 
   const { options: bankOptions } = DataFetcher.fetchBankAccounts({
     path: `factory/bank/factory/${factory?.id}`,
   });
-
   const handleSubmit = (payload: ExpenseFormType) => takeDue.mutate(payload);
 
   return (
     <DialogWrapper
-      triggerContent={
-        <ActionButton
-          btnStyle="bg-green-500 cursor-pointer text-white"
-          buttonContent="Add Expense"
-          icon={<BadgeDollarSign />}
-        />
-      }
+      triggerContent={<EditIcon className="w-5 h-5 cursor-pointer" />}
       open={open}
       handleOpen={() => setOpen(!open)}
       title="Add Expense - Amount"

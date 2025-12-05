@@ -69,7 +69,7 @@ export default function TopExpensesCards({ expenses }: TopExpensesCardsProps) {
               <p className="text-2xl font-bold text-gray-900">
                 ${expense.amount.toLocaleString()}
               </p>
-              <div className="mt-1 text-xs text-gray-500">Rank #{idx + 1}</div>
+              {/* <div className="mt-1 text-xs text-gray-500">Rank #{idx + 1}</div> */}
             </div>
 
             {/* Footer */}
@@ -89,7 +89,9 @@ export default function TopExpensesCards({ expenses }: TopExpensesCardsProps) {
                 </div>
               </div>
               <div className="mt-2 text-xs text-gray-500">
-                {dateFormat.fullDateTime(expense.createdAt)}
+                {dateFormat.fullDateTime(expense.createdAt, {
+                  showTime: false,
+                })}
               </div>
             </div>
           </div>

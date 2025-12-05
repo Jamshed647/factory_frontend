@@ -231,9 +231,9 @@ export function CashOverview({ factory, financialData }: CashOverviewProps) {
                   </div>
                 </div>
               </div>
-              <div className={`text-xs ${card.trendColor} font-medium`}>
-                {card.trend} from last month
-              </div>
+              {/* <div className={`text-xs ${card.trendColor} font-medium`}> */}
+              {/*   {card.trend} from last month */}
+              {/* </div> */}
             </Card>
           );
         })}

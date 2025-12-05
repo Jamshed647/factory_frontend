@@ -31,7 +31,7 @@ const CashPage = () => {
         <p>Track and manage your factory expenses</p>
       </div>
 
-      <div className="mx-auto space-y-6 max-w-6xl">
+      <div className="mx-auto space-y-6">
         <CashOverview financialData={data?.data} factory={factory} />
       </div>
       <ExpenseDashboard

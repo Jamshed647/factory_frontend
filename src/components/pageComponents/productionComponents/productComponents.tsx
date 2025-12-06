@@ -101,14 +101,15 @@ const ProductionComponents = () => {
                 header: "Total Weight",
               },
               {
-                key: "totalProductionAmount",
+                key: "totalAmount",
                 header: "Total Amount",
+                render: (row) => row?.totalProductionAmount + row?.extraCost,
               },
-              {
-                key: "status",
-                header: "Status",
-                render: (row) => <StatusWithIcon status={row?.status} />,
-              },
+              // {
+              //   key: "status",
+              //   header: "Status",
+              //   render: (row) => <StatusWithIcon status={row?.status} />,
+              // },
               // {
               //   key: "note",
               //   header: "Note",

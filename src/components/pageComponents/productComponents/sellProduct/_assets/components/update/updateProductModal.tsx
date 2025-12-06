@@ -43,7 +43,7 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
       triggerContent={<ActionButton icon={<Edit2Icon className="w-5 h-5" />} />}
       open={open}
       handleOpen={setOpen}
-      title="Update Salesman"
+      title="Update Product"
     >
       <ProductFormComponent
         operation="update"

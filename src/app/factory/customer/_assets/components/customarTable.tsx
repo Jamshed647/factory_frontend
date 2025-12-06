@@ -17,9 +17,7 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
-  const path = factoryId
-    ? `factory/bank/factory/${factoryId}`
-    : `factory/bank`;
+  const path = factoryId ? `factory/customer/${factoryId}` : `factory/customer`;
 
   const { data, isLoading } = useFetchData({
     method: "GET",

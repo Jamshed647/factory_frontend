@@ -40,7 +40,7 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           optional={false}
         />
 
-        {isFactoryId && (
+        {isFactoryId && operation !== "update" && (
           <CustomField.SelectField
             name="factoryId"
             labelName="Factory Id"
@@ -120,16 +120,16 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           form={form}
           // optional={false}
         />
-        <CustomField.SelectField
-          name="status"
-          labelName="Status"
-          placeholder="Select Status"
-          form={form}
-          options={[
-            { value: "ACTIVE", label: "Active" },
-            { value: "INACTIVE", label: "Inactive" },
-          ]}
-        />
+        {/* <CustomField.SelectField */}
+        {/*   name="status" */}
+        {/*   labelName="Status" */}
+        {/*   placeholder="Select Status" */}
+        {/*   form={form} */}
+        {/*   options={[ */}
+        {/*     { value: "ACTIVE", label: "Active" }, */}
+        {/*     { value: "INACTIVE", label: "Inactive" }, */}
+        {/*   ]} */}
+        {/* /> */}
 
         {/* <CustomField.Text */}
         {/*   name="image_url" */}

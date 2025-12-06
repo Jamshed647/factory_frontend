@@ -49,10 +49,14 @@ const PurchaseProductTable = ({ id }: { id?: string }) => {
           config={{
             columns: [
               { key: "name", header: "Name" },
-              { key: "phone", header: "Contact Info" },
-              { key: "status", header: "Status" },
+              // { key: "phone", header: "Contact Info" },
+              // { key: "status", header: "Status" },
               { key: "buyPrice", header: "Buy Price" },
-              // { key: "sellPrice", header: "Sell Price" },
+              {
+                key: "quantity",
+                header: "Quantity",
+                render: (item) => item?.quantity + " " + item?.quantityType,
+              },
               // {
               //   key: "factoryName",
               //   header: "Factory Owner Id",

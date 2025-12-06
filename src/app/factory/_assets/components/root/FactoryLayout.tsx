@@ -92,9 +92,14 @@ export default function FactoryLayout({
       label: <Link href="/factory/bank">Bank</Link>,
     },
     {
-      key: "/factory/bank",
+      key: "/factory/expense",
+      icon: <BadgeDollarSign />,
+      label: <Link href="/factory/expense">Expense</Link>,
+    },
+    {
+      key: "/factory/customer",
       icon: <Factory />,
-      label: <Link href="/factory/bank">Customer</Link>,
+      label: <Link href="/factory/customer">Customer</Link>,
     },
     {
       key: "/factory/supplier",

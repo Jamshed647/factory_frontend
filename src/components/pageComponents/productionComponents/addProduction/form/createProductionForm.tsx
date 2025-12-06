@@ -51,14 +51,14 @@ const AddProductForm = ({ isPending, form, onSubmit }: ProductionFormType) => {
             />
           </div>
 
-          <div>
-            <CustomField.Number
-              labelName="Extra Cost"
-              placeholder="Enter Extra Cost"
-              form={form}
-              name="extraCost"
-            />
-          </div>
+          {/* <div> */}
+          {/*   <CustomField.Number */}
+          {/*     labelName="Extra Cost" */}
+          {/*     placeholder="Enter Extra Cost" */}
+          {/*     form={form} */}
+          {/*     name="extraCost" */}
+          {/*   /> */}
+          {/* </div> */}
 
           {/* STATUS */}
           {/* <div> */}

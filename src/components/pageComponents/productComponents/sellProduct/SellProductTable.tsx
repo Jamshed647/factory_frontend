@@ -49,14 +49,18 @@ const SellProductTable = ({ id }: { id?: string }) => {
           config={{
             columns: [
               { key: "name", header: "Name" },
-              { key: "phone", header: "Contact Info" },
-              { key: "status", header: "Status" },
+              // { key: "status", header: "Status" },
               { key: "buyPrice", header: "Buy Price" },
               { key: "sellPrice", header: "Sell Price" },
+              // {
+              //   key: "factoryName",
+              //   header: "Factory Owner Id",
+              //   render: (item) => item?.factory?.name,
+              // },
               {
-                key: "factoryName",
-                header: "Factory Owner Id",
-                render: (item) => item?.factory?.name,
+                key: "Quantity",
+                header: "Quantity",
+                render: (item) => item?.quantity,
               },
               {
                 key: "action",

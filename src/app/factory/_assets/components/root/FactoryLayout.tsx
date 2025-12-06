@@ -1,12 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 import LayoutContainer from "@/components/layout/LayoutContainer";
 import Sidebar from "@/components/layout/Sidebar";
 import HeaderBar from "@/components/layout/HeaderBar";
 import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
-import { BanknoteX, Factory, PackageOpen, PackageSearch } from "lucide-react";
+import {
+  BadgeDollarSign,
+  BanknoteX,
+  Factory,
+  PackageOpen,
+  PackageSearch,
+} from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
 import { useAuth } from "@/hooks/hooks";
 import { UserRole } from "@/types/user";
@@ -88,7 +92,7 @@ export default function FactoryLayout({
       label: <Link href="/factory/bank">Bank</Link>,
     },
     {
-      key: "/factory/customer",
+      key: "/factory/bank",
       icon: <Factory />,
       label: <Link href="/factory/bank">Customer</Link>,
     },
@@ -143,8 +147,7 @@ export default function FactoryLayout({
       <LayoutContainer
         Sidebar={Sidebar}
         HeaderBar={<HeaderBar />}
-        // Type cast once here to avoid type mismatch
-        menuItems={menuItems as any}
+        menuItems={menuItems}
       >
         {children}
       </LayoutContainer>

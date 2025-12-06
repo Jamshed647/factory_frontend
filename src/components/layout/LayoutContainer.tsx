@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Layout } from "antd";
@@ -6,37 +7,26 @@ import React, { useState } from "react";
 const { Sider, Header, Content, Footer } = Layout;
 
 // Menu item type
-interface MenuItem {
-  key: string;
-  icon?: React.ReactNode;
-  label: React.ReactNode;
-  children?: MenuItem[];
-}
 
-// Layout container props
 interface LayoutContainerProps {
-  children: React.ReactNode;
-  Sidebar: React.ComponentType<{
-    collapsed: boolean;
-    onToggle: () => void;
-    menuItems: MenuItem[];
-  }>;
+  Sidebar: React.ComponentType<any>;
   HeaderBar?: React.ReactNode;
-  menuItems: MenuItem[];
+  menuItems: any[];
+  children: React.ReactNode;
 }
 
-function LayoutContainer({
-  children,
+export default function LayoutContainer({
   Sidebar,
   HeaderBar,
   menuItems,
+  children,
 }: LayoutContainerProps) {
   const [collapsed, setCollapsed] = useState(false);
-  const sidebarWidth = collapsed ? 110 : 200;
+  const sidebarWidth = collapsed ? 80 : 250;
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* Sidebar */}
+      {/* Sidebar with proper scrolling and responsive height */}
       <Sider
         collapsible
         trigger={null}
@@ -49,7 +39,8 @@ function LayoutContainer({
           bottom: 20,
           left: 16,
           borderRadius: 8,
-          overflow: "hidden",
+          overflow: "auto",
+          scrollbarGutter: "stable",
           transition: "all 0.3s ease",
         }}
       >
@@ -80,6 +71,7 @@ function LayoutContainer({
               height: 64,
               paddingInline: 16,
               boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+              zIndex: 100,
             }}
           >
             {HeaderBar}
@@ -94,7 +86,7 @@ function LayoutContainer({
             background: "#fff",
             borderRadius: 8,
             padding: 24,
-            minHeight: `calc(100vh - ${HeaderBar ? 80 : 16}px - 40px)`, // header + footer
+            minHeight: `calc(100vh - ${HeaderBar ? 80 : 16}px - 40px)`,
             overflow: "auto",
           }}
         >
@@ -115,5 +107,3 @@ function LayoutContainer({
     </Layout>
   );
 }
-
-export default LayoutContainer;

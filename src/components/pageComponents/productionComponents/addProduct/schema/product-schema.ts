@@ -42,10 +42,12 @@ export const productionSchema = z
   // totalWeight condition
   .refine(
     (data) => {
-      const total = data.items.reduce(
-        (sum, item) => sum + item.size * item.quantity,
-        0,
-      );
+      const total = data.items.reduce((sum, item) => {
+        const size = item.size as number;
+        const qty = item.quantity as number;
+        return sum + size * qty;
+      }, 0);
+
       return data.totalWeight === total;
     },
     {

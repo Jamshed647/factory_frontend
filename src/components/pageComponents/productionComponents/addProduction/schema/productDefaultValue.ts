@@ -10,8 +10,7 @@ export const productionDefaultValue = (
   note: v?.note ?? "",
 
   items: v?.items ?? [],
-
   totalProductionAmount: v?.items
-    ? v.items.reduce((sum, item) => sum + item.totalPrice, 0)
+    ? v.items.reduce((sum, item) => sum + (item.totalPrice as number), 0)
     : 0,
 });

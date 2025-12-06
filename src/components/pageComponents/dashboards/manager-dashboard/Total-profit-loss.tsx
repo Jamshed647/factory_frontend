@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/metric-card";
 import { ArrowUpDown, Filter } from "lucide-react";
 import React from "react";
 
-const TodaysProfitLossAmount = ({ factoryId }: { factoryId: string }) => {
+const TodaysProfitLossAmount = ({ factoryId, factoryLoading }: any) => {
   const [type, setType] = React.useState("TODAY");
   const [open, setOpen] = React.useState(false);
   const { data, isLoading } = useFetchData({
@@ -29,7 +29,7 @@ const TodaysProfitLossAmount = ({ factoryId }: { factoryId: string }) => {
           <MetricCard
             type={type}
             setType={setType}
-            isLoading={isLoading}
+            isLoading={isLoading || factoryLoading}
             title="Total Profit / Loss"
             value={info?.totalProfitLoss}
             description={`${type}'s Total Profit / Loss`}

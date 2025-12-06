@@ -46,7 +46,7 @@ export default function FactoryLayout({
             label: <Link href="/factory/manager/dashboard">Dashboard</Link>,
           },
           {
-            key: "/factory/manager",
+            key: "/factory/manager/managerList",
             icon: <Factory />,
             label: (
               <Link href="/factory/manager/managerList">Manager List</Link>
@@ -86,6 +86,11 @@ export default function FactoryLayout({
         ] as AntdMenuItem[])
       : []),
 
+    {
+      key: "/factory/accounting",
+      icon: <BanknoteX />,
+      label: <Link href="/factory/accounting">Accounting</Link>,
+    },
     {
       key: "/factory/bank",
       icon: <BanknoteX />,

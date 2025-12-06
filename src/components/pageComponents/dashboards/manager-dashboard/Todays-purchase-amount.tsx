@@ -11,7 +11,13 @@ import {
 } from "lucide-react";
 import React from "react";
 
-const TodaysPurchaseAmount = ({ factoryId }: { factoryId: string }) => {
+const TodaysPurchaseAmount = ({
+  factoryId,
+  factoryLoading,
+}: {
+  factoryId: string;
+  factoryLoading: boolean;
+}) => {
   const [type, setType] = React.useState("TODAY");
   const [open, setOpen] = React.useState(false);
   const { data, isLoading } = useFetchData({
@@ -35,7 +41,7 @@ const TodaysPurchaseAmount = ({ factoryId }: { factoryId: string }) => {
           <MetricCard
             type={type}
             setType={setType}
-            isLoading={isLoading}
+            isLoading={isLoading || factoryLoading}
             title=" Purchase Amount"
             value={info?.totalPurchase}
             description={`${type}'s Total purchase amount`}

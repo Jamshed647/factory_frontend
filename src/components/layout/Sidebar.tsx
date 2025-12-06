@@ -24,29 +24,18 @@ export default function Sidebar({
   // This handles nested paths and query parameters
   // Examples: /factory/bank?page=1 -> /factory/bank, /factory/cash/yuidsoc5 -> /factory/cash
   const getActiveKey = () => {
-    const parts = pathname.split("/");
+    const cleanPath = pathname.split("?")[0];
 
-    // For paths like /factory/bank, /factory/cash, /factory/employee/dashboard
-    if (parts.length >= 3) {
-      // Check if this matches any menu item key exactly
-      const exactMatch = menuItems.find((item) => item.key === pathname);
-      if (exactMatch) return pathname;
+    // Filter valid menu items first
+    const validItems = menuItems.filter(
+      (item): item is { key: string } =>
+        item && typeof item === "object" && "key" in item,
+    );
 
-      // Try to match the first two segments (e.g., /factory/bank from /factory/bank?page=1)
-      const basePath = `/${parts[1]}/${parts[2]}`;
-      const baseMatch = menuItems.find((item) => item.key === basePath);
-      if (baseMatch) return basePath;
-
-      // For deeper paths, try matching just the first three segments
-      // This handles cases like /factory/cash/yuidsoc5 matching /factory/cash
-      if (parts.length > 3) {
-        // Try three-segment paths first
-        for (let i = 3; i < parts.length; i++) {
-          const partialPath = `/${parts[1]}/${parts[2]}`;
-          const match = menuItems.find((item) => item.key === partialPath);
-          if (match) return partialPath;
-          break;
-        }
+    // Find best match
+    for (const item of validItems) {
+      if (cleanPath === item.key || cleanPath.startsWith(item.key + "/")) {
+        return item.key;
       }
     }
 

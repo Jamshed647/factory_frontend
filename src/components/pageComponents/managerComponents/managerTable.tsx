@@ -69,11 +69,8 @@ const ManagerTable = ({
               {
                 key: "name",
                 header: "Name",
-                render: (item) => (
-                  <Link href={`manager/${item?.id}`}>
-                    {item?.firstName} {item?.lastName}
-                  </Link>
-                ),
+                render: (item) =>
+                  (item?.firstName ?? "") + " " + (item?.lastName ?? ""),
               },
               { key: "phone", header: "Contact Info" },
               { key: "status", header: "Status" },

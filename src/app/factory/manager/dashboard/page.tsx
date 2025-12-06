@@ -1,21 +1,15 @@
 "use client";
 import { ManagerDashboard } from "@/components/pageComponents/dashboards/manager-dashboard";
-import { useAuth } from "@/hooks/hooks";
-import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import { useFactory } from "@/utils/factoryInfo";
 import React from "react";
 
 export default function DashboardPage() {
-  const { user } = useAuth();
-  const switchFactoryId = getFactoryId();
-
-  // const switchFactoryId = findFactoryId();
-
-  const factoryId = user?.factoryId ? user?.factoryId : switchFactoryId;
+  const { factory, isLoading } = useFactory();
 
   return (
     <div>
       {/* Overview */}
-      <ManagerDashboard factoryId={factoryId as string} />
+      <ManagerDashboard factory={factory} isLoading={isLoading} />
     </div>
   );
 }

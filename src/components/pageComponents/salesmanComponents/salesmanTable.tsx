@@ -8,7 +8,7 @@ import CreateSalesmanModal from "./_assets/components/create/createSalesmanModal
 import UpdateSalesmanModal from "./_assets/components/update/updateSalesmanModal";
 import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
 import Link from "next/link";
-import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import { setFactory, setFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import ActionButton from "@/components/common/button/actionButton";
 
 interface TableProps {
@@ -94,7 +94,7 @@ const SalesmanTable = ({
                       <Link
                         href={`/factory/salesman/dashboard`}
                         onClick={() => {
-                          setFactoryId(user.factoryId, user?.id, user?.role);
+                          setFactory(user.factory, user?.id, user?.role);
                         }}
                       >
                         <ActionButton

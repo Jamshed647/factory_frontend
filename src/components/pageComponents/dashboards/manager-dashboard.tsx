@@ -7,15 +7,27 @@ import TotalProfitLoss from "./manager-dashboard/Total-profit-loss";
 import CashBalance from "./manager-dashboard/Cash-Balance";
 import MultiCard from "./manager-dashboard/MultiCard";
 import BankOverview from "./manager-dashboard/BankOverview";
+import { IFactoryInfo } from "@/utils/factoryInfo";
 
-export function ManagerDashboard({ factoryId }: { factoryId: string }) {
+export function ManagerDashboard({
+  factory,
+  isLoading,
+}: {
+  factory: IFactoryInfo;
+  isLoading: boolean;
+}) {
+  const { id: factoryId, name, address } = factory;
+
   return (
     <>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-3xl font-bold">Factory Dashboard</h1>
-            <p className="text-muted-foreground">Muri Master - Dhaka Factory</p>
+            <h1 className="text-3xl font-bold capitalize">Factory Dashboard</h1>
+            <p className="my-3 font-semibold capitalize text-muted-foreground">
+              {" "}
+              {name} - {address}
+            </p>
           </div>
 
           <div className="flex gap-x-4">
@@ -43,15 +55,16 @@ export function ManagerDashboard({ factoryId }: { factoryId: string }) {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <TodaysSalesAmount factoryId={factoryId} />
+        <TodaysSalesAmount factoryId={factoryId} factoryLoading={isLoading} />
 
-        <TodaysPurchaseAmount factoryId={factoryId} />
-        <TotalProfitLoss factoryId={factoryId} />
-
-        <CashBalance factoryId={factoryId} />
-
-        <MultiCard factoryId={factoryId} />
-        <BankOverview factoryId={factoryId} />
+        <TodaysPurchaseAmount
+          factoryId={factoryId}
+          factoryLoading={isLoading}
+        />
+        <TotalProfitLoss factoryId={factoryId} factoryLoading={isLoading} />
+        <CashBalance factoryId={factoryId} factoryLoading={isLoading} />
+        <MultiCard factoryId={factoryId} factoryLoading={isLoading} />
+        <BankOverview factoryId={factoryId} factoryLoading={isLoading} />
       </div>
     </>
   );

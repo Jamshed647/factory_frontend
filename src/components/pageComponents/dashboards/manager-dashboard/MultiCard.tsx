@@ -13,7 +13,13 @@ import {
 } from "lucide-react";
 import React from "react";
 
-const MultiCard = ({ factoryId }: { factoryId: string }) => {
+const MultiCard = ({
+  factoryId,
+  factoryLoading,
+}: {
+  factoryId: string;
+  factoryLoading: boolean;
+}) => {
   const [type, setType] = React.useState("TODAY");
 
   const { data, isLoading } = useFetchData({
@@ -48,7 +54,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Total Invoices */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Total Invoices"
         value={data?.data?.totalInvoices}
         description="Number of invoices created"
@@ -57,7 +63,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Total Customers */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Total Customers"
         value={data?.data?.totalCustomers}
         description="Total active banks"
@@ -66,7 +72,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Customers Due */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Customers Due"
         value={data?.data?.banksDue}
         description="Customers who owe money"
@@ -75,7 +81,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Total Suppliers */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Total Suppliers"
         value={data?.data?.totalSuppliers}
         description="Total suppliers added"
@@ -84,7 +90,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Suppliers Due */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Suppliers Due"
         value={data?.data?.suppliersDue}
         description="Money owed to suppliers"
@@ -93,7 +99,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Total Raw Product */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Total Raw Product"
         value={data?.data?.raw?.totalRawProduct}
         description="Types of raw materials"
@@ -111,7 +117,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Raw Product Amount */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Raw Product Amount"
         value={data?.data?.raw?.rawProductAmount}
         description="Total cost of raw materials"
@@ -120,7 +126,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Total Sell Product */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Total Sell Product"
         value={data?.data?.sell?.totalSellProduct}
         description="Types of products sold"
@@ -138,7 +144,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Sell Product Amount */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Sell Product Amount"
         value={data?.data?.sell?.sellProductAmount}
         description="Total income from sales"
@@ -147,7 +153,7 @@ const MultiCard = ({ factoryId }: { factoryId: string }) => {
 
       {/* Total Investment */}
       <MetricCard
-        isLoading={isLoading}
+        isLoading={isLoading || factoryLoading}
         title="Total Investment"
         value={data?.data?.totalInvestment}
         description="Total money invested"

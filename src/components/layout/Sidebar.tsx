@@ -5,6 +5,7 @@ import { Menu, Button } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/hooks";
+import SignOutConfirmation from "./SignOutDialog";
 
 interface SidebarProps {
   menuItems: any[];
@@ -92,6 +93,16 @@ export default function Sidebar({
                 overflow: "auto",
               }}
             />
+          </div>
+
+          {/* ==== Bottom Section (Logout Button) ==== */}
+          <div
+            style={{
+              padding: "12px 16px",
+              borderTop: "1px solid rgba(0,0,0,0.05)",
+            }}
+          >
+            <SignOutConfirmation collapsed={collapsed} />
           </div>
         </div>
       )}

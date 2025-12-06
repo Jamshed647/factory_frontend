@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 
-/* -------------------------------------------------------------------------- */
 /*                               Base TypeDefs                                */
-/* -------------------------------------------------------------------------- */
 
 type BaseValidationProps = {
   min?: number;
@@ -50,6 +48,7 @@ interface NumberValidationProps {
   max?: number;
   integerOnly?: boolean;
   positiveOnly?: boolean;
+  type?: "number" | "string";
 }
 
 type TextValidationProps = BaseValidationProps & {
@@ -74,7 +73,6 @@ type UsernameValidationProps = BaseValidationProps & {
 /* -------------------------------------------------------------------------- */
 /*                         Core Schema Factory Helper                         */
 /* -------------------------------------------------------------------------- */
-
 const createStringSchema = (props: BaseValidationProps = {}) => {
   const {
     min = 1,
@@ -97,6 +95,29 @@ const createStringSchema = (props: BaseValidationProps = {}) => {
     message: customMessage || `${label} must be at most ${max} characters`,
   });
 };
+
+// const createStringSchema = (props: BaseValidationProps = {}) => {
+//   const {
+//     min = 1,
+//     max = 255,
+//     label = "Field",
+//     required = true,
+//     customMessage,
+//   } = props;
+//   let schema = z.string();
+//
+//   if (required) {
+//     schema = schema.min(min, {
+//       message:
+//         customMessage ||
+//         `${label} must be at least ${min} character${min > 1 ? "s" : ""}`,
+//     });
+//   }
+//
+//   return schema.max(max, {
+//     message: customMessage || `${label} must be at most ${max} characters`,
+//   });
+// };
 
 /* -------------------------------------------------------------------------- */
 /*                                Email Schema                                */
@@ -143,8 +164,8 @@ const passwordSchema = (props: PasswordValidationProps = {}) => {
     requireSpecialChars = true,
     preventSequentialNumbers = true,
     preventCommonPatterns = true,
-    minNumbers = 1,
-    minSpecialChars = 1,
+    // minNumbers = 1,
+    // minSpecialChars = 1,
   } = props;
 
   let schema = createStringSchema({ min, max, label, required });
@@ -201,69 +222,6 @@ const passwordSchema = (props: PasswordValidationProps = {}) => {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                 Name Schema                                */
-/* -------------------------------------------------------------------------- */
-
-export const nameSchema = (props: NameValidationProps = {}) => {
-  const {
-    label = "Name",
-    min = 2,
-    max = 50,
-    required = true,
-    allowMultipleWords = true,
-    allowAccents = true,
-  } = props;
-
-  const charPattern = allowAccents ? /^[A-Za-zÀ-ÿ .'-]+$/ : /^[A-Za-z .'-]+$/;
-
-  return z
-    .string()
-    .trim()
-    .refine(
-      (val) => {
-        if (!val && !required) return true; // optional and empty -> valid
-        return val.length >= min && val.length <= max;
-      },
-      { message: `${label} must be between ${min} and ${max} characters` },
-    )
-    .refine(
-      (val) => {
-        if (!val && !required) return true;
-        return charPattern.test(val);
-      },
-      { message: `${label} can only contain letters, spaces, and . - '` },
-    )
-    .refine(
-      (val) => {
-        if (!val && !required) return true;
-        return !/\d/.test(val);
-      },
-      { message: `${label} cannot contain numbers` },
-    )
-    .refine(
-      (val) => {
-        if (!val && !required) return true;
-        return !/[@!#$%^&*()+=?/|{}[\]\\<>]/.test(val);
-      },
-      {
-        message: `${label} cannot contain special characters other than ., -, '`,
-      },
-    )
-    .refine(
-      (val) => {
-        if (!val && !required) return true;
-        const words = val.trim().split(/\s+/);
-        return allowMultipleWords ? words.length >= 1 : words.length === 1;
-      },
-      {
-        message: allowMultipleWords
-          ? `${label} must contain at least one word`
-          : `${label} must be a single word`,
-      },
-    );
-};
-
-/* -------------------------------------------------------------------------- */
 /*                                Username Schema                             */
 /* -------------------------------------------------------------------------- */
 
@@ -303,58 +261,6 @@ const usernameSchema = (props: UsernameValidationProps = {}) => {
     schema = schema.refine((val) => /^[a-zA-Z]/.test(val), {
       message: `${label} must start with a letter`,
     });
-  }
-
-  return schema;
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                 Phone Schema                               */
-/* -------------------------------------------------------------------------- */
-
-const phoneSchema = (props: PhoneValidationProps = {}) => {
-  const {
-    label = "Phone number",
-    required = true,
-    countryCode = "optional",
-    allowedCountries,
-  } = props;
-
-  let schema: z.ZodTypeAny = createStringSchema({
-    min: 8,
-    max: 15,
-    label,
-    required,
-  });
-
-  schema = (schema as z.ZodString).transform((val) =>
-    val.replace(/[\s\-()]/g, ""),
-  );
-
-  if (countryCode === "required") {
-    schema = (schema as z.ZodString).refine((val) => /^\+\d+$/.test(val), {
-      message: `${label} must include country code (e.g., +1)`,
-    });
-  } else if (countryCode === "optional") {
-    schema = (schema as z.ZodString).refine((val) => /^(\+?\d+)$/.test(val), {
-      message: `${label} can only contain digits and optional +`,
-    });
-  } else {
-    schema = (schema as z.ZodString).refine((val) => /^\d+$/.test(val), {
-      message: `${label} can only contain digits`,
-    });
-  }
-
-  if (allowedCountries?.length) {
-    schema = (schema as z.ZodString).refine(
-      (val) => {
-        const code = val.startsWith("+") ? val.match(/^\+\d+/)?.[0] : undefined;
-        return !code || allowedCountries.some((c) => c.startsWith(code));
-      },
-      {
-        message: `${label} must be from allowed countries: ${allowedCountries.join(", ")}`,
-      },
-    );
   }
 
   return schema;
@@ -417,69 +323,323 @@ export const urlSchema = (props: UrlValidationProps = {}) => {
 };
 
 /* -------------------------------------------------------------------------- */
+/*                                 Phone Schema                               */
+/* -------------------------------------------------------------------------- */
+
+const phoneSchema = (props: PhoneValidationProps = {}) => {
+  const {
+    label = "Phone number",
+    required = true,
+    countryCode = "optional",
+    allowedCountries,
+  } = props;
+
+  let schema: z.ZodTypeAny = createStringSchema({
+    min: 8,
+    max: 15,
+    label,
+    required,
+  });
+
+  // Clean the phone number - allow more characters
+  schema = (schema as z.ZodString).transform((val) =>
+    val.replace(/[\s\-()]/g, ""),
+  );
+
+  // Allow digits from any script (Unicode category Nd = Decimal Digit Number)
+  // This includes: 0-9, ০-৯ (Bengali), ٠-٩ (Arabic), etc.
+  schema = (schema as z.ZodString).refine(
+    (val) => /^[+]?[\p{Nd}]+$/u.test(val),
+    {
+      message: `${label} must contain only digits and optional +`,
+    },
+  );
+
+  // Rest of the function remains the same...
+  // Country code validation
+  if (countryCode === "required") {
+    schema = (schema as z.ZodString).refine((val) => val.startsWith("+"), {
+      message: `${label} must start with country code (e.g., +1)`,
+    });
+  }
+
+  if (allowedCountries?.length) {
+    schema = (schema as z.ZodString).refine(
+      (val) => {
+        if (!val.startsWith("+")) return false; // Must have country code
+
+        // Check if any allowed country code matches
+        return allowedCountries.some((countryCode) =>
+          val.startsWith(countryCode),
+        );
+      },
+      {
+        message: `${label} must be from allowed countries: ${allowedCountries.join(", ")}`,
+      },
+    );
+  }
+
+  return schema;
+};
+
+/* -------------------------------------------------------------------------- */
 /*                                 Number Schema                              */
 /* -------------------------------------------------------------------------- */
 
-interface NumberValidationProps {
-  label?: string;
-  required?: boolean;
+export const numberSchema = (
+  props: NumberValidationProps = {},
+): z.ZodTypeAny => {
+  const {
+    label = "Number",
+    required = true,
+    min,
+    max,
+    integerOnly = false,
+    positiveOnly = false,
+    type = "number",
+  } = props;
+
+  // Handle string type numbers (accepts international numerals)
+  if (type === "string") {
+    return createStringNumberSchema({
+      label,
+      required,
+      min,
+      max,
+      integerOnly,
+      positiveOnly,
+    });
+  }
+
+  // Handle native number type
+  return createNativeNumberSchema({
+    label,
+    required,
+    min,
+    max,
+    integerOnly,
+    positiveOnly,
+  });
+};
+
+// Helper function for string-based number validation
+const createStringNumberSchema = (props: {
+  label: string;
+  required: boolean;
   min?: number;
   max?: number;
-  integerOnly?: boolean;
-  positiveOnly?: boolean;
-  type?: "number" | "string";
-}
+  integerOnly: boolean;
+  positiveOnly: boolean;
+}): z.ZodTypeAny => {
+  const { label, required, min, max, integerOnly, positiveOnly } = props;
 
-export const numberSchema = <T extends "number" | "string" = "number">({
-  label = "Number",
-  required = true,
-  min,
-  max,
-  integerOnly,
-  positiveOnly,
-  type = "number" as T,
-}: NumberValidationProps & { type?: T } = {}): T extends "string"
-  ? z.ZodString
-  : z.ZodNumber => {
-  let schema: z.ZodType<any> =
-    type === "string"
-      ? z.string().regex(/^[+]?\d+$/, `${label} must contain only digits or +`)
-      : z.preprocess(
-          (val) => {
-            if (val === "" || val === null || val === undefined)
-              return undefined;
-            if (typeof val === "number") return val;
-            if (typeof val === "string") {
-              const num = Number(val);
-              return isNaN(num) ? val : num;
-            }
-            return val;
-          },
-          z.number({ message: `${label} must be a valid number` }),
-        );
+  let schema: any = z.string();
 
-  if (integerOnly && type === "number")
-    schema = schema.refine((v) => Number.isInteger(v as number), {
-      message: `${label} must be an integer`,
+  if (!required) {
+    schema = schema.optional();
+  }
+
+  // Convert international numerals to Western Arabic for validation
+  const normalizeNumber = (val: string): string => {
+    return val.replace(/[\p{Nd}]/gu, (char) => {
+      const digit = char.codePointAt(0)!;
+      // Map various numeral systems to Western Arabic
+      const mappings = [
+        [0x660, 0x669], // Arabic
+        [0x6f0, 0x6f9], // Eastern Arabic
+        [0x966, 0x96f], // Devanagari
+        [0x9e6, 0x9ef], // Bengali
+        [0xa66, 0xa6f], // Gurmukhi
+        [0xae6, 0xaef], // Gujarati
+        [0xb66, 0xb6f], // Oriya
+        [0xbe6, 0xbef], // Tamil
+        [0xc66, 0xcef], // Telugu
+        [0xce6, 0xcef], // Kannada
+        [0xd66, 0xdef], // Malayalam
+        [0xe50, 0xe59], // Thai
+        [0xed0, 0xed9], // Lao
+        [0xf20, 0xf29], // Tibetan
+      ];
+
+      for (const [start, end] of mappings) {
+        if (digit >= start && digit <= end) {
+          return String(digit - start);
+        }
+      }
+      return char; // Already Western Arabic
     });
+  };
 
-  if (positiveOnly && type === "number")
-    schema = schema.refine((v) => (v as number) >= 0, {
-      message: `${label} must be positive`,
-    });
+  // Basic number validation
+  schema = schema.refine((val: string) => {
+    if (!required && !val) return true;
+    const trimmed = (val || "").trim();
+    if (trimmed === "") return !required;
 
-  if (min !== undefined && type === "number")
-    schema = schema.refine((v) => (v as number) >= min, {
-      message: `${label} must be at least ${min}`,
-    });
+    const normalized = normalizeNumber(trimmed);
+    const num = Number(normalized);
+    return !isNaN(num) && isFinite(num);
+  }, `${label} must be a valid number`);
 
-  if (max !== undefined && type === "number")
-    schema = schema.refine((v) => (v as number) <= max, {
-      message: `${label} must be at most ${max}`,
-    });
+  // Helper for adding refinements
+  const addRefinement = (
+    condition: (val: string) => boolean,
+    message: string,
+  ) => {
+    schema = schema.refine((val: string) => {
+      if (!required && !val) return true;
+      const trimmed = (val || "").trim();
+      if (trimmed === "") return !required;
 
-  return (required ? schema : schema.optional()) as any;
+      const normalized = normalizeNumber(trimmed);
+      return condition(normalized);
+    }, message);
+  };
+
+  if (integerOnly) {
+    addRefinement((val) => /^-?\d+$/.test(val), `${label} must be an integer`);
+  }
+
+  if (positiveOnly) {
+    addRefinement((val) => Number(val) >= 0, `${label} must be positive`);
+  }
+
+  if (min !== undefined) {
+    addRefinement(
+      (val) => Number(val) >= min,
+      `${label} must be at least ${min}`,
+    );
+  }
+
+  if (max !== undefined) {
+    addRefinement(
+      (val) => Number(val) <= max,
+      `${label} must be at most ${max}`,
+    );
+  }
+
+  return schema;
 };
+
+// Helper function for native number type validation
+const createNativeNumberSchema = (props: {
+  label: string;
+  required: boolean;
+  min?: number;
+  max?: number;
+  integerOnly: boolean;
+  positiveOnly: boolean;
+}): z.ZodTypeAny => {
+  const { label, required, min, max, integerOnly, positiveOnly } = props;
+
+  let schema: any = z.number();
+
+  if (!required) {
+    schema = schema.optional();
+  }
+
+  // Helper for adding refinements
+  const addRefinement = (
+    condition: (val: number) => boolean,
+    message: string,
+  ) => {
+    schema = schema.refine((val: number) => {
+      if (!required && val === undefined) return true;
+      return condition(val);
+    }, message);
+  };
+
+  if (integerOnly) {
+    addRefinement(
+      (val) => Number.isInteger(val),
+      `${label} must be an integer`,
+    );
+  }
+
+  if (positiveOnly) {
+    addRefinement((val) => val >= 0, `${label} must be positive`);
+  }
+
+  if (min !== undefined) {
+    addRefinement((val) => val >= min, `${label} must be at least ${min}`);
+  }
+
+  if (max !== undefined) {
+    addRefinement((val) => val <= max, `${label} must be at most ${max}`);
+  }
+
+  return schema;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                 Name Schema                                */
+/* -------------------------------------------------------------------------- */
+
+export const nameSchema = (props: NameValidationProps = {}) => {
+  const {
+    label = "Name",
+    min = 2,
+    max = 50,
+    required = true,
+    allowMultipleWords = true,
+  } = props;
+
+  let schema: z.ZodTypeAny = createStringSchema({ min, max, label, required });
+
+  // Trim whitespace
+  schema = (schema as z.ZodString).transform((v) => v.trim());
+
+  // Check for consecutive spaces
+  schema = (schema as z.ZodString).refine((val) => !/\s{2,}/.test(val), {
+    message: `${label} cannot contain consecutive spaces`,
+  });
+
+  // Character-by-character validation - allow all Unicode letters and common punctuation
+  schema = (schema as z.ZodString).refine(
+    (val) => {
+      // Check each character
+      for (let i = 0; i < val.length; i++) {
+        const char = val[i];
+
+        // Allow letters from any language (including Bengali, Arabic, Chinese, etc.)
+        if (/[\p{L}\p{M}]/u.test(char)) continue;
+
+        // Allow spaces, dots, hyphens, apostrophes, commas, and other common punctuation
+        if (" .-',…—–。・・・・・".includes(char)) continue;
+
+        // Allow numbers in names (some cultures include numbers in names)
+        if (/\p{N}/u.test(char)) continue;
+
+        // Allow parentheses and brackets for some naming conventions
+        if ("()[]{}".includes(char)) continue;
+
+        // Character not allowed - only block truly problematic characters
+        if (/[\p{C}\p{Zl}\p{Zp}]/u.test(char)) return false; // Control characters and line/paragraph separators
+      }
+
+      return true;
+    },
+    {
+      message: `${label} contains invalid characters`,
+    },
+  );
+
+  // Word count validation
+  schema = (schema as z.ZodString).refine(
+    (val) => {
+      const words = val.trim().split(/\s+/);
+      return allowMultipleWords ? words.length >= 1 : words.length === 1;
+    },
+    {
+      message: allowMultipleWords
+        ? `${label} must contain at least one word`
+        : `${label} must be a single word`,
+    },
+  );
+
+  return schema;
+};
+
 /* -------------------------------------------------------------------------- */
 /*                                  Text Schema                               */
 /* -------------------------------------------------------------------------- */
@@ -498,28 +658,128 @@ const textSchema = (props: TextValidationProps = {}) => {
 
   let schema: z.ZodTypeAny = createStringSchema({ min, max, label, required });
 
-  if (trimWhitespace)
+  if (trimWhitespace) {
     schema = (schema as z.ZodString).transform((v) => v.trim());
+  }
 
+  // Check for consecutive spaces
   schema = (schema as z.ZodString).refine((val) => !/\s{2,}/.test(val), {
     message: `${label} cannot contain consecutive spaces`,
   });
 
-  let pattern = "a-zA-Z";
-  if (allowNumbers) pattern += "0-9";
-  if (allowSpecialChars) pattern += ` .,!?;:'"\\-_@#$%&*()+={}|[\\]<>/\\\\`;
-  if (allowNewlines) pattern += "\\n\\r";
+  // Character-by-character validation (most reliable)
+  schema = (schema as z.ZodString).refine(
+    (val) => {
+      // Check each character
+      for (let i = 0; i < val.length; i++) {
+        const char = val[i];
 
-  const regex = new RegExp(`^[${pattern}]*$`);
+        // Always allow any Unicode letter (any language)
+        if (/[\p{L}\p{M}]/u.test(char)) continue;
 
-  schema = (schema as z.ZodString).refine((val) => regex.test(val), {
-    message: `${label} contains invalid characters`,
-  });
+        // Allow single space
+        if (char === " ") continue;
+
+        // Allow numbers if enabled (any script)
+        if (allowNumbers && /\p{N}/u.test(char)) continue;
+
+        // Allow special characters if enabled - expanded set
+        if (allowSpecialChars) {
+          // Common punctuation
+          const commonPunctuation = `.,!?;:'"\\-_@#$%&*()+={}|[]<>/~\`^`;
+          if (commonPunctuation.includes(char)) continue;
+
+          // Ellipsis and other common symbols
+          if ("…—–•·°©®™€£¥¢§¶†‡".includes(char)) continue;
+
+          // Asian punctuation
+          if ("。，、；：？！「」『』【】（）《》〈〉".includes(char)) continue;
+        }
+
+        // Allow newlines if enabled
+        if (allowNewlines && (char === "\n" || char === "\r")) continue;
+
+        // Block control characters, line/paragraph separators
+        if (/[\p{C}\p{Zl}\p{Zp}]/u.test(char)) return false;
+
+        // If we get here, character is not allowed
+        return false;
+      }
+
+      return true;
+    },
+    {
+      message: `${label} contains invalid characters`,
+    },
+  );
 
   return schema;
 };
-
-/* -------------------------------------------------------------------------- */
+//   const {
+//     min = 1,
+//     max = 200,
+//     label = "Text",
+//     required = true,
+//     allowNumbers = true,
+//     allowSpecialChars = true,
+//     allowNewlines = false,
+//     trimWhitespace = true,
+//   } = props;
+//
+//   let schema: z.ZodTypeAny = createStringSchema({ min, max, label, required });
+//
+//   if (trimWhitespace)
+//     schema = (schema as z.ZodString).transform((v) => v.trim());
+//
+//   schema = (schema as z.ZodString).refine((val) => !/\s{2,}/.test(val), {
+//     message: `${label} cannot contain consecutive spaces`,
+//   });
+//
+//   // SIMPLE VALIDATION - Allow text in any language with basic restrictions
+//   schema = (schema as z.ZodString).refine(
+//     (val) => {
+//       // Reject if contains control characters (except newlines if allowed)
+//       const controlChars = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/;
+//       if (controlChars.test(val)) return false;
+//
+//       // If newlines not allowed, check for them
+//       if (!allowNewlines && /[\n\r]/.test(val)) return false;
+//
+//       // Check character by character
+//       for (let i = 0; i < val.length; i++) {
+//         const char = val[i];
+//
+//         // Allow letters from any language
+//         if (/[\p{L}\p{M}]/u.test(char)) continue;
+//
+//         // Allow digits if enabled
+//         if (allowNumbers && /\d/.test(char)) continue;
+//
+//         // Allow space
+//         if (char === " ") continue;
+//
+//         // Allow newlines if enabled
+//         if (allowNewlines && (char === "\n" || char === "\r")) continue;
+//
+//         // Allow common punctuation if enabled
+//         if (allowSpecialChars) {
+//           const allowedPunctuation = `.,!?;:'"\\-_@#$%&*()+={}|[]<>/`;
+//           if (allowedPunctuation.includes(char)) continue;
+//         }
+//
+//         // Character not allowed
+//         return false;
+//       }
+//
+//       return true;
+//     },
+//     {
+//       message: `${label} contains invalid characters`,
+//     },
+//   );
+//
+//   return schema;
+// };
 /*                            Optional Schema Helper                          */
 /* -------------------------------------------------------------------------- */
 

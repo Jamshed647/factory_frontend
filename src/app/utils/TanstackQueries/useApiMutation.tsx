@@ -37,7 +37,7 @@ export const useApiMutation = ({
   const { accessToken } = useAuthStore();
   const { signout } = useAuth();
 
-  const portalName: string = "/admin";
+  //const portalName: string = "/admin";
   if (token == "" || token == undefined || token == null) {
     token = accessToken as string;
   }
@@ -119,7 +119,7 @@ export const useApiMutation = ({
     onError: (error: any) => {
       console.error("API mutation error:", error);
       // if 401 error, redirect to login
-      const handled = handleApiError(error, portalName);
+      const handled = handleApiError(error);
       if (handled) return; // stop further execution
 
       if (onError) {
@@ -129,6 +129,7 @@ export const useApiMutation = ({
       } else {
         // if not provided, use the default error handler
         if (isErrorToast) {
+          console.log("Error TostMessage", error);
           showToast("error", error);
         }
         return;

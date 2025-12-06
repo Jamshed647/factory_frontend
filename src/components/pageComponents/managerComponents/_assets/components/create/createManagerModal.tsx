@@ -21,8 +21,12 @@ const CreateManagerModal = ({
 
   const managerForm = useForm<ManagerFormType>({
     resolver: zodResolver(managerSchema),
-    defaultValues: managerDefaultValue({ factoryId: factoryId }),
+    defaultValues: managerDefaultValue(),
   });
+
+  if (factoryId) {
+    managerForm.setValue("factoryId", factoryId);
+  }
 
   const createManager = useApiMutation({
     path: "auth/manager",
@@ -51,7 +55,7 @@ const CreateManagerModal = ({
       }
       open={open}
       handleOpen={setOpen}
-      title="Create Manager"
+      title="Create shawa"
     >
       <ManagerFormComponent
         selectFactory={!factoryId ? true : false}

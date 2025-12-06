@@ -44,8 +44,7 @@ export const MultiFileUploadField = ({
 }: MultiFileUploadFieldProps) => {
   const user = {
     user: {
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2MjI5NjQ0MDAiLCJlbWFpbCI6InRlc3RAbWFpbC5jb20iLCJpYXQiOjE2NjA4NDk0ODYsImV4cCI6MTk2MDg0OTQ4Nn0.3-3t-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6-7-8-9-0-1-2-3-4-5-6   ",
+      token: "",
     },
   };
   //  const user = useAuths();

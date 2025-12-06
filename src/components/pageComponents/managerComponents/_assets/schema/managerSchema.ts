@@ -4,7 +4,7 @@ import { z } from "zod";
 // Register schema
 export const managerSchema = z
   .object({
-    firstName: validationSchemas.nameSchema({ label: "First Name" }),
+    firstName: validationSchemas.textSchema({ label: "First Name" }),
     lastName: validationSchemas.nameSchema({
       label: "Last Name",
       required: false,

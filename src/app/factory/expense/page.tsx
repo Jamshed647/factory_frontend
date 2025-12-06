@@ -11,7 +11,6 @@ const CashPage = () => {
   const [rangeType, setRangeType] = useState<
     "ALL" | "TODAY" | "WEEKLY" | "MONTHLY"
   >("ALL");
-  const [page, setPage] = useState(1);
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -19,7 +18,6 @@ const CashPage = () => {
     queryKey: "getExpenseDataByFactory",
     filterData: {
       rangeType: rangeType,
-      page: page,
     },
   });
 
@@ -39,8 +37,6 @@ const CashPage = () => {
         isLoading={isLoading}
         rangeType={rangeType}
         setRangeType={setRangeType}
-        page={page}
-        setPage={setPage}
       />
     </main>
   );

@@ -8,6 +8,7 @@ import CashBalance from "./manager-dashboard/Cash-Balance";
 import MultiCard from "./manager-dashboard/MultiCard";
 import BankOverview from "./manager-dashboard/BankOverview";
 import { IFactoryInfo } from "@/utils/factoryInfo";
+import TotalExpenseOverview from "./manager-dashboard/TotalExpense";
 
 export function ManagerDashboard({
   factory,
@@ -61,10 +62,14 @@ export function ManagerDashboard({
           factoryId={factoryId}
           factoryLoading={isLoading}
         />
+        <BankOverview factoryId={factoryId} factoryLoading={isLoading} />
         <TotalProfitLoss factoryId={factoryId} factoryLoading={isLoading} />
+        <TotalExpenseOverview
+          factoryId={factoryId}
+          factoryLoading={isLoading}
+        />
         <CashBalance factoryId={factoryId} factoryLoading={isLoading} />
         <MultiCard factoryId={factoryId} factoryLoading={isLoading} />
-        <BankOverview factoryId={factoryId} factoryLoading={isLoading} />
       </div>
     </>
   );

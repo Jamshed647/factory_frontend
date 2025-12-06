@@ -11,14 +11,14 @@ interface TransactionTableProps {
   transactions: any[];
   isLoading: boolean;
   pagination: any;
-  onPageChange: (page: number) => void;
+  // onPageChange: (page: number) => void;
 }
 
 export default function TransactionTable({
   transactions,
   isLoading,
   pagination,
-  onPageChange,
+  // onPageChange,
 }: TransactionTableProps) {
   const { user } = useAuth();
   const factory = user?.factory;
@@ -98,9 +98,9 @@ export default function TransactionTable({
       <DynamicTableWithPagination
         data={transactions}
         isLoading={isLoading}
-        pagination={pagination}
-        currentPage={pagination?.page || 1}
-        setCurrentPage={(page) => onPageChange(page)}
+        //        pagination={pagination}
+        //       currentPage={pagination?.page || 1}
+        //        setCurrentPage={(page) => onPageChange(page)}
         config={tableConfig}
         isCheckBox={false}
       />

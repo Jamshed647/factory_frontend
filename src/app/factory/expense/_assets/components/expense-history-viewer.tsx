@@ -2,27 +2,21 @@
 
 "use client";
 
-import { Card } from "@/components/ui/card";
 import TransactionTable from "./transactionTable";
 import TopExpensesCards from "./top-expense-cart";
-import SummaryCards from "./summary-cards";
 
 interface ExpenseDashboardProps {
   data: any;
   isLoading: boolean;
   rangeType: string;
   setRangeType: any;
-  page: number;
-  setPage: any;
 }
 
 export default function ExpenseDashboard({
   data,
   isLoading,
-  rangeType,
-  setRangeType,
-  page,
-  setPage,
+  // rangeType,
+  // setRangeType,
 }: ExpenseDashboardProps) {
   return (
     <main>
@@ -52,7 +46,7 @@ export default function ExpenseDashboard({
               transactions={data?.data?.history || []}
               isLoading={isLoading}
               pagination={data?.pagination}
-              onPageChange={setPage}
+              //              onPageChange={setPage}
             />
           </div>
         </div>

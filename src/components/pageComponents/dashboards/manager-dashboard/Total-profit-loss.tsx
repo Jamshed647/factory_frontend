@@ -4,10 +4,12 @@ import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import { MetricCard } from "@/components/ui/metric-card";
 import { ArrowUpDown, Filter } from "lucide-react";
 import React from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const TodaysProfitLossAmount = ({ factoryId, factoryLoading }: any) => {
   const [type, setType] = React.useState("TODAY");
   const [open, setOpen] = React.useState(false);
+  const { t } = useLanguage();
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `dashboard/factory/profit-loss/${factoryId}`,
@@ -21,7 +23,7 @@ const TodaysProfitLossAmount = ({ factoryId, factoryLoading }: any) => {
 
   return (
     <DialogWrapper
-      title={`Sales Amount`}
+      title={t.totalProfitLoss}
       open={open}
       handleOpen={setOpen}
       triggerContent={
@@ -30,9 +32,9 @@ const TodaysProfitLossAmount = ({ factoryId, factoryLoading }: any) => {
             type={type}
             setType={setType}
             isLoading={isLoading || factoryLoading}
-            title="Total Profit / Loss"
+            title={t.totalProfitLoss}
             value={info?.totalProfitLoss}
-            description={`${type}'s Total Profit / Loss`}
+            description={`${type === "TODAY" ? t.today : type}'s ${t.todaysTotalProfitLoss}`}
             icon={<ArrowUpDown className="w-4 h-4 text-muted-foreground" />}
           />
         </div>
@@ -67,11 +69,10 @@ const TodaysProfitLossAmount = ({ factoryId, factoryLoading }: any) => {
                         Invoice: {item?.invoiceNo}
                       </p>
                       <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          isLoss
+                        className={`text-xs px-2 py-1 rounded-full ${isLoss
                             ? "bg-red-100 text-red-700"
                             : "bg-emerald-100 text-emerald-700"
-                        }`}
+                          }`}
                       >
                         {isLoss ? "LOSS" : "PROFIT"}
                       </span>
@@ -100,9 +101,8 @@ const TodaysProfitLossAmount = ({ factoryId, factoryLoading }: any) => {
                   {/* Right */}
                   <div className="ml-4 text-right">
                     <p
-                      className={`text-lg font-bold ${
-                        isLoss ? "text-red-600" : "text-emerald-600"
-                      }`}
+                      className={`text-lg font-bold ${isLoss ? "text-red-600" : "text-emerald-600"
+                        }`}
                     >
                       {isLoss ? "−" : "+"}৳
                       {((n) => (n % 1 ? n.toFixed(2) : n))(

@@ -10,6 +10,7 @@ import DeleteManagerModal from "./_assets/components/delete/deleteManagerModal";
 import Link from "next/link";
 import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import ActionButton from "@/components/common/button/actionButton";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TableProps {
   factoryId?: string;
@@ -24,6 +25,7 @@ const ManagerTable = ({
 }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const { t } = useLanguage();
 
   const path = factoryId
     ? `auth/manager/factory/${factoryId}`
@@ -46,7 +48,7 @@ const ManagerTable = ({
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex flex-col gap-5 justify-between items-center p-3 md:flex-row">
-          <h2 className="text-2xl font-bold">Manager List</h2>
+          <h2 className="text-2xl font-bold">{t.managerListTitle}</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
@@ -68,21 +70,21 @@ const ManagerTable = ({
             columns: [
               {
                 key: "name",
-                header: "Name",
+                header: t.name,
                 render: (item) =>
                   (item?.firstName ?? "") + " " + (item?.lastName ?? ""),
               },
-              { key: "phone", header: "Contact Info" },
-              { key: "status", header: "Status" },
-              { key: "role", header: "Role" },
+              { key: "phone", header: t.contactInfo },
+              { key: "status", header: t.status },
+              { key: "role", header: t.role },
               {
                 key: "factoryName",
-                header: "Factory Owner",
+                header: t.factoryName,
                 render: (item) => item?.factory?.name,
               },
               {
                 key: "action",
-                header: "Action",
+                header: t.action,
                 render: (user) => (
                   <ResponsiveButtonGroup>
                     <UpdateManagerModal data={user} />
@@ -96,7 +98,7 @@ const ManagerTable = ({
                       >
                         <ActionButton
                           variant="primaryIcon"
-                          buttonContent="Go to Dashboard"
+                          buttonContent={t.goToDashboard}
                         />
                       </Link>
                     )}

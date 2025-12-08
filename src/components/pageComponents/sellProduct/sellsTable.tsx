@@ -6,11 +6,13 @@ import { CustomField } from "@/components/common/fields/cusField";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const SalesTable = ({ factoryId }: { factoryId: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
   const [status, setStatus] = React.useState("");
+  const { t } = useLanguage();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -33,7 +35,7 @@ const SalesTable = ({ factoryId }: { factoryId: string }) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Sells List</h2>
+          <h2 className="text-2xl font-bold">{t.sellsList}</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
@@ -45,14 +47,14 @@ const SalesTable = ({ factoryId }: { factoryId: string }) => {
               <CustomField.SingleSelectField
                 name="status"
                 options={["Quick", "Normal"]}
-                placeholder="Select Status"
+                placeholder={t.selectStatus}
                 onValueChange={handleStatusChange}
                 defaultValue={status}
               />
 
               <Link href="/factory/sell/createSell">
                 <ActionButton
-                  buttonContent="Sell Product"
+                  buttonContent={t.sellProduct}
                   type="button"
                   isPending={false}
                   icon={<ShoppingCart className="w-5 h-5" />}
@@ -75,42 +77,42 @@ const SalesTable = ({ factoryId }: { factoryId: string }) => {
             columns: [
               {
                 key: "invoiceNo",
-                header: "Invoice No",
+                header: t.invoiceNo,
               },
               {
                 key: "date",
-                header: "Date",
+                header: t.date,
                 render: (item) => new Date(item.date).toLocaleString(),
               },
               {
                 key: "bank",
-                header: "Customer Name",
+                header: t.customerName,
                 render: (item) => item?.bank?.name,
               },
               {
                 key: "phone",
-                header: "Phone",
+                header: t.phone,
                 render: (item) => item?.bank?.phone,
               },
               {
                 key: "totalSaleAmount",
-                header: "Total Sale",
+                header: t.totalSale,
               },
               {
                 key: "paidAmount",
-                header: "Paid",
+                header: t.paid,
               },
               {
                 key: "discountAmount",
-                header: "Discount",
+                header: t.discount,
               },
               {
                 key: "paymentMethod",
-                header: "Payment Method",
+                header: t.paymentMethod,
               },
               {
                 key: "sellerName",
-                header: "Seller",
+                header: t.seller,
               },
             ],
           }}

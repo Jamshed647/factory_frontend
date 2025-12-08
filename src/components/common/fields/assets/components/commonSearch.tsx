@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const CommonSearch = ({
   width,
@@ -18,6 +19,7 @@ const CommonSearch = ({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const { t } = useLanguage();
 
   const [inputValue, setInputValue] = useState(searchText); // Local state for input
 
@@ -48,14 +50,13 @@ const CommonSearch = ({
 
   return (
     <div
-      className={`flex gap-x-2 justify-start items-center py-2 px-4 rounded-lg border bg-[#FFFFFF] ${
-        width ? `w-[${width}]` : "w-[150px] xl:w-[300px]"
-      } border border-[#CFD6DD]`}
+      className={`flex gap-x-2 justify-start items-center py-2 px-4 rounded-lg border bg-[#FFFFFF] ${width ? `w-[${width}]` : "w-[150px] xl:w-[300px]"
+        } border border-[#CFD6DD]`}
     >
       <Search size={16} />
       <input
         type="text"
-        placeholder={placeholder ?? "Search"}
+        placeholder={placeholder ?? t.search}
         onChange={(e) => setInputValue(e.target.value)} // Update local state
         value={inputValue}
         className="flex-grow w-full text-black bg-transparent outline-none placeholder:text-gray-500"

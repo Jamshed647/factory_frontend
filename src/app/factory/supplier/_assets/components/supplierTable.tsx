@@ -5,6 +5,7 @@ import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
 import CreateSupplierModal from "./create/createSupplierModal";
 import Link from "next/link";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TableProps {
   factoryId?: string;
@@ -14,6 +15,7 @@ interface TableProps {
 const SupplierTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const { t } = useLanguage();
 
   const path = factoryId
     ? `factory/supplier/factory/${factoryId}`
@@ -34,7 +36,7 @@ const SupplierTable = ({ factoryId, switchUser = false }: TableProps) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Supplier List</h2>
+          <h2 className="text-2xl font-bold">{t.supplierList}</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
@@ -56,17 +58,17 @@ const SupplierTable = ({ factoryId, switchUser = false }: TableProps) => {
             columns: [
               {
                 key: "name",
-                header: "Name",
+                header: t.name,
                 render: (item) => (
                   <Link href={`/factory/supplier/${item.id}`}>{item.name}</Link>
                 ),
               },
-              { key: "phone", header: "Contact Info" },
-              { key: "address", header: "Address" },
-              { key: "totalDueAmount", header: "Total Due Amount" },
+              { key: "phone", header: t.contactInfo },
+              { key: "address", header: t.address },
+              { key: "totalDueAmount", header: t.totalDueAmount },
               {
                 key: "factoryName",
-                header: "Factory Name",
+                header: t.factoryName,
                 render: (item) => item?.factory?.name,
               },
               // {

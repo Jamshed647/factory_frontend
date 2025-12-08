@@ -2,6 +2,7 @@
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { MetricCard } from "@/components/ui/metric-card";
 import { Banknote } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const BankOverview = ({
   factoryId,
@@ -10,6 +11,7 @@ const BankOverview = ({
   factoryId: string;
   factoryLoading: boolean;
 }) => {
+  const { t } = useLanguage();
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/bank/factory/${factoryId}`,
@@ -27,9 +29,9 @@ const BankOverview = ({
       <MetricCard
         isLoading={isLoading || factoryLoading}
         link={`/factory/cash`}
-        title="Bank Balance"
+        title={t.bankBalance}
         value={totalBalance}
-        description="All bank amount"
+        description={t.allBankAmount}
         icon={<Banknote className="w-4 h-4 text-muted-foreground" />}
       />
     </div>

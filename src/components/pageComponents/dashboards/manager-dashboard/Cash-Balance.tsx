@@ -1,6 +1,7 @@
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { MetricCard } from "@/components/ui/metric-card";
 import { TrendingUp } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const CashBalance = ({
   factoryId,
@@ -9,6 +10,7 @@ const CashBalance = ({
   factoryId: string;
   factoryLoading: boolean;
 }) => {
+  const { t } = useLanguage();
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/cash/factory/${factoryId}`,
@@ -22,9 +24,9 @@ const CashBalance = ({
       <MetricCard
         isLoading={isLoading || factoryLoading}
         link={`/factory/cash`}
-        title="Cash Balance"
+        title={t.cashBalance}
         value={cash?.balance ?? 0}
-        description="Available units"
+        description={t.availableUnits}
         icon={<TrendingUp className="w-4 h-4 text-muted-foreground" />}
       />
     </div>

@@ -4,6 +4,7 @@
 
 import TransactionTable from "./transactionTable";
 import TopExpensesCards from "./top-expense-cart";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface ExpenseDashboardProps {
   data: any;
@@ -18,6 +19,8 @@ export default function ExpenseDashboard({
   // rangeType,
   // setRangeType,
 }: ExpenseDashboardProps) {
+  const { t } = useLanguage();
+
   return (
     <main>
       <div>
@@ -32,7 +35,7 @@ export default function ExpenseDashboard({
         {/* </div> */}
 
         <div className="mb-8">
-          <h2 className="mb-4 text-xl font-semibold">Top 5 Expenses</h2>
+          <h2 className="mb-4 text-xl font-semibold">{t.topExpenses}</h2>
           <TopExpensesCards expenses={data?.data?.topFiveExpense || []} />
         </div>
 
@@ -40,13 +43,13 @@ export default function ExpenseDashboard({
         <div>
           <div className="py-4 rounded-md border shadow-2xl">
             <h2 className="mb-4 ml-4 text-xl font-semibold">
-              Full Transaction History
+              {t.fullTransactionHistory}
             </h2>
             <TransactionTable
               transactions={data?.data?.history || []}
               isLoading={isLoading}
               pagination={data?.pagination}
-              //              onPageChange={setPage}
+            //              onPageChange={setPage}
             />
           </div>
         </div>

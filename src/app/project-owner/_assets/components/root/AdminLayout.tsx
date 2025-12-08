@@ -6,27 +6,29 @@ import Link from "next/link";
 import { PieChartOutlined } from "@ant-design/icons";
 import { Factory, Users } from "lucide-react";
 import { Protected } from "@/components/auth/protected-route";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { t } = useLanguage();
   const menuItems = [
     {
       key: "/project-owner/dashboard",
       icon: <PieChartOutlined />,
-      label: <Link href="/project-owner/dashboard">Dashboard</Link>,
+      label: <Link href="/project-owner/dashboard">{t.dashboard}</Link>,
     },
     {
       key: "/project-owner/company",
       icon: <Factory />,
-      label: <Link href="/project-owner/company">Company</Link>,
+      label: <Link href="/project-owner/company">{t.company}</Link>,
     },
     {
       key: "/project-owner/factory",
       icon: <Factory />,
-      label: <Link href="/project-owner/factory">Factory</Link>,
+      label: <Link href="/project-owner/factory">{t.factory}</Link>,
     },
     {
       key: "/project-owner/manager",
@@ -38,7 +40,7 @@ export default function AdminLayout({
       key: "/project-owner/user-management",
 
       icon: <Users />,
-      label: "User Management",
+      label: t.userManagement,
       children: [
         {
           key: "/project-owner/user-management/employee",
@@ -49,7 +51,7 @@ export default function AdminLayout({
         {
           key: "/project-owner/user-management/salesman",
           label: (
-            <Link href="/project-owner/user-management/salesman">Salesman</Link>
+            <Link href="/project-owner/user-management/salesman">{t.salesman}</Link>
           ),
         },
       ],

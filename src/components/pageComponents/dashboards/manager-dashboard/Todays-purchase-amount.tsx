@@ -10,6 +10,7 @@ import {
   Filter,
 } from "lucide-react";
 import React from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const TodaysPurchaseAmount = ({
   factoryId,
@@ -20,6 +21,7 @@ const TodaysPurchaseAmount = ({
 }) => {
   const [type, setType] = React.useState("TODAY");
   const [open, setOpen] = React.useState(false);
+  const { t } = useLanguage();
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `dashboard/factory/purchase/${factoryId}`,
@@ -33,7 +35,7 @@ const TodaysPurchaseAmount = ({
 
   return (
     <DialogWrapper
-      title={`Sales Amount`}
+      title={t.purchaseAmount}
       open={open}
       handleOpen={setOpen}
       triggerContent={
@@ -42,9 +44,9 @@ const TodaysPurchaseAmount = ({
             type={type}
             setType={setType}
             isLoading={isLoading || factoryLoading}
-            title=" Purchase Amount"
+            title={t.purchaseAmount}
             value={info?.totalPurchase}
-            description={`${type}'s Total purchase amount`}
+            description={`${type === "TODAY" ? t.today : type}'s ${t.todaysTotalPurchaseAmount}`}
             icon={<BaggageClaim className="w-4 h-4 text-muted-foreground" />}
           />
         </div>
@@ -87,18 +89,17 @@ const TodaysPurchaseAmount = ({
                           </p>
 
                           <span
-                            className={`text-xs px-2 py-1 rounded-full ${
-                              isPay
+                            className={`text-xs px-2 py-1 rounded-full ${isPay
                                 ? "bg-red-100 text-red-700"
                                 : "bg-emerald-100 text-emerald-700"
-                            }`}
+                              }`}
                           >
                             {isPay ? "DUE" : "PAID"}
                           </span>
                         </div>
 
                         <p className="text-sm text-muted-foreground">
-                          Seller: {invoice.sellerName}
+                          {t.seller}: {invoice.sellerName}
                         </p>
 
                         <p className="text-sm text-muted-foreground">
@@ -106,7 +107,7 @@ const TodaysPurchaseAmount = ({
                         </p>
 
                         <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
-                          <span className="font-semibold">Note:</span>{" "}
+                          <span className="font-semibold">{t.note}:</span>{" "}
                           {invoice.note ?? " - "}
                         </p>
                       </div>
@@ -115,15 +116,14 @@ const TodaysPurchaseAmount = ({
                     {/* Right */}
                     <div className="ml-4 text-right">
                       <p
-                        className={`text-lg font-bold ${
-                          isPay ? "text-red-600" : "text-emerald-600"
-                        }`}
+                        className={`text-lg font-bold ${isPay ? "text-red-600" : "text-emerald-600"
+                          }`}
                       >
                         {isPay ? "−" : "+"}৳ {invoice.paidAmount}
                       </p>
 
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Total: ৳ {invoice.totalSaleAmount}
+                        {t.total}: ৳ {invoice.totalSaleAmount}
                       </p>
 
                       {invoice.extraCharge > 0 && (
@@ -133,7 +133,7 @@ const TodaysPurchaseAmount = ({
                       )}
 
                       <p className="mt-1 text-xs font-semibold text-red-500">
-                        Due: ৳ {invoice.currentDueAmount}
+                        {t.due}: ৳ {invoice.currentDueAmount}
                       </p>
                     </div>
                   </div>

@@ -9,6 +9,7 @@ import { PieChartOutlined } from "@ant-design/icons";
 import { Factory } from "lucide-react";
 import { useAuth } from "@/hooks/hooks";
 import type { MenuProps } from "antd";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // Use a distinct type alias name to avoid conflict
 type AntdMenuItem = Exclude<
@@ -22,50 +23,51 @@ export default function LayoutWrapper({
   children: React.ReactNode;
 }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   // Use AntdMenuItem instead of MenuItem
   const menuItems: AntdMenuItem[] = [
     {
       key: "/dashboard",
       icon: <PieChartOutlined />,
-      label: <Link href="/dashboard">Dashboard</Link>,
+      label: <Link href="/dashboard">{t.dashboard}</Link>,
     },
     ...(user?.role === "MANAGER"
       ? ([
-          {
-            key: "/factory/manager",
-            icon: <Factory />,
-            label: <Link href="/factory/manager">Manager</Link>,
-          },
-          {
-            key: "/factory/employees",
-            icon: <PieChartOutlined />,
-            label: <Link href="/factory/employees">Employees</Link>,
-          },
-          {
-            key: "/factory/salesman",
-            icon: <Factory />,
-            label: <Link href="/factory/salesman">Salesman</Link>,
-          },
-        ] as AntdMenuItem[])
+        {
+          key: "/factory/manager",
+          icon: <Factory />,
+          label: <Link href="/factory/manager">Manager</Link>,
+        },
+        {
+          key: "/factory/employees",
+          icon: <PieChartOutlined />,
+          label: <Link href="/factory/employees">{t.employees}</Link>,
+        },
+        {
+          key: "/factory/salesman",
+          icon: <Factory />,
+          label: <Link href="/factory/salesman">{t.salesman}</Link>,
+        },
+      ] as AntdMenuItem[])
       : []),
     ...(user?.role === "EMPLOYEE"
       ? ([
-          {
-            key: "/factory/employee-work",
-            icon: <PieChartOutlined />,
-            label: <Link href="/factory/employee-work">Employee Work</Link>,
-          },
-        ] as AntdMenuItem[])
+        {
+          key: "/factory/employee-work",
+          icon: <PieChartOutlined />,
+          label: <Link href="/factory/employee-work">{t.employeeWork}</Link>,
+        },
+      ] as AntdMenuItem[])
       : []),
     ...(user?.role === "SALESMAN"
       ? ([
-          {
-            key: "/factory/salesman-work",
-            icon: <PieChartOutlined />,
-            label: <Link href="/factory/salesman-work">Salesman Work</Link>,
-          },
-        ] as AntdMenuItem[])
+        {
+          key: "/factory/salesman-work",
+          icon: <PieChartOutlined />,
+          label: <Link href="/factory/salesman-work">{t.salesmanWork}</Link>,
+        },
+      ] as AntdMenuItem[])
       : []),
   ];
 

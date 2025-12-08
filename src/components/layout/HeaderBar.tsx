@@ -2,6 +2,7 @@ import { Bell, CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import ActionButton from "../common/button/actionButton";
 import { useFactory } from "@/utils/factoryInfo";
+import LanguageSwitcher from "../common/LanguageSwitcher";
 
 export default function HeaderBar() {
   const { factory } = useFactory();
@@ -31,6 +32,8 @@ export default function HeaderBar() {
         <Link className="!h-fit w-fit bg-red" href="#">
           <ActionButton icon={<Bell />} tooltipContent="Notifications" />
         </Link>
+
+        <LanguageSwitcher />
 
         <Link className="!h-fit w-fit bg-red" href={`profile`}>
           <ActionButton icon={<CircleUserRound />} />

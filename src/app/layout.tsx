@@ -6,6 +6,7 @@ import { GeistMono } from "geist/font/mono";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,11 +27,13 @@ export default function RootLayout({
         {/* hot Toaster  */}
         <Toaster />
 
-        <TanStackQueryWrapper>
-          <TooltipProvider>
-            <AntdRegistry>{children}</AntdRegistry>
-          </TooltipProvider>
-        </TanStackQueryWrapper>
+        <LanguageProvider>
+          <TanStackQueryWrapper>
+            <TooltipProvider>
+              <AntdRegistry>{children}</AntdRegistry>
+            </TooltipProvider>
+          </TanStackQueryWrapper>
+        </LanguageProvider>
       </body>
     </html>
   );

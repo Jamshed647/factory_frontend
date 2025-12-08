@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/metric-card";
 import dateFormat from "@/utils/formatter/DateFormatter";
 import { ArrowUpDown, Banknote, Filter, Wallet } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const TotalExpenseOverview = ({
   factoryId,
@@ -15,6 +16,7 @@ const TotalExpenseOverview = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState("TODAY");
+  const { t } = useLanguage();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -39,9 +41,9 @@ const TotalExpenseOverview = ({
             setType={setType}
             options={["ALL", "TODAY", "WEEKLY", "MONTHLY"]}
             isLoading={isLoading || factoryLoading}
-            title="Total Expense"
+            title={t.totalExpense}
             value={info?.totalHistoryAmount}
-            description={`${type}'s Total Profit / Loss`}
+            description={`${type === "TODAY" ? t.today : type}'s ${t.todaysTotalProfitLoss}`}
             icon={<ArrowUpDown className="w-4 h-4 text-muted-foreground" />}
           />
         </div>
@@ -104,7 +106,7 @@ const TotalExpenseOverview = ({
                         {/* Note if available */}
                         {item.note && (
                           <p className="text-sm text-muted-foreground">
-                            Note: {item.note}
+                            {t.note}: {item.note}
                           </p>
                         )}
 

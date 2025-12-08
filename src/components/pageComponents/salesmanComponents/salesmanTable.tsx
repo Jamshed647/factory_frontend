@@ -10,6 +10,7 @@ import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal
 import Link from "next/link";
 import { setFactory, setFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import ActionButton from "@/components/common/button/actionButton";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TableProps {
   factoryId?: string;
@@ -24,6 +25,7 @@ const SalesmanTable = ({
 }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const { t } = useLanguage();
 
   const path = factoryId
     ? `auth/salesman/factory/${factoryId}`
@@ -46,7 +48,7 @@ const SalesmanTable = ({
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Salesman List</h2>
+          <h2 className="text-2xl font-bold">{t.salesmanList}</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
@@ -68,24 +70,24 @@ const SalesmanTable = ({
             columns: [
               {
                 key: "name",
-                header: "Name",
+                header: t.name,
                 render: (item) => (
                   <span>
                     {item?.firstName} {item?.lastName}
                   </span>
                 ),
               },
-              { key: "phone", header: "Contact Info" },
-              { key: "status", header: "Status" },
-              { key: "role", header: "Role" },
+              { key: "phone", header: t.contactInfo },
+              { key: "status", header: t.status },
+              { key: "role", header: t.role },
               {
                 key: "factoryName",
-                header: "Factory Name",
+                header: t.factoryName,
                 render: (item) => item?.factory?.name,
               },
               {
                 key: "action",
-                header: "Action",
+                header: t.action,
                 render: (user) => (
                   <ResponsiveButtonGroup>
                     <UpdateSalesmanModal data={user} />
@@ -99,7 +101,7 @@ const SalesmanTable = ({
                       >
                         <ActionButton
                           variant="primaryIcon"
-                          buttonContent="Go to Dashboard"
+                          buttonContent={t.goToDashboard}
                         />
                       </Link>
                     )}

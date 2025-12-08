@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 import ProductionUpdateModal from "./addProduction/update/updateProductModal";
 import dateFormat from "@/utils/formatter/DateFormatter";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const ProductionComponents = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +17,7 @@ const ProductionComponents = () => {
   const [status, setStatus] = useState("");
   const { user } = useAuth();
   const factoryId = user?.factoryId;
+  const { t } = useLanguage();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -39,7 +41,7 @@ const ProductionComponents = () => {
         <div className="flex justify-between py-4 px-2">
           <div>
             <CustomField.CommonSearch
-              placeholder="Search Production"
+              placeholder={t.searchProduction}
               searchText={searchText}
               setSearchText={setSearchText}
               width="full"
@@ -50,7 +52,7 @@ const ProductionComponents = () => {
             <CustomField.SingleSelectField
               name="status"
               options={["COMPLETE", "QUICK"]}
-              placeholder="Select Status"
+              placeholder={t.selectStatus}
               onValueChange={handleStatusChange}
               defaultValue={status}
             />
@@ -60,7 +62,7 @@ const ProductionComponents = () => {
                 type="button"
                 variant="outline"
                 handleOpen={() => console.log("open")}
-                buttonContent="Add Production"
+                buttonContent={t.addProduction}
                 lastIcon={<ArrowRightFromLine />}
                 className="py-2 px-4 font-bold text-white bg-blue-400 rounded hover:bg-blue-300"
               />
@@ -78,54 +80,30 @@ const ProductionComponents = () => {
             columns: [
               {
                 key: "date",
-                header: "Date",
+                header: t.date,
                 render: (row) =>
                   dateFormat.fullDateTime(row?.createdAt, { showTime: false }),
               },
               {
                 key: "batchNo",
-                header: "Batch No",
+                header: t.batchNo,
               },
-
-              // {
-              //   key: "extraCost",
-              //   header: "Extra Cost",
-              // },
               {
                 key: "totalProductionAmount",
-                header: "Total Production Cost",
+                header: t.totalProductionCost,
               },
               {
                 key: "totalWeight",
-                header: "Total Weight",
+                header: t.totalWeight,
               },
               {
                 key: "totalAmount",
-                header: "Total Amount",
+                header: t.totalAmount,
                 render: (row) => row?.totalProductionAmount + row?.extraCost,
               },
-              // {
-              //   key: "status",
-              //   header: "Status",
-              //   render: (row) => <StatusWithIcon status={row?.status} />,
-              // },
-              // {
-              //   key: "note",
-              //   header: "Note",
-              // },
-              // {
-              //   key: "factory",
-              //   header: "Factory",
-              //   render: (row) => row.factory?.name || "—",
-              // },
-              // {
-              //   key: "items",
-              //   header: "Total Items",
-              //   render: (row) => row.items?.length ?? 0,
-              // },
               {
                 key: "action",
-                header: "Action",
+                header: t.action,
                 className: "text-right",
                 render: (row) => (
                   <div
@@ -139,7 +117,7 @@ const ProductionComponents = () => {
                       href={`production/addProduct/${row.id}`}
                       className="py-1 px-2 rounded-md border"
                     >
-                      Production to Product
+                      {t.productionToProduct}
                     </Link>
                   </div>
                 ),

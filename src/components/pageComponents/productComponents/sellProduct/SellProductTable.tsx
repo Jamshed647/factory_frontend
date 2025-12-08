@@ -7,10 +7,12 @@ import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButt
 import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
 import CreateProductModal from "./_assets/components/create/createProductModal";
 import UpdateProductModal from "./_assets/components/update/updateProductModal";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const SellProductTable = ({ id }: { id?: string }) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const { t } = useLanguage();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -28,7 +30,7 @@ const SellProductTable = ({ id }: { id?: string }) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Sell Product List</h2>
+          <h2 className="text-2xl font-bold">{t.productList}</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
@@ -48,23 +50,17 @@ const SellProductTable = ({ id }: { id?: string }) => {
           setCurrentPage={setCurrentPage}
           config={{
             columns: [
-              { key: "name", header: "Name" },
-              // { key: "status", header: "Status" },
-              { key: "buyPrice", header: "Buy Price" },
-              { key: "sellPrice", header: "Sell Price" },
-              // {
-              //   key: "factoryName",
-              //   header: "Factory Owner Id",
-              //   render: (item) => item?.factory?.name,
-              // },
+              { key: "name", header: t.name },
+              { key: "buyPrice", header: t.buyPrice },
+              { key: "sellPrice", header: t.sellPrice },
               {
                 key: "Quantity",
-                header: "Quantity",
+                header: t.quantity,
                 render: (item) => item?.quantity,
               },
               {
                 key: "action",
-                header: "Action",
+                header: t.action,
                 render: (user) => (
                   <ResponsiveButtonGroup>
                     <UpdateProductModal data={user} />

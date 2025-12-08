@@ -10,10 +10,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { EmployeeFormType, employeeSchema } from "../../schema/employeeSchema";
 import { employeeDefaultValue } from "../../utils/employeeDefaultValue";
 import EmployeeFormComponent from "../form/employeForm";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
+  const { t } = useLanguage();
 
   const employeeForm = useForm<EmployeeFormType>({
     resolver: zodResolver(employeeSchema),
@@ -47,12 +49,12 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
         <ActionButton
           btnStyle="bg-blue-500 text-white"
           icon={<Edit2Icon className="w-5 h-5" />}
-          buttonContent="Create Employee"
+          buttonContent={t.createEmployee}
         />
       }
       open={open}
       handleOpen={setOpen}
-      title="Create Employee"
+      title={t.createEmployee}
     >
       <EmployeeFormComponent
         selectFactory={!factoryId ? true : false}

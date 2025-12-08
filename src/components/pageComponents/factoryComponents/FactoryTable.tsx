@@ -9,6 +9,7 @@ import CreateFactoryModal from "./_assets/components/create/createFactoryModal";
 import UpdateCompanyModal from "./_assets/components/update/updateCompanyModal";
 import DeleteCompanyModal from "./_assets/components/delete/deleteCompanyModal";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TableProps {
   companyId?: string;
@@ -17,6 +18,7 @@ interface TableProps {
 const FactoryTable = ({ companyId }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const { t } = useLanguage();
 
   const path = companyId ? `auth/factory/company/${companyId}` : `auth/factory`;
 
@@ -34,7 +36,7 @@ const FactoryTable = ({ companyId }: TableProps) => {
     <div className="rounded-md border shadow-lg">
       {/* Table Header */}
       <div className="flex justify-between items-center p-3">
-        <h2 className="text-2xl font-bold">Factory List</h2>
+        <h2 className="text-2xl font-bold">{t.factoryList}</h2>
         <div className="flex gap-x-2 items-center">
           <CustomField.CommonSearch
             width="w-full"
@@ -56,22 +58,22 @@ const FactoryTable = ({ companyId }: TableProps) => {
           columns: [
             {
               key: "name",
-              header: "Name",
+              header: t.name,
               render: (user) => (
                 <Link href={`factory/${user.id}`}>{user.name}</Link>
               ),
             },
-            { key: "address", header: "Address" },
-            { key: "phone", header: "Contact Info" },
-            { key: "status", header: "Status" },
+            { key: "address", header: t.address },
+            { key: "phone", header: t.contactInfo },
+            { key: "status", header: t.status },
             {
               key: "companyOwner",
-              header: "Company Owner",
+              header: t.companyName,
               render: (user) => user.companyOwner.name,
             },
             {
               key: "action",
-              header: "Action",
+              header: t.action,
               render: (user) => (
                 <ResponsiveButtonGroup>
                   <UpdateCompanyModal data={user} />

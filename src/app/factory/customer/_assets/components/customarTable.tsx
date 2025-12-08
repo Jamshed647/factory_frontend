@@ -7,6 +7,7 @@ import CreateCustomerModal from "./create/createCustomerModal";
 import Link from "next/link";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import UpdateCustomerModal from "./update/updateCustomerModal";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TableProps {
   factoryId?: string;
@@ -16,6 +17,7 @@ interface TableProps {
 const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
+  const { t } = useLanguage();
 
   const path = factoryId ? `factory/customer/${factoryId}` : `factory/customer`;
 
@@ -34,7 +36,7 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">Customer List</h2>
+          <h2 className="text-2xl font-bold">{t.customerList}</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"
@@ -56,22 +58,22 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
             columns: [
               {
                 key: "name",
-                header: "Name",
+                header: t.name,
                 render: (item) => (
                   <Link href={`/factory/bank/${item.id}`}>{item.name}</Link>
                 ),
               },
-              { key: "phone", header: "Contact Info" },
-              { key: "address", header: "Address" },
-              { key: "totalDueAmount", header: "Total Due Amount" },
+              { key: "phone", header: t.contactInfo },
+              { key: "address", header: t.address },
+              { key: "totalDueAmount", header: t.totalDueAmount },
               {
                 key: "factoryName",
-                header: "Factory Name",
+                header: t.factoryName,
                 render: (item) => item?.factory?.name,
               },
               {
                 key: "action",
-                header: "Action",
+                header: t.action,
                 render: (user) => (
                   <ResponsiveButtonGroup>
                     <UpdateCustomerModal data={user} />

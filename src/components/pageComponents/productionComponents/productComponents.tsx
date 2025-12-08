@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useState } from "react";
 import ProductionUpdateModal from "./addProduction/update/updateProductModal";
 import dateFormat from "@/utils/formatter/DateFormatter";
-import { StatusWithIcon } from "@/components/common/Badge/status_point";
 
 const ProductionComponents = () => {
   const [currentPage, setCurrentPage] = useState(1);

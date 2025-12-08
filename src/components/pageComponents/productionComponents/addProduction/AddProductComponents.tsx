@@ -57,15 +57,15 @@ const AddProductionComponents = () => {
 
       const exists = prev.find((p) => p.productId === productId);
 
-      console.log({
-        productId: productId,
-        name: name,
-        quantity: quantity,
-        quantityType: quantityType,
-        productionQuantity: productionQuantity,
-        buyPrice: buyPrice,
-        exists: exists,
-      });
+      // console.log({
+      //   productId: productId,
+      //   name: name,
+      //   quantity: quantity,
+      //   quantityType: quantityType,
+      //   productionQuantity: productionQuantity,
+      //   buyPrice: buyPrice,
+      //   exists: exists,
+      // });
 
       // --- UPDATE Case ---
       if (exists) {

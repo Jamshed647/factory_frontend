@@ -33,7 +33,7 @@ export default function HeaderBar() {
           <ActionButton icon={<Bell />} tooltipContent="Notifications" />
         </Link>
 
-        <LanguageSwitcher />
+        {/* <LanguageSwitcher /> */}
 
         <Link className="!h-fit w-fit bg-red" href={`profile`}>
           <ActionButton icon={<CircleUserRound />} />

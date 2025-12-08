@@ -25,7 +25,7 @@ const useFetchData = ({
   const { accessToken } = useAuthStore();
 
   //  const user = useAuths();
-  const portalName: string = "/admin";
+  // const portalName: string = "/admin";
   if (token == "" || token == undefined || token == null) {
     token = accessToken as string;
   }
@@ -36,7 +36,7 @@ const useFetchData = ({
       queryKey,
       {
         path,
-        portalName,
+        // portalName,
         Method: method,
         token,
         queryParams: RemoveEmptyFields(filterData),

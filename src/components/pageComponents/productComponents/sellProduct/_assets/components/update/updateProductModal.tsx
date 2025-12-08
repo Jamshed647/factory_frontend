@@ -29,7 +29,9 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getSellProductDataByFactory"],
+      });
       setOpen(false);
     },
   });

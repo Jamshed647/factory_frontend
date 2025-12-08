@@ -15,7 +15,7 @@ const SellProductTable = ({ id }: { id?: string }) => {
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/product/factory/${id}`,
-    queryKey: "getProductDataByFactory",
+    queryKey: "getSellProductDataByFactory",
     filterData: {
       type: "FINISHED",
       search: searchText,

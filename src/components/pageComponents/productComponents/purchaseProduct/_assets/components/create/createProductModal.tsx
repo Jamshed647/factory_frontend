@@ -33,7 +33,9 @@ const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
     method: "POST",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getProductDataByFactory"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getRawProductDataByFactory"],
+      });
       productForm.reset({});
       setOpen(false);
     },

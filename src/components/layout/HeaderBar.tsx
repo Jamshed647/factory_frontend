@@ -1,8 +1,11 @@
 import { Bell, CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import ActionButton from "../common/button/actionButton";
+import { useFactory } from "@/utils/factoryInfo";
 
 export default function HeaderBar() {
+  const { factory } = useFactory();
+
   return (
     <div
       style={{
@@ -16,7 +19,12 @@ export default function HeaderBar() {
       }}
     >
       <Link href="/">
-        <h2 style={{ margin: 0, fontSize: 18 }}>Jangosoft</h2>
+        <h2
+          style={{ margin: 0, fontSize: 18 }}
+          className="font-semibold capitalize"
+        >
+          {factory?.name}
+        </h2>
       </Link>
 
       <div className="flex gap-3">

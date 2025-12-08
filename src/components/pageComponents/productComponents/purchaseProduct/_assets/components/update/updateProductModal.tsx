@@ -29,7 +29,9 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
     method: "PATCH",
     onSuccess: (data) => {
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getSalesmanData"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getRawProductDataByFactory"],
+      });
       setOpen(false);
     },
   });
@@ -37,6 +39,13 @@ const UpdateSalesmanModal = ({ data }: { data: any }) => {
   const onSubmit = async (data: UpdateProductType) => {
     updateProduct.mutate(data);
   };
+
+  // Reset form when modal opens
+  React.useEffect(() => {
+    if (open && data) {
+      updateProductForm.reset(productDefaultValue(data));
+    }
+  }, [open, data, updateProductForm]);
 
   return (
     <DialogWrapper

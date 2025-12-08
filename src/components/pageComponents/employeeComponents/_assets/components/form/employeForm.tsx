@@ -69,8 +69,8 @@ export default function EmployeeFormComponent<T extends Record<string, any>>({
 
         <CustomField.SelectField
           name="status"
-          labelName="Factory Status"
-          placeholder="Select Factory Status"
+          labelName="Employee Status"
+          placeholder="Select Employee Status"
           form={form}
           options={[
             { value: "ACTIVE", label: "Active" },

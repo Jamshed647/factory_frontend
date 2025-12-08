@@ -27,7 +27,6 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
   const createFactory = useApiMutation({
     path: "auth/employee",
     method: "POST",
-    // dataType: "multipart/form-data",
     onSuccess: (data) => {
       employeeForm.reset({});
       showToast("success", data);

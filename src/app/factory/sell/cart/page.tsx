@@ -39,7 +39,7 @@ const CartPage = () => {
     }[]
   >(cart.get() || []);
 
-  // Always update products whenever selectedProducts changes
+  // Transform selectedProducts to form products format
   const products = useMemo(
     () =>
       selectedProducts?.map((item) => ({
@@ -58,11 +58,11 @@ const CartPage = () => {
       factoryId: user?.factoryId,
       sellerId: user?.id,
       sellerName: user?.name,
-      items: [], // Initialize empty, we'll populate in useEffect
+      items: [], // Initialize empty, will be populated in useEffect
     }),
   });
 
-  // Always sync selectedProducts with form items
+  // Sync products with form items
   useEffect(() => {
     if (products.length > 0) {
       form.setValue("items", products);
@@ -71,7 +71,7 @@ const CartPage = () => {
 
   const values = form.watch();
 
-  // Calculate derived values using useMemo to prevent unnecessary recalculations
+  // Calculate total price from products
   const totalPrice = useMemo(
     () =>
       products?.reduce((sum, item) => {
@@ -79,10 +79,10 @@ const CartPage = () => {
         const quantity = item.quantity ?? 0;
         return sum + price * quantity;
       }, 0) || 0,
-    [products], // Changed dependency to products instead of selectedProducts
+    [products],
   );
 
-  // Update your other calculations to use products instead of selectedProducts
+  // Calculate discount amount
   const discountAmount = useMemo(() => {
     if (values.discountType === "PERCENTAGE") {
       return (totalPrice * (Number(values.discountPercentage) || 0)) / 100;
@@ -95,30 +95,44 @@ const CartPage = () => {
     totalPrice,
   ]);
 
+  // Calculate sell price after discount
   const sellPrice = useMemo(
     () => totalPrice - discountAmount,
     [totalPrice, discountAmount],
   );
 
+  // Calculate total with extra charge
   const total = useMemo(
     () => sellPrice + Number(values.extraCharge || 0),
     [sellPrice, values.extraCharge],
   );
 
+  // Check if customer has credit (negative due amount)
   const isBigAmount = useMemo(() => {
+    if (!customer || !customer.id) return false;
     return (
       Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
       customer?.totalDueAmount < 0
     );
-  }, [total, customer?.totalDueAmount]);
+  }, [total, customer]);
 
+  // Calculate grand total (including previous due if customer exists)
   const grandTotal = useMemo(() => {
+    if (!customer || !customer.id) {
+      return total; // No customer, no previous due
+    }
     return isBigAmount ? total : total + Number(customer?.totalDueAmount || 0);
-  }, [isBigAmount, total, customer?.totalDueAmount]);
+  }, [isBigAmount, total, customer]);
 
+  // Calculate due amount
   const due = useMemo(() => {
+    if (!customer || !customer.id) {
+      // No customer: due = total - paidAmount (but cannot be negative)
+      return Math.max(0, Number(total) - Number(values.paidAmount || 0));
+    }
+    // With customer: due = grandTotal - paidAmount
     return Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
-  }, [grandTotal, values.paidAmount]);
+  }, [customer, grandTotal, total, values.paidAmount]);
 
   // Initialize customerId when customer data is available
   useEffect(() => {
@@ -156,7 +170,17 @@ const CartPage = () => {
     }
   }, [user, form]);
 
-  // Update calculated form values - using a stable callback
+  // Auto-set paidAmount to total when there's no customer
+  useEffect(() => {
+    if ((!customer || !customer.id) && total > 0) {
+      const currentPaid = form.getValues("paidAmount") || 0;
+      if (currentPaid !== total) {
+        form.setValue("paidAmount", total);
+      }
+    }
+  }, [customer, total, form]);
+
+  // Update calculated form values
   const updateCalculatedValues = useCallback(() => {
     form.setValue("totalSaleAmount", sellPrice);
     form.setValue("totalAmount", grandTotal);
@@ -164,6 +188,7 @@ const CartPage = () => {
     form.setValue("discountAmount", discountAmount);
   }, [form, sellPrice, grandTotal, due, discountAmount]);
 
+  // Update calculated values when dependencies change
   useEffect(() => {
     updateCalculatedValues();
   }, [updateCalculatedValues]);
@@ -189,7 +214,6 @@ const CartPage = () => {
   });
 
   const handleSubmit = (data: CartFormType) => {
-    // Always use the latest products from state
     const submitData = {
       ...data,
       items: products,
@@ -202,6 +226,10 @@ const CartPage = () => {
     } else {
       sellProduct.mutate(data);
     }
+  };
+
+  const handleSetFullPayment = () => {
+    form.setValue("paidAmount", grandTotal);
   };
 
   return (
@@ -267,7 +295,7 @@ const CartPage = () => {
               </div>
             </div>
 
-            {/* Advance */}
+            {/* Payment Method */}
             <CustomField.SelectField
               placeholder="Select payment method"
               form={form}
@@ -289,12 +317,16 @@ const CartPage = () => {
               />
             )}
 
+            {/* Advance Payment */}
             <CustomField.Number
               form={form}
               name="paidAmount"
               labelName="Advance"
               placeholder="Enter advance"
+              disabled={!customer?.id} // Disable if no customer (auto-filled to total)
             />
+
+            {/* Note */}
             <CustomField.Text
               form={form}
               name="note"
@@ -309,6 +341,7 @@ const CartPage = () => {
 
             <div className="space-y-3 text-sm">
               <SummaryItem label="Total Product Price" value={sellPrice} />
+
               <SummaryItem
                 label="Extra Charge"
                 value={values.extraCharge || 0}
@@ -324,12 +357,20 @@ const CartPage = () => {
               />
 
               <SummaryItem label="Advance" value={values.paidAmount || 0} />
-              <SummaryItem
-                label="Previous Due"
-                value={customer?.totalDueAmount || 0}
-              />
 
-              <SummaryItem label="Total Sell Price" value={grandTotal} />
+              {/* Show Previous Due only if customer exists */}
+              {customer?.id && (
+                <SummaryItem
+                  label="Previous Due"
+                  value={customer?.totalDueAmount || 0}
+                />
+              )}
+
+              {/* Dynamic label based on customer existence */}
+              <SummaryItem
+                label={customer?.id ? "Total Sell Price" : "Total Amount"}
+                value={grandTotal}
+              />
             </div>
 
             <hr className="my-2" />
@@ -339,14 +380,30 @@ const CartPage = () => {
               <span>৳{due}</span>
             </div>
 
-            <ActionButton
-              isPending={sellProduct.isPending}
-              buttonContent="Sell"
-              btnStyle="w-full font-medium text-white bg-blue-600 rounded-lg transition hover:bg-blue-400 !cursor-pointer"
-              handleOpen={() =>
-                form.handleSubmit((data) => handleSubmit(data), onFormError)
-              }
-            />
+            {/* Full Payment Button - Show only if no customer */}
+            {(!customer || !customer.id) && due > 0 && (
+              <div className="mt-2">
+                <button
+                  type="button"
+                  onClick={handleSetFullPayment}
+                  className="py-2 w-full text-sm font-medium text-blue-600 bg-blue-50 rounded-lg border border-blue-200 transition hover:bg-blue-100"
+                >
+                  Set Full Payment
+                </button>
+              </div>
+            )}
+
+            {/* Sell Button */}
+            <div className="pt-2">
+              <ActionButton
+                isPending={sellProduct.isPending}
+                buttonContent="Sell"
+                btnStyle="w-full font-medium text-white bg-blue-600 rounded-lg transition hover:bg-blue-400 !cursor-pointer"
+                handleOpen={() =>
+                  form.handleSubmit((data) => handleSubmit(data), onFormError)
+                }
+              />
+            </div>
           </div>
         </form>
       </FormProvider>
@@ -368,7 +425,9 @@ const CartPage = () => {
 const SummaryItem = ({ label, value }: { label: string; value: any }) => (
   <div className="flex justify-between">
     <span className="text-gray-600">{label}</span>
-    <span className="font-semibold">{value}</span>
+    <span className="font-semibold">
+      {typeof value === "number" ? `৳${value.toFixed(2)}` : value}
+    </span>
   </div>
 );
 

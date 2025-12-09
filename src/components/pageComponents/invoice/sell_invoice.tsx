@@ -19,13 +19,13 @@ export default function SellInvoicePreview({ data }: { data: any }) {
   });
 
   // Calculate estimated profit safely
-  const estimatedProfit =
-    data?.items?.reduce((total: number, item: any) => {
-      const sellPrice = item?.sellPrice || 0;
-      const buyPrice = item?.buyPrice || 0;
-      const quantity = item?.quantity || 0;
-      return total + (sellPrice - buyPrice) * quantity;
-    }, 0) || 0;
+  // const estimatedProfit =
+  //   data?.items?.reduce((total: number, item: any) => {
+  //     const sellPrice = item?.sellPrice || 0;
+  //     const buyPrice = item?.buyPrice || 0;
+  //     const quantity = item?.quantity || 0;
+  //     return total + (sellPrice - buyPrice) * quantity;
+  //   }, 0) || 0;
 
   return (
     <div className="p-4 mx-auto text-gray-900 bg-white rounded-lg border shadow-sm print:shadow-none print:border-none">
@@ -175,10 +175,10 @@ export default function SellInvoicePreview({ data }: { data: any }) {
           </div>
 
           {/* Profit Calculation */}
-          <div className="flex justify-between pt-2 text-blue-600 border-t">
-            <span>Estimated Profit:</span>
-            <span>৳{estimatedProfit.toFixed(2)}</span>
-          </div>
+          {/* <div className="flex justify-between pt-2 text-blue-600 border-t"> */}
+          {/*   <span>Estimated Profit:</span> */}
+          {/*   <span>৳{estimatedProfit.toFixed(2)}</span> */}
+          {/* </div> */}
         </div>
       </div>
 

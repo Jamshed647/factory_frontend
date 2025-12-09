@@ -21,13 +21,11 @@ export default function DueHistoryTable({ history }: { history: any }) {
             { key: "type", header: "Type" },
             { key: "amount", header: "Amount (৳)" },
             { key: "balance", header: "Balance (৳)" },
-            {key: "transactionType", header: "Type"},
+            // {key: "transactionType", header: "Type"},
             {
               key: "transactionType",
               header: "Transaction Type",
-              render: (item) => item?.bank?.name,
             },
-
 
             { key: "note", header: "Note" },
           ],

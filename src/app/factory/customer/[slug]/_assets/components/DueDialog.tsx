@@ -33,7 +33,7 @@ export default function TakeDueDialog({
   const factoryId = user?.factoryId;
 
   const takeDue = useApiMutation({
-    path: `factory/bank/${data?.id}/due`,
+    path: `factory/customer/${data?.id}/due`,
     method: "POST",
     onSuccess: (data: any) => {
       form.reset({});
@@ -67,18 +67,6 @@ export default function TakeDueDialog({
     }
   }, [transactionType, type, form]);
 
-  // if (form.watch("transactionType") === "CASH") {
-  //   form.setValue("bankId", "");
-  // }
-  //
-  // if (transactionType) {
-  //   form.setValue("transactionType", transactionType);
-  // }
-  //
-  // if (type) {
-  //   form.setValue("type", type);
-  // }
-
   const handleSubmit = (payload: DueFormType) => {
     takeDue.mutate(payload);
     console.log("Take Due:", payload);
@@ -99,29 +87,30 @@ export default function TakeDueDialog({
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, onFormError)}>
           <div className="space-y-3">
-            <CustomField.Text
+            <CustomField.Number
               optional={false}
               form={form}
               name="amount"
               labelName="Amount"
               placeholder="Amount"
             />
-            {type === "PAY" && (
-              <>
-                <CustomField.SelectField
-                  form={form}
-                  optional={false}
-                  viewOnly={true}
-                  name="type"
-                  options={[
-                    { value: "TAKE", label: "Take" },
-                    { value: "PAY", label: "Pay" },
-                  ]}
-                  labelName="Type"
-                  placeholder="Type"
-                />
-              </>
-            )}
+
+            {/* {type === "PAY" && ( */}
+            {/*   <> */}
+            {/*     <CustomField.SelectField */}
+            {/*       form={form} */}
+            {/*       optional={false} */}
+            {/*       viewOnly={true} */}
+            {/*       name="type" */}
+            {/*       options={[ */}
+            {/*         { value: "TAKE", label: "Take" }, */}
+            {/*         { value: "PAY", label: "Pay" }, */}
+            {/*       ]} */}
+            {/*       labelName="Type" */}
+            {/*       placeholder="Type" */}
+            {/*     /> */}
+            {/*   </> */}
+            {/* )} */}
 
             <CustomField.SelectField
               form={form}

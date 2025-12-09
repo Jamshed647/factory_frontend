@@ -6,6 +6,9 @@ import React from "react";
 import CreateSupplierModal from "./create/createSupplierModal";
 import Link from "next/link";
 import { useLanguage } from "@/hooks/useLanguage";
+import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
+import UpdateSupplierModal from "./update/updateSuppplierModal";
+import DeleteSupplierModal from "./delete/deleteSupplierModal";
 
 interface TableProps {
   factoryId?: string;
@@ -66,21 +69,21 @@ const SupplierTable = ({ factoryId, switchUser = false }: TableProps) => {
               { key: "phone", header: t.contactInfo },
               { key: "address", header: t.address },
               { key: "totalDueAmount", header: t.totalDueAmount },
-              {
-                key: "factoryName",
-                header: t.factoryName,
-                render: (item) => item?.factory?.name,
-              },
               // {
-              //   key: "action",
-              //   header: "Action",
-              //   render: (user) => (
-              //     <ResponsiveButtonGroup>
-              //       <UpdateEmployeeModal data={user} />
-              //       <DeleteEmployeeModal data={user} />
-              //    </ResponsiveButtonGroup>
-              //   ),
+              //   key: "factoryName",
+              //   header: t.factoryName,
+              //   render: (item) => item?.factory?.name,
               // },
+              {
+                key: "action",
+                header: "Action",
+                render: (user) => (
+                  <ResponsiveButtonGroup>
+                    <UpdateSupplierModal value={user} />
+                    <DeleteSupplierModal data={user} />
+                  </ResponsiveButtonGroup>
+                ),
+              },
             ],
           }}
         />

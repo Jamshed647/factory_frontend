@@ -15,6 +15,7 @@ import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { FormProvider, useForm } from "react-hook-form";
 import { ExpenseFormType, expenseSchema } from "../schema/dueSchema";
 import { expenseDefaultValue } from "../utils/dueDefaultValue";
+import { getChangedFields } from "@/utils/formatter/formChangedValues";
 
 interface Props {
   factory: any;
@@ -25,7 +26,7 @@ export default function UpdateExpenseDialog({ factory, value }: Props) {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
 
-  console.log(value);
+  //  console.log(value);
 
   const form = useForm<ExpenseFormType>({
     resolver: zodResolver(expenseSchema),
@@ -50,7 +51,10 @@ export default function UpdateExpenseDialog({ factory, value }: Props) {
   const { options: bankOptions } = DataFetcher.fetchBankAccounts({
     path: `factory/bank/factory/${factory?.id}`,
   });
-  const handleSubmit = (payload: ExpenseFormType) => takeDue.mutate(payload);
+  const handleSubmit = () => {
+    const updatedData = getChangedFields(form, value);
+    takeDue.mutate(updatedData);
+  };
 
   return (
     <DialogWrapper

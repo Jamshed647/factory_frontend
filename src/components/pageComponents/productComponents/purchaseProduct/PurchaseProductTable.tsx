@@ -63,7 +63,7 @@ const PurchaseProductTable = ({ id }: { id?: string }) => {
                 render: (user) => (
                   <ResponsiveButtonGroup>
                     <UpdateProductModal data={user} />
-                    <DeleteSalesmanModal data={user} />
+                    {/* <DeleteSalesmanModal data={user} /> */}
                   </ResponsiveButtonGroup>
                 ),
               },

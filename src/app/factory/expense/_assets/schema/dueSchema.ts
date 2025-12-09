@@ -8,9 +8,8 @@ export const expenseSchema = z
     }),
     title: validationSchemas.textSchema({ label: "Title" }),
     category: validationSchemas.textSchema({ label: "Category" }),
-    amount: validationSchemas.numberSchema({
+    amount: validationSchemas.textSchema({
       label: "Amount",
-      type: "string",
     }),
     // type: validationSchemas.textSchema({ label: "Type" }),
     //  note: validationSchemas.textSchema({ label: "Note", required: false }),

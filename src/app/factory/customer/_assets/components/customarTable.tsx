@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import UpdateCustomerModal from "./update/updateCustomerModal";
 import { useLanguage } from "@/hooks/useLanguage";
+import DeleteCustomerModal from "./delete/deleteCustomerModal";
 
 interface TableProps {
   factoryId?: string;
@@ -19,7 +20,9 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
   const [searchText, setSearchText] = React.useState("");
   const { t } = useLanguage();
 
-  const path = factoryId ? `factory/customer/${factoryId}` : `factory/customer`;
+  const path = factoryId
+    ? `factory/customer/factory/${factoryId}`
+    : `factory/customer`;
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -60,24 +63,19 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
                 key: "name",
                 header: t.name,
                 render: (item) => (
-                  <Link href={`/factory/bank/${item.id}`}>{item.name}</Link>
+                  <Link href={`/factory/customer/${item.id}`}>{item.name}</Link>
                 ),
               },
               { key: "phone", header: t.contactInfo },
               { key: "address", header: t.address },
               { key: "totalDueAmount", header: t.totalDueAmount },
               {
-                key: "factoryName",
-                header: t.factoryName,
-                render: (item) => item?.factory?.name,
-              },
-              {
                 key: "action",
                 header: t.action,
                 render: (user) => (
                   <ResponsiveButtonGroup>
                     <UpdateCustomerModal data={user} />
-                    {/* <DeleteEmployeeModal data={user} /> */}
+                    <DeleteCustomerModal data={user} />
                   </ResponsiveButtonGroup>
                 ),
               },

@@ -1,18 +1,14 @@
 "use client";
 
-import { useAuth } from "@/hooks/hooks";
 import SupplierTable from "./_assets/components/supplierTable";
-import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import { useFactory } from "@/utils/factoryInfo";
 
 const SupplierPage = () => {
-  const { user } = useAuth();
-
-  const switchedFactory = getFactoryId();
-  const factoryId = user?.factoryId ? user?.factoryId : switchedFactory;
+  const { factory } = useFactory();
 
   return (
     <div>
-      <SupplierTable factoryId={factoryId as string} />
+      <SupplierTable factoryId={factory?.id as string} />
     </div>
   );
 };

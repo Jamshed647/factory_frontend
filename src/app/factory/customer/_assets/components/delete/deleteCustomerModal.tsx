@@ -3,9 +3,27 @@ import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import React from "react";
 import ActionButton from "@/components/common/button/actionButton";
 import { TrashIcon } from "lucide-react";
+import { showToast } from "@/components/common/TostMessage/customTostMessage";
+import { useQueryClient } from "@tanstack/react-query";
+import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 
-const DeleteEmployeeModal = ({ data }: { data: any }) => {
+const DeleteCustomerModal = ({ data }: { data: any }) => {
   const [open, setOpen] = React.useState(false);
+  const queryClient = useQueryClient();
+
+  const deleteCustomer = useApiMutation({
+    path: `auth/customer/${data?.id}`,
+    method: "DELETE",
+    onSuccess: (data) => {
+      showToast("success", data);
+      queryClient.invalidateQueries({ queryKey: ["getCustomerData"] });
+    },
+  });
+
+  const handleDelete = () => {
+    deleteCustomer.mutate(data);
+    setOpen(false);
+  };
 
   return (
     <DialogWrapper
@@ -31,8 +49,8 @@ const DeleteEmployeeModal = ({ data }: { data: any }) => {
         <ActionButton
           buttonContent="Delete"
           type="submit"
-          // isPending={deleteCompany.isPending}
-          handleOpen={() => console.log("Submitted")}
+          isPending={deleteCustomer.isPending}
+          handleOpen={handleDelete}
           btnStyle=" bg-red-500 text-white"
         />
       </div>
@@ -40,4 +58,4 @@ const DeleteEmployeeModal = ({ data }: { data: any }) => {
   );
 };
 
-export default DeleteEmployeeModal;
+export default DeleteCustomerModal;

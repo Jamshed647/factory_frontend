@@ -7,16 +7,16 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { bankSchema, CustomerFormType } from "../../schema/customerSchema";
 import { bankDefaultValue } from "../../utils/customerDefaultValue";
 import CustomerFormComponent from "../form/customerForm";
+import { SupplierFormType, supplierSchema } from "../../schema/customerSchema";
 
 const CreateSupplierModal = ({ factoryId }: { factoryId?: string }) => {
   const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const bankForm = useForm<CustomerFormType>({
-    resolver: zodResolver(bankSchema),
+  const bankForm = useForm<SupplierFormType>({
+    resolver: zodResolver(supplierSchema),
     defaultValues: bankDefaultValue({ factoryId: factoryId }),
   });
 
@@ -35,7 +35,7 @@ const CreateSupplierModal = ({ factoryId }: { factoryId?: string }) => {
     },
   });
 
-  const onSubmit = async (data: CustomerFormType) => {
+  const onSubmit = async (data: SupplierFormType) => {
     createSupplier.mutate({ ...data });
   };
 

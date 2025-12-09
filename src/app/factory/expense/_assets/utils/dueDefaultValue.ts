@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-
 import { ExpenseFormType } from "../schema/dueSchema";
 
 export const expenseDefaultValue = (v: Partial<ExpenseFormType>) => {
@@ -7,7 +5,7 @@ export const expenseDefaultValue = (v: Partial<ExpenseFormType>) => {
     factoryId: v?.factoryId ?? "",
     title: v?.title ?? "",
     category: v?.category ?? "",
-    amount: v?.amount!,
+    amount: (v?.amount ?? "").toString(),
     // type: v?.type ?? "",
     // note: v?.note ?? "",
     transactionType: v?.transactionType ?? "",

@@ -36,7 +36,7 @@ const ProductionUpdateModal = ({
   const [page, setPage] = useState(1);
   const [seeMore, setSeeMore] = React.useState(true);
   const [open, setOpen] = React.useState(false);
-  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([
+  const [selectedProducts, setSelectedProducts] = useState<any[]>([
     ...productData?.items,
   ]);
 

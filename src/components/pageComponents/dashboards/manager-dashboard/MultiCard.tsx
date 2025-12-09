@@ -74,7 +74,7 @@ const MultiCard = ({
       <MetricCard
         isLoading={isLoading || factoryLoading}
         title="Customers Due"
-        value={data?.data?.banksDue}
+        value={data?.data?.customersDue}
         description="Customers who owe money"
         icon={<UserMinus className="w-4 h-4 text-muted-foreground" />}
       />

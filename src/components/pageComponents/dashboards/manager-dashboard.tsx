@@ -69,6 +69,7 @@ export function ManagerDashboard({
           factoryLoading={isLoading}
         />
         <CashBalance factoryId={factoryId} factoryLoading={isLoading} />
+
         <MultiCard factoryId={factoryId} factoryLoading={isLoading} />
       </div>
     </>

@@ -37,7 +37,7 @@ const SellProductTable = ({ id }: { id?: string }) => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateProductModal factoryId={id as string} />
+            {/* <CreateProductModal factoryId={id as string} /> */}
           </div>
         </div>
 
@@ -64,7 +64,7 @@ const SellProductTable = ({ id }: { id?: string }) => {
                 render: (user) => (
                   <ResponsiveButtonGroup>
                     <UpdateProductModal data={user} />
-                    <DeleteSalesmanModal data={user} />
+                    {/* <DeleteSalesmanModal data={user} /> */}
                   </ResponsiveButtonGroup>
                 ),
               },

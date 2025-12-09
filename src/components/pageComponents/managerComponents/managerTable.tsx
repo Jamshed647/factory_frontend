@@ -55,7 +55,7 @@ const ManagerTable = ({
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateManagerModal factoryId={factoryId} />
+            {/* <CreateManagerModal factoryId={factoryId} /> */}
           </div>
         </div>
 
@@ -76,35 +76,35 @@ const ManagerTable = ({
               },
               { key: "phone", header: t.contactInfo },
               { key: "status", header: t.status },
-              { key: "role", header: t.role },
-              {
-                key: "factoryName",
-                header: t.factoryName,
-                render: (item) => item?.factory?.name,
-              },
-              {
-                key: "action",
-                header: t.action,
-                render: (user) => (
-                  <ResponsiveButtonGroup>
-                    <UpdateManagerModal data={user} />
-                    <DeleteManagerModal data={user} />
-                    {switchUser === true && (
-                      <Link
-                        href={`/factory/manager/dashboard`}
-                        onClick={() => {
-                          setFactoryId(user.factoryId, user?.id, user?.role);
-                        }}
-                      >
-                        <ActionButton
-                          variant="primaryIcon"
-                          buttonContent={t.goToDashboard}
-                        />
-                      </Link>
-                    )}
-                  </ResponsiveButtonGroup>
-                ),
-              },
+              // { key: "role", header: t.role },
+              // {
+              //   key: "factoryName",
+              //   header: t.factoryName,
+              //   render: (item) => item?.factory?.name,
+              // },
+              // {
+              //   key: "action",
+              //   header: t.action,
+              //   render: (user) => (
+              //     <ResponsiveButtonGroup>
+              //       <UpdateManagerModal data={user} />
+              //       <DeleteManagerModal data={user} />
+              //       {switchUser === true && (
+              //         <Link
+              //           href={`/factory/manager/dashboard`}
+              //           onClick={() => {
+              //             setFactoryId(user.factoryId, user?.id, user?.role);
+              //           }}
+              //         >
+              //           <ActionButton
+              //             variant="primaryIcon"
+              //             buttonContent={t.goToDashboard}
+              //           />
+              //         </Link>
+              //       )}
+              //     </ResponsiveButtonGroup>
+              //   ),
+              // },
             ],
           }}
         />

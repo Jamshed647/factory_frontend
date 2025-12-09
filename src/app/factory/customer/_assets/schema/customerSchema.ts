@@ -2,7 +2,7 @@ import { validationSchemas } from "@/types/SchemaType/validationSchema";
 import { z } from "zod";
 
 // Register schema
-export const bankSchema = z.object({
+export const customerSchema = z.object({
   name: validationSchemas.nameSchema({ label: "Full Name" }),
   phone: validationSchemas.numberSchema({
     label: "Contact Info",
@@ -29,6 +29,6 @@ export const bankSchema = z.object({
 //   .partial();
 
 // --- TypeScript types inferred from schemas ---
-export type CustomerFormType = z.infer<typeof bankSchema>;
+export type CustomerFormType = z.infer<typeof customerSchema>;
 
 // export type EmployeeUpdateFormType = z.infer<typeof employeeUpdateSchema>;

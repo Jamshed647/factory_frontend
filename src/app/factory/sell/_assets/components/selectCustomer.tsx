@@ -18,11 +18,11 @@ const SelectCustomer = ({
 }) => {
   // const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const cart = CookieCart("bankInfo");
+  const cart = CookieCart("customerInfo");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/bank/factory/${factoryId}`,
+    path: `factory/customer/factory/${factoryId}`,
     queryKey: "getCustomerData",
     filterData: {
       search: searchTerm,

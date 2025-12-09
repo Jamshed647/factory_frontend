@@ -54,7 +54,7 @@ export default function CustomerFormComponent<T extends Record<string, any>>({
           viewOnly={enabled}
         />
         {!enabled && (
-          <CustomField.Text
+          <CustomField.Number
             name="initialDue"
             labelName="Initial Due"
             placeholder="Enter your initial due"

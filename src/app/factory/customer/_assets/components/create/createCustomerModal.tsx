@@ -7,7 +7,7 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { bankSchema, CustomerFormType } from "../../schema/customerSchema";
+import { customerSchema, CustomerFormType } from "../../schema/customerSchema";
 import { bankDefaultValue } from "../../utils/customerDefaultValue";
 import CustomerFormComponent from "../form/customerForm";
 
@@ -16,7 +16,7 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
   const queryClient = useQueryClient();
 
   const bankForm = useForm<CustomerFormType>({
-    resolver: zodResolver(bankSchema),
+    resolver: zodResolver(customerSchema),
     defaultValues: bankDefaultValue({ factoryId: factoryId }),
   });
 
@@ -25,9 +25,8 @@ const CreateEmployeeModal = ({ factoryId }: { factoryId?: string }) => {
   }
 
   const createCustomer = useApiMutation({
-    path: "factory/bank",
+    path: "factory/customer",
     method: "POST",
-    // dataType: "multipart/form-data",
     onSuccess: (data) => {
       bankForm.reset({});
       showToast("success", data);

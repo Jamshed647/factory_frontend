@@ -6,7 +6,7 @@ export const productionDefaultValue = (
 ): ProductionFormType => ({
   factoryId: v?.factoryId ?? "",
   productionId: v?.productionId ?? "",
-  totalWeight: v?.totalWeight!,
+  totalWeight: Number(v?.totalWeight ?? 0),
   packagingType: v?.packagingType!,
 
   items: v?.items?.length

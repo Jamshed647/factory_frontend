@@ -32,6 +32,8 @@ const ProductionModal = ({
   const [seeMore, setSeeMore] = React.useState(true);
   const [open, setOpen] = React.useState(false);
 
+  console.log("🚀 SelectedProducts", selectedProducts);
+
   return (
     <DialogWrapper
       triggerContent={

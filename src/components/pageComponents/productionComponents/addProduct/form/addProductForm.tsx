@@ -33,7 +33,7 @@ const AddProductForm = ({
         onSubmit={form.handleSubmit(onSubmit, onFormError)}
         className="space-y-6"
       >
-        <CustomField.Text
+        <CustomField.Number
           labelName="Total Weight"
           placeholder="Enter Total Weight"
           form={form}

@@ -34,7 +34,7 @@ const CreateProductToProductionModal = ({
     path: `factory/production-to-product`,
     method: "POST",
     onSuccess: (data) => {
-      console.log("SUCCESS:", data);
+      //console.log("SUCCESS:", data);
       showToast("success", data);
       form.reset({});
       router.push(`/factory/manager/production`);
@@ -43,7 +43,6 @@ const CreateProductToProductionModal = ({
 
   const onSubmit = (data: ProductionFormType) => {
     addProduct.mutate(data);
-    console.log(data);
   };
 
   return (

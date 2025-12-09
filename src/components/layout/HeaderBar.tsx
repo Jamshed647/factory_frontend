@@ -2,7 +2,7 @@ import { Bell, CircleUserRound } from "lucide-react";
 import Link from "next/link";
 import ActionButton from "../common/button/actionButton";
 import { useFactory } from "@/utils/factoryInfo";
-// import LanguageSwitcher from "../common/LanguageSwitcher";
+import LanguageSwitcher from "../common/LanguageSwitcher";
 
 export default function HeaderBar() {
   const { factory } = useFactory();

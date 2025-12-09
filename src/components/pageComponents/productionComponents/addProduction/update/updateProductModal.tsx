@@ -1,11 +1,12 @@
-"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+"use client";
 import ActionButton from "@/components/common/button/actionButton";
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import { Edit2Icon, MinusIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ProductSelectorGrid from "../productSelectorComponent";
-import { Product, SelectedProduct } from "../schema/product-type";
+import type { Product, SelectedProduct } from "../schema/product-type";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { CustomField } from "@/components/common/fields/cusField";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
@@ -13,7 +14,10 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { ProductionFormType, productionSchema } from "../schema/product-schema";
+import {
+  type ProductionFormType,
+  productionSchema,
+} from "../schema/product-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productionDefaultValue } from "../schema/productDefaultValue";
 import CreateProductionForm from "../form/createProductionForm";
@@ -36,14 +40,14 @@ const ProductionUpdateModal = ({
     ...productData?.items,
   ]);
 
+  //  console.log("🚀 ProductionModal", selectedProducts);
+
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/product/factory/${factoryId}`,
     queryKey: "getProductDataByFactoryForAdd",
     filterData: { type: "RAW", search: searchTerm, page },
   });
-
-  // console.log("Test Production", selectedProducts);
 
   const form = useForm<ProductionFormType>({
     resolver: zodResolver(productionSchema),
@@ -64,20 +68,13 @@ const ProductionUpdateModal = ({
       const buyPrice = Number(product.buyPrice ?? 0);
 
       if (productionQuantity < 0 || productionQuantity > quantity) {
-        console.log(
-          "Stock",
-          productionQuantity,
-          "Quantity",
-          quantity,
-          product.quantity,
-        );
         showToast("error", "Production quantity is invalid");
         return prev;
       }
 
       const existsIndex = prev.findIndex((p) => p.productId === productId);
 
-      // <CHANGE> Check if product exists FIRST
+      // Check if product exists FIRST
       if (existsIndex !== -1) {
         // UPDATE existing product
         if (productionQuantity === 0) {
@@ -92,7 +89,7 @@ const ProductionUpdateModal = ({
         return updated;
       }
 
-      // <CHANGE> Only add if it doesn't exist AND quantity > 0
+      // Only add if it doesn't exist AND quantity > 0
       if (productionQuantity > 0) {
         return [
           ...prev,
@@ -119,22 +116,29 @@ const ProductionUpdateModal = ({
       queryClient.invalidateQueries({
         queryKey: ["getProductionDataByFactory"],
       });
-      setOpen(false);
-      setSelectedProducts([]);
       form.reset({});
+      setOpen(false);
+      // setSelectedProducts([]);
     },
   });
 
+  const totalProductionPrice = selectedProducts.reduce(
+    (sum, product) => sum + (product.totalPrice || 0),
+    0,
+  );
+
   useEffect(() => {
-    if (selectedProducts) {
-      form.setValue("items", selectedProducts);
+    if (selectedProducts.length > 0) {
+      form.setValue("items", selectedProducts as any);
     }
-  }, [form, selectedProducts, setSelectedProducts]);
+    if (totalProductionPrice) {
+      form.setValue("totalProductionAmount", totalProductionPrice);
+    }
+  }, [selectedProducts, form, totalProductionPrice]);
 
   const onSubmit = (data: ProductionFormType) => {
     const { factoryId, ...rest } = data;
     addProduct.mutate(rest);
-    // console.log("Test data", data);
   };
 
   return (
@@ -161,7 +165,7 @@ const ProductionUpdateModal = ({
         </div>
 
         <div>
-          {productData.length < 1 ? (
+          {selectedProducts.length < 1 ? (
             <div className="py-16 text-center">
               <p className="text-lg text-muted-foreground">
                 No products selected
@@ -169,12 +173,17 @@ const ProductionUpdateModal = ({
             </div>
           ) : (
             <div>
-              <h2 className="p-2 my-4 text-lg font-semibold text-center bg-green-100 rounded-md">
-                Selected Production
-              </h2>
+              <div className="flex justify-between items-center p-2 my-4 bg-green-100 rounded-md">
+                <h2 className="text-lg font-semibold">
+                  Selected Production ({selectedProducts.length})
+                </h2>
+                <span className="text-lg font-semibold">
+                  Total: ৳{totalProductionPrice.toFixed(2)}
+                </span>
+              </div>
 
               <ProductSelectorGrid
-                products={productData?.items}
+                products={selectedProducts}
                 selectedProducts={selectedProducts}
                 updateLimit={updateLimit}
               />

@@ -8,7 +8,7 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { bankSchema, CustomerFormType } from "../../schema/customerSchema";
+import { customerSchema, CustomerFormType } from "../../schema/customerSchema";
 import { bankDefaultValue } from "../../utils/customerDefaultValue";
 import CustomerFormComponent from "../form/customerForm";
 
@@ -17,7 +17,7 @@ const UpdateCustomerModal = ({ data }: { data: any }) => {
   const queryClient = useQueryClient();
 
   const bankForm = useForm<CustomerFormType>({
-    resolver: zodResolver(bankSchema),
+    resolver: zodResolver(customerSchema),
     defaultValues: bankDefaultValue(data),
   });
 

@@ -4,7 +4,7 @@
 import { CustomField } from "@/components/common/fields/cusField";
 import { SelectProductComponent } from "@/components/pageComponents/sellProduct/SelectProductComponent";
 import { CookieCart } from "@/utils/cookie/cart-utils";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import cartSchema, { CartFormType } from "./_assets/schema/cartSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,17 +16,12 @@ import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useRouter } from "next/navigation";
+import useSellInvoiceStore from "@/store/sellInvoiceStore";
 
 const CartPage = () => {
   const cart = CookieCart("selected_products");
-  const bankCart = CookieCart("bankInfo");
-  const bankInfo = bankCart.get();
-  const bank = Array.isArray(bankInfo)
-    ? bankInfo.length === 0
-      ? null
-      : bankInfo
-    : bankInfo && typeof bankInfo === "object" && bankInfo;
-
+  const customerCart = CookieCart("customerInfo");
+  const customer = customerCart.get();
   const { user } = useAuth();
   const router = useRouter();
 
@@ -44,23 +39,19 @@ const CartPage = () => {
     }[]
   >(cart.get() || []);
 
-  const products = useMemo(
-    () =>
-      selectedProducts.map((item) => ({
-        productId: item.id,
-        quantity: item.limit,
-        sellPrice: item.sellPrice,
-        updateSellPrice: item?.updateSellPrice ?? item.sellPrice,
-        totalPrice: item.sellPrice * item.limit,
-      })),
-    [selectedProducts],
-  );
+  const products = selectedProducts.map((item) => ({
+    productId: item.id,
+    quantity: item.limit,
+    sellPrice: item.sellPrice,
+    updateSellPrice: item?.updateSellPrice ?? item.sellPrice,
+    totalPrice: item.sellPrice * item.limit,
+  }));
 
   const form = useForm<CartFormType>({
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
       factoryId: user?.factoryId,
-      bankId: bank?.id,
+      customerId: customer?.id,
       sellerId: user?.id,
       sellerName: user?.name,
       items: products,
@@ -69,82 +60,74 @@ const CartPage = () => {
 
   const values = form.watch();
 
-  const totalPrice = useMemo(
-    () =>
-      selectedProducts?.reduce((sum, item) => {
-        const price =
-          item.updateSellPrice != null
-            ? item.updateSellPrice
-            : (item.sellPrice ?? 0);
-        const quantity = item.limit ?? 0;
-        return sum + price * quantity;
-      }, 0),
-    [selectedProducts],
-  );
+  // Total Price
+  const totalPrice = selectedProducts?.reduce((sum, item) => {
+    const price =
+      item.updateSellPrice != null
+        ? item.updateSellPrice
+        : (item.sellPrice ?? 0);
+    const quantity = item.limit ?? 0;
+    return sum + price * quantity;
+  }, 0);
 
-  const discountAmount = useMemo(
-    () =>
-      values.discountType === "PERCENTAGE"
-        ? (totalPrice * (Number(values.discountPercentage) || 0)) / 100
-        : Number(values.discountAmount) || 0,
-    [
-      totalPrice,
-      values.discountType,
-      values.discountPercentage,
-      values.discountAmount,
-    ],
-  );
+  // Discount logic
+  const discountAmount =
+    values.discountType === "PERCENTAGE"
+      ? (totalPrice * (Number(values.discountPercentage) || 0)) / 100
+      : Number(values.discountAmount) || 0;
 
-  const sellPrice = useMemo(
-    () => totalPrice - discountAmount,
-    [totalPrice, discountAmount],
-  );
+  const sellPrice = totalPrice - discountAmount;
 
-  const total = useMemo(
-    () => sellPrice + Number(values.extraCharge || 0),
-    [sellPrice, values.extraCharge],
-  );
+  const total = sellPrice + Number(values.extraCharge || 0);
 
-  const isBigAmount = useMemo(
-    () =>
-      Math.abs(total) < Math.abs(bank?.totalDueAmount || 0) &&
-      bank?.totalDueAmount < 0,
-    [total, bank?.totalDueAmount],
-  );
+  const isBigAmount =
+    Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
+    customer?.totalDueAmount < 0;
 
-  const grandTotal = useMemo(
-    () => (isBigAmount ? total : total + Number(bank?.totalDueAmount || 0)),
-    [isBigAmount, total, bank?.totalDueAmount],
-  );
+  // Grand total
+  // const grandTotal = total + Number(customer?.totalDueAmount || 0);
+  const grandTotal = isBigAmount
+    ? total
+    : total + Number(customer?.totalDueAmount || 0);
 
-  const due = useMemo(
-    () =>
-      bank
-        ? Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0))
-        : 0,
-    [bank, grandTotal, values.paidAmount],
-  );
+  // Due
+  // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
+  const due = Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
 
-  // Effect 1: Initialize user data on mount only
+  // update values AFTER user/customer loads
   useEffect(() => {
-    if (user && !form.getValues("sellerId")) {
+    form.setValue("totalSaleAmount", sellPrice);
+    form.setValue("totalAmount", grandTotal);
+    form.setValue("currentDueAmount", due);
+    form.setValue("discountAmount", discountAmount);
+    // if (isBigAmount) {
+    //   form.setValue("paidAmount", total);
+    // }
+    if (user) {
       form.setValue("factoryId", user.factoryId as string);
       form.setValue("sellerId", user.id as string);
-
       form.setValue(
         "sellerName",
-        user?.name?.trim() ||
-          [user?.firstName, user?.lastName].filter(Boolean).join(" "),
+        user?.name ??
+          (user?.firstName
+            ? user.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : user.firstName
+            : (user?.lastName ?? "")),
       );
     }
-  }, [user, form]);
-
-  // Effect 2: Set initial paidAmount for empty bank
-  useEffect(() => {
-    if (!bank || bank === "empty") {
-      form.setValue("paidAmount", total);
-    }
-  }, [bank, total, form]);
+  }, [
+    user,
+    form,
+    values.discountType,
+    discountAmount,
+    grandTotal,
+    due,
+    total,
+    totalPrice,
+    sellPrice,
+    isBigAmount,
+  ]);
 
   const sellProduct = useApiMutation({
     path: "factory/sale",
@@ -153,32 +136,21 @@ const CartPage = () => {
       showToast("success", data);
       form.reset({});
       cart.remove();
-      bankCart.remove();
-      router.push(`invoice/${data?.data?.id}`);
+      customerCart.remove();
+      useSellInvoiceStore.getState().setAll(data.data);
+      router.push(`invoice/${data?.data?.invoiceNo}`);
     },
   });
 
-  const onSubmit = (data: CartFormType) => {
+  const handleSubmit = (data: CartFormType) => {
     const { discountPercentage, ...restData } = data;
 
-    const submissionData = {
-      ...restData,
-      sellerName:
-        user?.name?.trim() ||
-        [user?.firstName, user?.lastName].filter(Boolean).join(" "),
-      totalSaleAmount: sellPrice,
-      totalAmount: grandTotal,
-      currentDueAmount: due,
-      discountAmount: discountAmount,
-      items: products,
-    };
-
-    // console.log("Test SelectProductComponent", selectedProducts);
+    //    console.log("TanstackQueries", data);
 
     if (data?.discountType === "CASH") {
-      sellProduct.mutate(submissionData);
+      sellProduct.mutate(restData);
     } else {
-      sellProduct.mutate({ ...submissionData, discountPercentage });
+      sellProduct.mutate(data);
     }
   };
 
@@ -186,7 +158,7 @@ const CartPage = () => {
     <>
       <FormProvider {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit((data) => handleSubmit(data))}
           className="grid grid-cols-1 gap-10 p-8 bg-white rounded-2xl border shadow-lg lg:grid-cols-2"
         >
           {/* Left Fields */}
@@ -195,6 +167,9 @@ const CartPage = () => {
               <h2 className="text-2xl font-semibold tracking-tight">
                 Sell Price Calculation
               </h2>
+              {/* <p className="text-sm text-gray-600"> */}
+              {/*   Extra charge, discount & advance */}
+              {/* </p> */}
             </div>
 
             {/* Extra Charge */}
@@ -245,7 +220,7 @@ const CartPage = () => {
               </div>
             </div>
 
-            {/* Payment Method */}
+            {/* Advance */}
             <CustomField.SelectField
               placeholder="Select payment method"
               form={form}
@@ -293,14 +268,18 @@ const CartPage = () => {
               />
 
               <SummaryItem
-                label={`Discount ${values.discountType === "PERCENTAGE" ? `(${values.discountPercentage || 0}%)` : ""}`}
+                label={`Discount ${
+                  values.discountType === "PERCENTAGE"
+                    ? `(${values.discountPercentage || 0}%)`
+                    : ""
+                }`}
                 value={`-${discountAmount}`}
               />
 
               <SummaryItem label="Advance" value={values.paidAmount || 0} />
               <SummaryItem
                 label="Previous Due"
-                value={bank?.totalDueAmount || 0}
+                value={customer?.totalDueAmount || 0}
               />
 
               <SummaryItem label="Total Sell Price" value={grandTotal} />
@@ -310,6 +289,7 @@ const CartPage = () => {
 
             <div className="flex justify-between text-lg font-bold text-gray-900">
               <span>Due (Bokeya)</span>
+              {/* <span>{due.toFixed(2)}</span> */}
               <span>৳{due}</span>
             </div>
 
@@ -317,8 +297,9 @@ const CartPage = () => {
               isPending={sellProduct.isPending}
               buttonContent="Sell"
               btnStyle="w-full font-medium text-white bg-blue-600 rounded-lg transition hover:bg-blue-400 !cursor-pointer"
-              type="submit"
-              handleOpen={form.handleSubmit(onSubmit, onFormError)}
+              handleOpen={() =>
+                form.handleSubmit((data) => handleSubmit(data), onFormError)
+              }
             />
           </div>
         </form>

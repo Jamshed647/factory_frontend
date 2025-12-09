@@ -1,6 +1,6 @@
-import { CustomerFormType } from "../schema/customerSchema";
+import { SupplierFormType } from "../schema/customerSchema";
 
-export const bankDefaultValue = (v: Partial<CustomerFormType>) => {
+export const bankDefaultValue = (v: Partial<SupplierFormType>) => {
   return {
     name: v?.name ?? "",
     phone: v?.phone ?? "",

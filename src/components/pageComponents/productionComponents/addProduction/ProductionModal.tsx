@@ -1,12 +1,13 @@
-"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+"use client";
 import ActionButton from "@/components/common/button/actionButton";
 import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import { Edit2Icon, MinusIcon } from "lucide-react";
 import React from "react";
 import ProductSelectorGrid from "./productSelectorComponent";
 import { Product, SelectedProduct } from "./schema/product-type";
-import CreateProductionModal from "./create/createProduction";
+import CreateProduction from "./create/createProduction";
 import { CustomField } from "@/components/common/fields/cusField";
 
 interface ProductionModalProps {
@@ -48,7 +49,7 @@ const ProductionModal = ({
     >
       <div>
         <div>
-          <CreateProductionModal
+          <CreateProduction
             product={productData}
             setOpen={setOpen}
             setSelectedProducts={setSelectedProducts}

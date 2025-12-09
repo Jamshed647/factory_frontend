@@ -17,7 +17,7 @@ const SellInvoicePage = ({ params }: InvoicePageProps) => {
     queryKey: "getSingleInvoiceData",
   });
 
-  console.log("TESt about invoice", data);
+  //  console.log("TESt about invoice", data);
 
   return (
     <>

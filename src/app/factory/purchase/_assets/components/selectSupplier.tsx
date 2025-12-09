@@ -2,8 +2,6 @@
 "use client";
 import CreateSupplierModal from "@/app/factory/supplier/_assets/components/create/createSupplierModal";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-// import ActionButton from "@/components/common/button/actionButton";
-// import { DialogWrapper } from "@/components/common/common_dialog/common_dialog";
 import { CustomField } from "@/components/common/fields/cusField";
 import { Card } from "@/components/ui/card";
 import { CookieCart } from "@/utils/cookie/cart-utils";
@@ -18,14 +16,13 @@ const SelectSupplier = ({
   factoryId: string;
   enabled?: boolean;
 }) => {
-  // const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const cart = CookieCart("supplierInfo");
 
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/supplier/factory/${factoryId}`,
-    queryKey: "getSupplierDataByFactory",
+    queryKey: "getSupplierDataToSupply",
     filterData: {
       search: searchTerm,
     },
@@ -37,19 +34,6 @@ const SelectSupplier = ({
 
   return (
     <>
-      {/* <DialogWrapper */}
-      {/*   triggerContent={ */}
-      {/*     <ActionButton */}
-      {/*       btnStyle="bg-blue-500 text-white" */}
-      {/*       icon={<Edit2Icon className="w-5 h-5" />} */}
-      {/*       buttonContent="Select Customer" */}
-      {/*     /> */}
-      {/*   } */}
-      {/*   open={open} */}
-      {/*   handleOpen={setOpen} */}
-      {/*   title="Select Customer" */}
-      {/* > */}
-
       <div className="mb-4 space-y-2">
         <div>
           <CustomField.CommonSearch
@@ -94,7 +78,6 @@ const SelectSupplier = ({
           </Link>
         ))}
       </div>
-      {/* </DialogWrapper> */}
     </>
   );
 };

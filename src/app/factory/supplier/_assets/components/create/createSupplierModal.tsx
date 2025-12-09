@@ -30,7 +30,7 @@ const CreateSupplierModal = ({ factoryId }: { factoryId?: string }) => {
     onSuccess: (data) => {
       bankForm.reset({});
       showToast("success", data);
-      queryClient.invalidateQueries({ queryKey: ["getSupplierData"] });
+      queryClient.invalidateQueries({ queryKey: ["getSupplierDataToSupply"] });
       setOpen(false);
     },
   });

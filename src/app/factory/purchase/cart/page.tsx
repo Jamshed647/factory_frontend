@@ -15,7 +15,6 @@ import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useRouter } from "next/navigation";
-import usePurchaseInvoiceStore from "@/store/invoiceStore";
 import { SelectProductComponent } from "@/components/pageComponents/purchaseProduct/SelectProductComponent";
 
 const CartPage = () => {
@@ -136,8 +135,7 @@ const CartPage = () => {
       form.reset({});
       cart.remove();
       supplierCart.remove();
-      usePurchaseInvoiceStore.getState().setAll(data.data);
-      router.push(`invoice/${data?.data?.invoiceNo}`);
+      router.push(`invoice/${data?.data?.id}`);
     },
   });
 

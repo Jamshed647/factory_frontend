@@ -14,14 +14,14 @@ import dateFormat from "@/utils/formatter/DateFormatter";
 
 export default function PurchaseInvoicePreview({ data }: { data: any }) {
   return (
-    <div className="p-8 mx-auto max-w-3xl text-gray-900 bg-white rounded-lg border shadow-sm print:shadow-none print:border-none">
+    <div className="p-8 mx-auto text-gray-900 bg-white rounded-lg border shadow-sm print:shadow-none print:border-none">
       {/* Header */}
       <div className="flex justify-between items-start pb-4 border-b">
         <div>
           <h1 className="text-3xl font-bold">Purchase Invoice</h1>
 
           <p className="text-sm">
-            <span className="font-semibold">Invoice ID:</span> {data.invoiceNo}
+            <span className="font-semibold">Invoice No:</span> {data.invoiceNo}
           </p>
 
           <p className="text-sm">
@@ -41,9 +41,25 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
       {/* Supplier Info */}
       <div className="pb-4 mt-4 border-b">
         <h2 className="mb-2 text-lg font-semibold">Supplier Details</h2>
+
         <p className="text-sm">
-          <span className="font-semibold">Supplier ID:</span>{" "}
-          {data.supplierId ?? "N/A"}
+          <span className="font-semibold">Name:</span>{" "}
+          {data.supplier?.name ?? "N/A"}
+        </p>
+
+        <p className="text-sm">
+          <span className="font-semibold">Phone:</span>{" "}
+          {data.supplier?.phone ?? "N/A"}
+        </p>
+
+        <p className="text-sm">
+          <span className="font-semibold">Address:</span>{" "}
+          {data.supplier?.address ?? "N/A"}
+        </p>
+
+        <p className="mt-1 text-sm">
+          <span className="font-semibold">Total Supplier Due:</span>{" "}
+          {data.supplier?.totalDueAmount ?? 0}
         </p>
       </div>
 
@@ -56,8 +72,8 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
             <TableHeader className="bg-gray-100">
               <TableRow>
                 <TableHead className="w-12 text-center">SL</TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead className="w-24 text-right">Qty</TableHead>
+                <TableHead className="w-40">Product ID</TableHead>
+                <TableHead className="w-20 text-right">Qty</TableHead>
                 <TableHead className="w-32 text-right">Buy Price</TableHead>
                 <TableHead className="w-32 text-right">Total</TableHead>
               </TableRow>
@@ -68,13 +84,16 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
                 <TableRow key={item.id}>
                   <TableCell className="text-center">{index + 1}</TableCell>
 
+                  {/* You will replace productId with actual product.name later */}
                   <TableCell className="font-medium">
                     {item.productId}
                   </TableCell>
 
                   <TableCell className="text-right">{item.quantity}</TableCell>
 
-                  <TableCell className="text-right">{item.buyPrice}</TableCell>
+                  <TableCell className="text-right">
+                    {item.updateBuyPrice ?? item.buyPrice}
+                  </TableCell>
 
                   <TableCell className="text-right">
                     {item.totalPrice}
@@ -101,7 +120,11 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
 
           <div className="flex justify-between">
             <span>Discount:</span>
-            <span>{data.discountAmount}</span>
+            <span>
+              {data.discountType === "CASH"
+                ? data.discountAmount
+                : `${data.discountPercentage ?? 0}%`}
+            </span>
           </div>
 
           <div className="flex justify-between pt-2 font-semibold border-t">

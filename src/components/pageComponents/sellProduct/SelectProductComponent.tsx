@@ -48,8 +48,8 @@ export const SelectProductComponent = ({
     id: string,
     limit: number,
     name: string,
-    sellPrice: number,
     stock: number,
+    sellPrice: number,
     buyPrice?: number,
     updateSellPrice?: number,
   ) => {
@@ -57,8 +57,8 @@ export const SelectProductComponent = ({
       id,
       limit,
       name,
-      sellPrice,
       stock,
+      sellPrice,
       buyPrice as number,
       updateSellPrice as number,
     );
@@ -193,8 +193,8 @@ export const SelectProductComponent = ({
                             p.id,
                             limit - 1,
                             p?.name,
-                            p?.sellPrice,
                             p?.quantity ?? p?.stock,
+                            p?.sellPrice,
                             p?.buyPrice,
                             p?.updateSellPrice,
                           );
@@ -215,8 +215,8 @@ export const SelectProductComponent = ({
                             p.id,
                             limit + 1,
                             p?.name,
-                            p?.sellPrice,
                             p?.quantity ?? p?.stock,
+                            p?.sellPrice,
                             p?.buyPrice,
                             p?.updateSellPrice,
                           );

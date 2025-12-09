@@ -4,7 +4,7 @@
 import { CustomField } from "@/components/common/fields/cusField";
 import { SelectProductComponent } from "@/components/pageComponents/sellProduct/SelectProductComponent";
 import { CookieCart } from "@/utils/cookie/cart-utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import cartSchema, { CartFormType } from "./_assets/schema/cartSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,95 +39,141 @@ const CartPage = () => {
     }[]
   >(cart.get() || []);
 
-  const products = selectedProducts.map((item) => ({
-    productId: item.id,
-    quantity: item.limit,
-    sellPrice: item.sellPrice,
-    updateSellPrice: item?.updateSellPrice ?? item.sellPrice,
-    totalPrice: item.sellPrice * item.limit,
-  }));
+  // Always update products whenever selectedProducts changes
+  const products = useMemo(
+    () =>
+      selectedProducts?.map((item) => ({
+        productId: item.id,
+        quantity: item.limit,
+        sellPrice: item.sellPrice,
+        updateSellPrice: item?.updateSellPrice ?? item.sellPrice,
+        totalPrice: (item?.updateSellPrice ?? item.sellPrice) * item.limit,
+      })),
+    [selectedProducts],
+  );
 
   const form = useForm<CartFormType>({
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
       factoryId: user?.factoryId,
-      customerId: customer?.id,
       sellerId: user?.id,
       sellerName: user?.name,
-      items: products,
+      items: [], // Initialize empty, we'll populate in useEffect
     }),
   });
 
+  // Always sync selectedProducts with form items
+  useEffect(() => {
+    if (products.length > 0) {
+      form.setValue("items", products);
+    }
+  }, [products, form]);
+
   const values = form.watch();
 
-  // Total Price
-  const totalPrice = selectedProducts?.reduce((sum, item) => {
-    const price =
-      item.updateSellPrice != null
-        ? item.updateSellPrice
-        : (item.sellPrice ?? 0);
-    const quantity = item.limit ?? 0;
-    return sum + price * quantity;
-  }, 0);
+  // Calculate derived values using useMemo to prevent unnecessary recalculations
+  const totalPrice = useMemo(
+    () =>
+      products?.reduce((sum, item) => {
+        const price = item.updateSellPrice ?? item.sellPrice;
+        const quantity = item.quantity ?? 0;
+        return sum + price * quantity;
+      }, 0) || 0,
+    [products], // Changed dependency to products instead of selectedProducts
+  );
 
-  // Discount logic
-  const discountAmount =
-    values.discountType === "PERCENTAGE"
-      ? (totalPrice * (Number(values.discountPercentage) || 0)) / 100
-      : Number(values.discountAmount) || 0;
+  // Update your other calculations to use products instead of selectedProducts
+  const discountAmount = useMemo(() => {
+    if (values.discountType === "PERCENTAGE") {
+      return (totalPrice * (Number(values.discountPercentage) || 0)) / 100;
+    }
+    return Number(values.discountAmount) || 0;
+  }, [
+    values.discountType,
+    values.discountPercentage,
+    values.discountAmount,
+    totalPrice,
+  ]);
 
-  const sellPrice = totalPrice - discountAmount;
+  const sellPrice = useMemo(
+    () => totalPrice - discountAmount,
+    [totalPrice, discountAmount],
+  );
 
-  const total = sellPrice + Number(values.extraCharge || 0);
+  const total = useMemo(
+    () => sellPrice + Number(values.extraCharge || 0),
+    [sellPrice, values.extraCharge],
+  );
 
-  const isBigAmount =
-    Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
-    customer?.totalDueAmount < 0;
+  const isBigAmount = useMemo(() => {
+    return (
+      Math.abs(total) < Math.abs(customer?.totalDueAmount || 0) &&
+      customer?.totalDueAmount < 0
+    );
+  }, [total, customer?.totalDueAmount]);
 
-  // Grand total
-  // const grandTotal = total + Number(customer?.totalDueAmount || 0);
-  const grandTotal = isBigAmount
-    ? total
-    : total + Number(customer?.totalDueAmount || 0);
+  const grandTotal = useMemo(() => {
+    return isBigAmount ? total : total + Number(customer?.totalDueAmount || 0);
+  }, [isBigAmount, total, customer?.totalDueAmount]);
 
-  // Due
-  // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
-  const due = Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
+  const due = useMemo(() => {
+    return Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
+  }, [grandTotal, values.paidAmount]);
 
-  // update values AFTER user/customer loads
+  // Initialize customerId when customer data is available
   useEffect(() => {
+    if (customer?.id && form.getValues("customerId") !== customer.id) {
+      form.setValue("customerId", customer.id);
+    }
+  }, [customer, form]);
+
+  // Initialize user fields when user data is available
+  useEffect(() => {
+    if (user && user.factoryId) {
+      const currentFactoryId = form.getValues("factoryId");
+      const currentSellerId = form.getValues("sellerId");
+      const currentSellerName = form.getValues("sellerName");
+
+      if (currentFactoryId !== user.factoryId) {
+        form.setValue("factoryId", user.factoryId as string);
+      }
+
+      if (currentSellerId !== user.id) {
+        form.setValue("sellerId", user.id as string);
+      }
+
+      const sellerName =
+        user?.name ??
+        (user?.firstName
+          ? user.lastName
+            ? `${user.firstName} ${user.lastName}`
+            : user.firstName
+          : (user?.lastName ?? ""));
+
+      if (currentSellerName !== sellerName) {
+        form.setValue("sellerName", sellerName);
+      }
+    }
+  }, [user, form]);
+
+  // Update calculated form values - using a stable callback
+  const updateCalculatedValues = useCallback(() => {
     form.setValue("totalSaleAmount", sellPrice);
     form.setValue("totalAmount", grandTotal);
     form.setValue("currentDueAmount", due);
     form.setValue("discountAmount", discountAmount);
-    // if (isBigAmount) {
-    //   form.setValue("paidAmount", total);
-    // }
-    if (user) {
-      form.setValue("factoryId", user.factoryId as string);
-      form.setValue("sellerId", user.id as string);
-      form.setValue(
-        "sellerName",
-        user?.name ??
-          (user?.firstName
-            ? user.lastName
-              ? `${user.firstName} ${user.lastName}`
-              : user.firstName
-            : (user?.lastName ?? "")),
-      );
+  }, [form, sellPrice, grandTotal, due, discountAmount]);
+
+  useEffect(() => {
+    updateCalculatedValues();
+  }, [updateCalculatedValues]);
+
+  // Also update calculated values when products change
+  useEffect(() => {
+    if (products.length > 0) {
+      updateCalculatedValues();
     }
-  }, [
-    user,
-    form,
-    values.discountType,
-    discountAmount,
-    grandTotal,
-    due,
-    total,
-    totalPrice,
-    sellPrice,
-    isBigAmount,
-  ]);
+  }, [products, updateCalculatedValues]);
 
   const sellProduct = useApiMutation({
     path: "factory/sale",
@@ -138,14 +184,18 @@ const CartPage = () => {
       cart.remove();
       customerCart.remove();
       useSellInvoiceStore.getState().setAll(data.data);
-      router.push(`invoice/${data?.data?.invoiceNo}`);
+      router.push(`invoice/${data?.data?.id}`);
     },
   });
 
   const handleSubmit = (data: CartFormType) => {
-    const { discountPercentage, ...restData } = data;
+    // Always use the latest products from state
+    const submitData = {
+      ...data,
+      items: products,
+    };
 
-    //    console.log("TanstackQueries", data);
+    const { discountPercentage, ...restData } = submitData;
 
     if (data?.discountType === "CASH") {
       sellProduct.mutate(restData);
@@ -167,9 +217,6 @@ const CartPage = () => {
               <h2 className="text-2xl font-semibold tracking-tight">
                 Sell Price Calculation
               </h2>
-              {/* <p className="text-sm text-gray-600"> */}
-              {/*   Extra charge, discount & advance */}
-              {/* </p> */}
             </div>
 
             {/* Extra Charge */}
@@ -289,7 +336,6 @@ const CartPage = () => {
 
             <div className="flex justify-between text-lg font-bold text-gray-900">
               <span>Due (Bokeya)</span>
-              {/* <span>{due.toFixed(2)}</span> */}
               <span>৳{due}</span>
             </div>
 

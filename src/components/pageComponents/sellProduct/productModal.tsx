@@ -27,8 +27,8 @@ interface CreateSalesmanModalProps {
     id: string,
     limit: number,
     name: string,
-    sellPrice: number,
     stock: number,
+    sellPrice: number,
     buyPrice?: number,
     updateSellPrice?: number,
   ) => void;
@@ -37,10 +37,10 @@ interface CreateSalesmanModalProps {
 const productModalSchema = z.object({
   id: z.string(),
   name: z.string(),
-  sellPrice: z.number(),
   stock: z.number(),
+  sellPrice: z.number(),
   limit: z.number(),
-  buyPrice: z.number(),
+  buyPrice: z.coerce.number(),
   updateSellPrice: z.number().optional(),
 });
 
@@ -53,16 +53,16 @@ const ProductModal = ({
   const { id, limit, name, sellPrice, stock, buyPrice, updateSellPrice } =
     productData || {};
 
-  const form = useForm<z.infer<typeof productModalSchema>>({
+  const form = useForm({
     resolver: zodResolver(productModalSchema),
     defaultValues: {
-      id: id,
-      name: name,
-      sellPrice: sellPrice,
-      stock: stock,
+      id: id || "",
+      name: name || "",
+      stock: stock || 0,
       limit: Math.min(limit || 0, stock || 0),
-      buyPrice: buyPrice,
-      updateSellPrice: sellPrice,
+      sellPrice: sellPrice || 0,
+      buyPrice: buyPrice || 0,
+      updateSellPrice: updateSellPrice || sellPrice || 0,
     },
   });
 
@@ -75,9 +75,9 @@ const ProductModal = ({
     form.reset({
       id: id,
       name: name,
-      sellPrice: productData?.updateSellPrice ?? productData?.sellPrice,
-      limit: Math.min(limit ?? 0, stock ?? 0),
       stock: Number(productData?.stock ?? 0),
+      limit: Math.min(limit ?? 0, stock ?? 0),
+      sellPrice: productData?.updateSellPrice ?? productData?.sellPrice,
       buyPrice: productData?.buyPrice ?? 0,
       updateSellPrice: productData?.updateSellPrice ?? productData?.sellPrice,
     });
@@ -90,9 +90,9 @@ const ProductModal = ({
       id as string,
       data.limit,
       data?.name,
-      productData?.sellPrice as number,
       data?.stock,
-      data?.buyPrice,
+      productData?.sellPrice as number,
+      data?.buyPrice as number,
       data?.updateSellPrice,
     );
     setOpen(false);

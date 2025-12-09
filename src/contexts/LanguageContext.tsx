@@ -18,7 +18,7 @@ interface LanguageProviderProps {
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [language, setLanguageState] = useState<Language>("en");
+  const [language, setLanguageState] = useState<Language>("bn");
   const [isClient, setIsClient] = useState(false);
 
   // Initialize language from localStorage on client side

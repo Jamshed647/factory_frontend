@@ -5,7 +5,7 @@ const onFormError = (errors: FieldErrors<any>) => {
   Object.entries(errors).forEach(([key, value]) => {
     const err = value as FieldError | undefined;
     if (err?.message) {
-      console.error(`- ${key}: ${err.message}`);
+      console?.error(`- ${key}: ${err.message}`);
     }
   });
 };

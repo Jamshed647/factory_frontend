@@ -1,13 +1,12 @@
 "use client";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-import { useAuth } from "@/hooks/hooks";
 import { CashOverview } from "./_assets/components/factory-overview";
 import { useState } from "react";
 import ExpenseDashboard from "./_assets/components/expense-history-viewer";
+import { useFactory } from "@/utils/factoryInfo";
 
 const CashPage = () => {
-  const { user } = useAuth();
-  const factory = user?.factory;
+  const { factory } = useFactory();
   const [rangeType, setRangeType] = useState<
     "ALL" | "TODAY" | "WEEKLY" | "MONTHLY"
   >("ALL");

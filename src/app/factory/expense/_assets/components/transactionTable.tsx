@@ -5,8 +5,8 @@
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import dateFormat from "@/utils/formatter/DateFormatter";
 import UpdateExpenseDialog from "./UpdateExpense";
-import { useAuth } from "@/hooks/hooks";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useFactory } from "@/utils/factoryInfo";
 
 interface TransactionTableProps {
   transactions: any[];
@@ -21,8 +21,7 @@ export default function TransactionTable({
   pagination,
   // onPageChange,
 }: TransactionTableProps) {
-  const { user } = useAuth();
-  const factory = user?.factory;
+  const { factory } = useFactory();
   const { t } = useLanguage();
 
   // Config for dynamic table
@@ -57,10 +56,11 @@ export default function TransactionTable({
         className: "py-3 px-4 text-sm",
         render: (row: any) => (
           <span
-            className={`font-medium ${row.transactionType === "ONLINE"
+            className={`font-medium ${
+              row.transactionType === "ONLINE"
                 ? "text-blue-600"
                 : "text-amber-600"
-              }`}
+            }`}
           >
             {row.transactionType}
           </span>

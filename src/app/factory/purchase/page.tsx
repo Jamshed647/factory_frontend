@@ -1,12 +1,12 @@
 "use client";
 
 import PurchaseTable from "@/components/pageComponents/purchaseProduct/purchaseTable";
-import { useAuth } from "@/hooks/hooks";
+import { useFactory } from "@/utils/factoryInfo";
 
 const PurchasePage = () => {
-  const { user } = useAuth();
+  const { factory } = useFactory();
 
-  return <PurchaseTable factoryId={user?.factoryId as string} />;
+  return <PurchaseTable factoryId={factory?.id as string} />;
 };
 
 export default PurchasePage;

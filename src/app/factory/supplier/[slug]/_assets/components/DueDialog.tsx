@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import { useAuth } from "@/hooks/hooks";
+import { useFactory } from "@/utils/factoryInfo";
 
 interface TakeDueDialogProps {
   data: any;
@@ -29,9 +30,7 @@ export default function TakeDueDialog({
 }: TakeDueDialogProps) {
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
-  // const factoryId = getFactoryId();
-  const { user } = useAuth();
-  const factoryId = user?.factoryId;
+  const { factory } = useFactory();
 
   const takeDue = useApiMutation({
     path: `factory/supplier/${data?.id}/due`,
@@ -45,7 +44,7 @@ export default function TakeDueDialog({
   });
 
   const { options: bankOptions } = DataFetcher.fetchBankAccounts({
-    path: `factory/bank/factory/${factoryId}`,
+    path: `factory/bank/factory/${factory?.id}`,
   });
 
   const form = useForm<DueFormType>({

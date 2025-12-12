@@ -44,10 +44,6 @@ export default function UpdateExpenseDialog({ factory, value }: Props) {
     },
   });
 
-  // if (factory?.id) {
-  //   form.setValue("factoryId", factory?.id);
-  // }
-
   const { options: bankOptions } = DataFetcher.fetchBankAccounts({
     path: `factory/bank/factory/${factory?.id}`,
   });

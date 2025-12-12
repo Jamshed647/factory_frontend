@@ -7,6 +7,7 @@ import ActionButton from "@/components/common/button/actionButton";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import type { Product, SelectedProduct } from "./schema/product-type";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
+import { Input } from "@/components/ui/input";
 
 interface ProductCardProps {
   product: Product;
@@ -79,7 +80,7 @@ const ProductCard = ({
           </div>
         </div>
 
-        <div className="flex justify-between mt-2">
+        <div className="flex gap-2 justify-between mt-2">
           <ActionButton
             type="button"
             disabled={!isStock}
@@ -92,7 +93,19 @@ const ProductCard = ({
             btnStyle="bg-red-500 text-white"
           />
 
-          <span className="px-2 font-semibold">{productionQuantity}</span>
+          {/* <span className="px-2 font-semibold">{productionQuantity}</span> */}
+
+          <Input
+            type="number"
+            value={productionQuantity}
+            onClick={(e) => e.stopPropagation()}
+            onChange={(e) =>
+              updateLimit(product, Number(e.target.value), stock)
+            }
+            name="limit"
+            placeholder="Limit"
+            className="appearance-none bg-white text-center [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden w-fit"
+          />
 
           <ActionButton
             type="button"

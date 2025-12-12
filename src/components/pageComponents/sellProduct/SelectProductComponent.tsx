@@ -9,6 +9,8 @@ import ActionButton from "@/components/common/button/actionButton";
 import { CookieCart } from "@/utils/cookie/cart-utils";
 import { useState } from "react";
 import ProductModal from "./productModal";
+import Input from "antd/es/input";
+import { showToast } from "@/components/common/TostMessage/customTostMessage";
 
 interface Item {
   id: string;
@@ -53,12 +55,14 @@ export const SelectProductComponent = ({
     buyPrice?: number,
     updateSellPrice?: number,
   ) => {
+    if (limit > stock) showToast("error", "Limit cannot be greater than stock");
+
     const updated = cart.update(
       id,
       limit,
-      name,
-      stock,
-      sellPrice,
+      name as string,
+      stock as number,
+      sellPrice as number,
       buyPrice as number,
       updateSellPrice as number,
     );
@@ -182,7 +186,7 @@ export const SelectProductComponent = ({
                     </div>
 
                     {/* Quantity Controls - Fixed position */}
-                    <div className="flex justify-between pt-2 mt-2 border-t">
+                    <div className="flex gap-2 justify-between pt-2 mt-2 border-t">
                       <ActionButton
                         type="button"
                         disabled={!isStock}
@@ -203,7 +207,25 @@ export const SelectProductComponent = ({
                         btnStyle="bg-red-500 text-white"
                       />
 
-                      <span className="px-2 font-semibold">{limit}</span>
+                      <Input
+                        type="number"
+                        value={limit}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) =>
+                          updateLimit(
+                            p.id,
+                            Number(e.target.value),
+                            p?.name,
+                            p?.quantity ?? p?.stock,
+                            p?.sellPrice,
+                            p?.buyPrice,
+                            p?.updateSellPrice,
+                          )
+                        }
+                        name="limit"
+                        placeholder="Limit"
+                        className="appearance-none bg-white text-center [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden w-fit"
+                      />
 
                       <ActionButton
                         type="button"

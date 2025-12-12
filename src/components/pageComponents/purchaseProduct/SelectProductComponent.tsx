@@ -9,6 +9,7 @@ import ActionButton from "@/components/common/button/actionButton";
 import { useState } from "react";
 import ProductModal from "./productModal";
 import { CookieCart } from "@/utils/cookie/purchase-cart";
+import { Input } from "@/components/ui/input";
 
 interface Item {
   id: string;
@@ -177,7 +178,7 @@ export const SelectProductComponent = ({
                     </div>
 
                     {/* Quantity Controls - Fixed position */}
-                    <div className="flex justify-between pt-2 mt-2 border-t">
+                    <div className="flex gap-2 justify-between pt-2 mt-2 border-t">
                       <ActionButton
                         type="button"
                         //  disabled={!isStock}
@@ -197,7 +198,24 @@ export const SelectProductComponent = ({
                         btnStyle="bg-red-500 text-white"
                       />
 
-                      <span className="px-2 font-semibold">{limit}</span>
+                      <Input
+                        type="number"
+                        value={limit}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) =>
+                          updateLimit(
+                            p.id,
+                            Number(e.target.value),
+                            p?.name,
+                            p?.quantity ?? p?.stock,
+                            p?.sellPrice,
+                            p?.buyPrice,
+                          )
+                        }
+                        name="limit"
+                        placeholder="Limit"
+                        className="appearance-none bg-white text-center [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden w-fit"
+                      />
 
                       <ActionButton
                         type="button"

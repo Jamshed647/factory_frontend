@@ -2,24 +2,23 @@
 "use client";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { CustomField } from "@/components/common/fields/cusField";
-import { useAuth } from "@/hooks/hooks";
 import { useState } from "react";
 import ProductionModal from "./ProductionModal";
 import ProductSelectorGrid from "./productSelectorComponent";
 import { Product, SelectedProduct } from "./schema/product-type";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
+import { useFactory } from "@/utils/factoryInfo";
 
 const AddProductionComponents = () => {
-  const { user } = useAuth();
-  const factoryId = user?.factoryId ?? "";
+  const { factory } = useFactory();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/product/factory/${factoryId}`,
+    path: `factory/product/factory/${factory?.id}`,
     queryKey: "getProductDataByFactory",
     filterData: { type: "RAW", search: searchTerm, page },
   });

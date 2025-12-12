@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-import { useAuth } from "@/hooks/hooks";
 import { CashHistoryViewer } from "./_assets/components/cash-history-viewer";
 import { CashOverview } from "./_assets/components/cash-overview";
 import CashHistoryDialog from "./_assets/components/cash-history-dialog";
 import { CustomField } from "@/components/common/fields/cusField";
 import { useState } from "react";
+import { IFactoryInfo, useFactory } from "@/utils/factoryInfo";
 
 const CashPage = () => {
   const [rangeType, setRangeType] = useState<"TODAY" | "WEEKLY" | "MONTHLY">(
     "TODAY",
   );
-  const { user } = useAuth();
-  const factory = user?.factory;
+
+  const { factory } = useFactory();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
@@ -28,7 +28,7 @@ const CashPage = () => {
       <div className="mx-auto space-y-6">
         <CashOverview
           transactions={balanceInfo?.cashAmountHistories}
-          factory={factory}
+          factory={factory as IFactoryInfo}
           currentBalance={balanceInfo?.balance}
         />
 

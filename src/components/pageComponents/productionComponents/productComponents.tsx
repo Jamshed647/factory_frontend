@@ -3,25 +3,25 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import ActionButton from "@/components/common/button/actionButton";
 import DynamicTableWithPagination from "@/components/common/DynamicTable/DynamicTable";
 import { CustomField } from "@/components/common/fields/cusField";
-import { useAuth } from "@/hooks/hooks";
 import { ArrowRightFromLine } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import ProductionUpdateModal from "./addProduction/update/updateProductModal";
 import dateFormat from "@/utils/formatter/DateFormatter";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useFactory } from "@/utils/factoryInfo";
 
 const ProductionComponents = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("");
-  const { user } = useAuth();
-  const factoryId = user?.factoryId;
+  const { factory } = useFactory();
+
   const { t } = useLanguage();
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/production/factory/${factoryId}`,
+    path: `factory/production/factory/${factory?.id}`,
     queryKey: "getProductionDataByFactory",
     filterData: {
       type: status,
@@ -111,7 +111,7 @@ const ProductionComponents = () => {
                     className={`flex gap-3 justify-end items-center ${row.status === "COMPLETE" ? "opacity-60 pointer-events-none select-none" : ""}`}
                   >
                     <ProductionUpdateModal
-                      factoryId={factoryId as string}
+                      factoryId={factory?.id as string}
                       productData={row}
                     />
                     <Link

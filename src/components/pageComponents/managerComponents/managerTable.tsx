@@ -9,7 +9,7 @@ import CreateManagerModal from "./_assets/components/create/createManagerModal";
 import UpdateManagerModal from "./_assets/components/update/updateManagerModal";
 import DeleteManagerModal from "./_assets/components/delete/deleteManagerModal";
 import Link from "next/link";
-import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import { setFactory } from "@/utils/cookie/companyFactoryCookie";
 import ActionButton from "@/components/common/button/actionButton";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useAuth } from "@/hooks/hooks";
@@ -62,7 +62,7 @@ const ManagerTable = ({
     },
   ];
 
-  // ✅ Add action column ONLY when switchUser === true
+  // Add action column ONLY when switchUser === true
   if (switchUser === true) {
     columns.push({
       key: "action",
@@ -74,7 +74,16 @@ const ManagerTable = ({
           <Link
             href={`/factory/manager/dashboard`}
             onClick={() => {
-              setFactoryId(user.factoryId, user?.id, user?.role);
+              setFactory(
+                {
+                  id: user.factoryId,
+                  name: user.factoryName,
+                  address: user.factoryAddress,
+                  status: user.factoryStatus,
+                },
+                user.id,
+                user.role,
+              );
             }}
           >
             <ActionButton

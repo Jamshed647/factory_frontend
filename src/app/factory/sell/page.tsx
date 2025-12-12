@@ -1,12 +1,13 @@
 "use client";
 
 import SellsTable from "@/components/pageComponents/sellProduct/sellsTable";
-import { useAuth } from "@/hooks/hooks";
+import { useFactory } from "@/utils/factoryInfo";
 
 const SellPage = () => {
-  const { user } = useAuth();
+  const { factory } = useFactory();
+  // console.log("factory", factory);
 
-  return <SellsTable factoryId={user?.factoryId as string} />;
+  return <SellsTable factoryId={factory?.id as string} />;
 };
 
 export default SellPage;

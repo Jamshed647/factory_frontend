@@ -8,7 +8,7 @@ import CreateSalesmanModal from "./_assets/components/create/createSalesmanModal
 import UpdateSalesmanModal from "./_assets/components/update/updateSalesmanModal";
 import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
 import Link from "next/link";
-import { setFactory, setFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import { setFactory } from "@/utils/cookie/companyFactoryCookie";
 import ActionButton from "@/components/common/button/actionButton";
 import { useLanguage } from "@/hooks/useLanguage";
 

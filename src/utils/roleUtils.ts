@@ -36,3 +36,20 @@ const ROLE_HIERARCHY: Record<UserRole, UserRole[]> = {
 
 export const hasPermission = (role: UserRole, target: UserRole): boolean =>
   ROLE_HIERARCHY[role]?.includes(target) ?? false;
+
+export const getPath = (role: UserRole): string => {
+  switch (role) {
+    case "PROJECT_OWNER":
+      return "/project-owner";
+    case "COMPANY_OWNER":
+      return "/company-owner";
+    case "MANAGER":
+      return "/factory/manager";
+    case "EMPLOYEE":
+      return "/factory/employee";
+    case "SALESMAN":
+      return "/factory/salesman";
+    default:
+      return "/";
+  }
+};

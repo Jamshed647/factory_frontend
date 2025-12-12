@@ -1,20 +1,13 @@
 "use client";
 import SellProductTable from "@/components/pageComponents/productComponents/sellProduct/SellProductTable";
-import { useAuth } from "@/hooks/hooks";
-import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
+import { useFactory } from "@/utils/factoryInfo";
 
 const ProductPage = () => {
-  const { user } = useAuth();
-  const factoryId = getFactoryId();
-
-  const id =
-    user?.role === "PROJECT_OWNER" || user?.role === "COMPANY_OWNER"
-      ? factoryId
-      : user?.factory?.id;
+  const { factory } = useFactory();
 
   return (
     <div>
-      <SellProductTable id={id as string} />
+      <SellProductTable id={factory?.id as string} />
     </div>
   );
 };

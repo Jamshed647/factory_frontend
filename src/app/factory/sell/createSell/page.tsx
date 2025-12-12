@@ -5,17 +5,14 @@ import { CustomField } from "@/components/common/fields/cusField";
 import { SelectProductComponent } from "@/components/pageComponents/sellProduct/SelectProductComponent";
 import { CookieCart } from "@/utils/cookie/cart-utils";
 import { useState } from "react";
-import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
-import { useAuth } from "@/hooks/hooks";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
 import SelectCustomer from "../_assets/components/selectCustomer";
+import { useFactory } from "@/utils/factoryInfo";
 
 const CreateSellPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-
-  const { user } = useAuth();
-  const factoryId = user?.factoryId || getFactoryId();
+  const { factory } = useFactory();
 
   const cart = CookieCart("selected_products");
 
@@ -31,7 +28,7 @@ const CreateSellPage = () => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/product/factory/${factoryId}`,
+    path: `factory/product/factory/${factory?.id}`,
     queryKey: "getProductDataByFactory",
     filterData: { type: "FINISHED", search: searchTerm, page },
   });
@@ -76,7 +73,7 @@ const CreateSellPage = () => {
 
         <SelectCustomer
           enabled={selectedProducts?.length > 0}
-          factoryId={factoryId as string}
+          factoryId={factory?.id as string}
         />
       </div>
     </div>

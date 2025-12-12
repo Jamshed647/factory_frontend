@@ -7,7 +7,7 @@ export type IFactoryInfo = {
   id: string;
   name?: string;
   address?: string;
-  status?: string;
+  status?: "ACTIVE" | "INACTIVE";
 };
 
 export type UseFactoryReturn = {
@@ -20,7 +20,7 @@ export const useFactory = (): UseFactoryReturn => {
 
   if (authLoading || !user)
     return {
-      factory: { id: "", name: "", address: "", status: "" },
+      factory: { id: "", name: "", address: "", status: "INACTIVE" },
       isLoading: true,
     };
 

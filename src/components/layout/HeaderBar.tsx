@@ -3,9 +3,15 @@ import Link from "next/link";
 import ActionButton from "../common/button/actionButton";
 import { useFactory } from "@/utils/factoryInfo";
 import LanguageSwitcher from "../common/LanguageSwitcher";
+import { useAuth } from "@/hooks/hooks";
+import { getPath } from "@/utils/roleUtils";
+import { UserRole } from "@/types/user";
 
 export default function HeaderBar() {
+  const { user } = useAuth();
   const { factory } = useFactory();
+
+  const path = getPath(user?.role as UserRole);
 
   return (
     <div
@@ -19,12 +25,12 @@ export default function HeaderBar() {
         position: "relative",
       }}
     >
-      <Link href="dashboard">
+      <Link href={`${path}/dashboard`}>
         <h2
           style={{ margin: 0, fontSize: 18 }}
           className="font-semibold capitalize"
         >
-          {factory?.name}
+          {factory?.name ?? "JangoSoft"}
         </h2>
       </Link>
 
@@ -35,7 +41,7 @@ export default function HeaderBar() {
 
         <LanguageSwitcher />
 
-        <Link className="!h-fit w-fit bg-red" href={`profile`}>
+        <Link className="!h-fit w-fit bg-red" href={`${path}/profile`}>
           <ActionButton icon={<CircleUserRound />} />
         </Link>
       </div>

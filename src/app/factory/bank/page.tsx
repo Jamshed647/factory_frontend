@@ -1,18 +1,14 @@
 "use client";
 
-import { useAuth } from "@/hooks/hooks";
-import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import BankTable from "./_assets/components/bankTable";
-
-//const factoryId = getFactoryId();
+import { useFactory } from "@/utils/factoryInfo";
 
 const BankPage = () => {
-  const { user } = useAuth();
-  const factoryId = user?.factoryId;
+  const { factory } = useFactory();
 
   return (
     <div>
-      <BankTable factoryId={factoryId as string} />
+      <BankTable factoryId={factory?.id as string} />
     </div>
   );
 };

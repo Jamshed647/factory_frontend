@@ -58,7 +58,10 @@ export function MetricCard({
   }
 
   return (
-    <Link href={link}>
+    <Link
+      href={link}
+      className={`${link === "#" ? "pointer-events-none" : ""}`}
+    >
       <Card className="flex flex-col justify-between h-36">
         <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
           <CardTitle className="text-sm font-medium">{title}</CardTitle>

@@ -19,7 +19,7 @@ export default function HeaderBar() {
         position: "relative",
       }}
     >
-      <Link href="/">
+      <Link href="dashboard">
         <h2
           style={{ margin: 0, fontSize: 18 }}
           className="font-semibold capitalize"
@@ -33,7 +33,7 @@ export default function HeaderBar() {
           <ActionButton icon={<Bell />} tooltipContent="Notifications" />
         </Link>
 
-        {/* <LanguageSwitcher /> */}
+        <LanguageSwitcher />
 
         <Link className="!h-fit w-fit bg-red" href={`profile`}>
           <ActionButton icon={<CircleUserRound />} />

@@ -28,7 +28,7 @@ const BankOverview = ({
       {" "}
       <MetricCard
         isLoading={isLoading || factoryLoading}
-        link={`/factory/cash`}
+        link={`/factory/bank`}
         title={t.bankBalance}
         value={totalBalance}
         description={t.allBankAmount}

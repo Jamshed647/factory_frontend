@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
@@ -11,6 +12,7 @@ import Link from "next/link";
 import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
 import ActionButton from "@/components/common/button/actionButton";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useAuth } from "@/hooks/hooks";
 
 interface TableProps {
   factoryId?: string;
@@ -23,6 +25,7 @@ const ManagerTable = ({
   companyId,
   switchUser = false,
 }: TableProps) => {
+  const { user } = useAuth();
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
   const { t } = useLanguage();
@@ -43,6 +46,47 @@ const ManagerTable = ({
     },
   });
 
+  const columns: any[] = [
+    {
+      key: "name",
+      header: t.name,
+      render: (item: any) => `${item?.firstName ?? ""} ${item?.lastName ?? ""}`,
+    },
+    { key: "phone", header: t.contactInfo },
+    { key: "status", header: t.status },
+    { key: "role", header: t.role },
+    {
+      key: "factoryName",
+      header: t.factoryName,
+      render: (item: any) => item?.factory?.name,
+    },
+  ];
+
+  // ✅ Add action column ONLY when switchUser === true
+  if (switchUser === true) {
+    columns.push({
+      key: "action",
+      header: t.action,
+      render: (user: any) => (
+        <ResponsiveButtonGroup>
+          <UpdateManagerModal data={user} />
+          <DeleteManagerModal data={user} />
+          <Link
+            href={`/factory/manager/dashboard`}
+            onClick={() => {
+              setFactoryId(user.factoryId, user?.id, user?.role);
+            }}
+          >
+            <ActionButton
+              variant="primaryIcon"
+              buttonContent={t.goToDashboard}
+            />
+          </Link>
+        </ResponsiveButtonGroup>
+      ),
+    });
+  }
+
   return (
     <div className="mt-10">
       <div className="rounded-md border shadow-lg">
@@ -55,7 +99,10 @@ const ManagerTable = ({
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            {/* <CreateManagerModal factoryId={factoryId} /> */}
+            {user?.role === "COMPANY_OWNER" ||
+              (user?.role === "PROJECT_OWNER" && (
+                <CreateManagerModal factoryId={factoryId} />
+              ))}
           </div>
         </div>
 
@@ -67,45 +114,7 @@ const ManagerTable = ({
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           config={{
-            columns: [
-              {
-                key: "name",
-                header: t.name,
-                render: (item) =>
-                  (item?.firstName ?? "") + " " + (item?.lastName ?? ""),
-              },
-              { key: "phone", header: t.contactInfo },
-              { key: "status", header: t.status },
-              // { key: "role", header: t.role },
-              // {
-              //   key: "factoryName",
-              //   header: t.factoryName,
-              //   render: (item) => item?.factory?.name,
-              // },
-              // {
-              //   key: "action",
-              //   header: t.action,
-              //   render: (user) => (
-              //     <ResponsiveButtonGroup>
-              //       <UpdateManagerModal data={user} />
-              //       <DeleteManagerModal data={user} />
-              //       {switchUser === true && (
-              //         <Link
-              //           href={`/factory/manager/dashboard`}
-              //           onClick={() => {
-              //             setFactoryId(user.factoryId, user?.id, user?.role);
-              //           }}
-              //         >
-              //           <ActionButton
-              //             variant="primaryIcon"
-              //             buttonContent={t.goToDashboard}
-              //           />
-              //         </Link>
-              //       )}
-              //     </ResponsiveButtonGroup>
-              //   ),
-              // },
-            ],
+            columns,
           }}
         />
       </div>

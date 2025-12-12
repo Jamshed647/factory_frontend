@@ -12,7 +12,7 @@ import {
   supplierUpdateSchema,
 } from "../../schema/customerSchema";
 import { bankDefaultValue } from "../../utils/customerDefaultValue";
-import CustomerFormComponent from "../form/customerForm";
+import SupplierFormComponent from "../form/supplierForm";
 
 const UpdateSupplierModal = ({
   value,
@@ -51,7 +51,7 @@ const UpdateSupplierModal = ({
       handleOpen={setOpen}
       title="Create Supplier"
     >
-      <CustomerFormComponent
+      <SupplierFormComponent
         operation="update"
         form={bankForm}
         isPending={createSupplier.isPending}

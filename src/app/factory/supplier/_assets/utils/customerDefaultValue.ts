@@ -6,6 +6,6 @@ export const bankDefaultValue = (v: Partial<SupplierFormType>) => {
     phone: v?.phone ?? "",
     factoryId: v?.factoryId ?? "",
     address: v?.address ?? "",
-    initialDue: v?.initialDue ?? 0,
+    initialDue: Number(v?.initialDue ?? 0),
   };
 };

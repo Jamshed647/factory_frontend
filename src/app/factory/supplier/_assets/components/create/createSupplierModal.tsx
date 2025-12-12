@@ -8,8 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { bankDefaultValue } from "../../utils/customerDefaultValue";
-import CustomerFormComponent from "../form/customerForm";
 import { SupplierFormType, supplierSchema } from "../../schema/customerSchema";
+import SupplierFormComponent from "../form/supplierForm";
 
 const CreateSupplierModal = ({ factoryId }: { factoryId?: string }) => {
   const [open, setOpen] = React.useState(false);
@@ -52,7 +52,7 @@ const CreateSupplierModal = ({ factoryId }: { factoryId?: string }) => {
       handleOpen={setOpen}
       title="Create Supplier"
     >
-      <CustomerFormComponent
+      <SupplierFormComponent
         selectFactory={!factoryId ? true : false}
         form={bankForm}
         isPending={createSupplier.isPending}

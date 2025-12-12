@@ -9,8 +9,8 @@ import { CustomField } from "@/components/common/fields/cusField";
 import { useState } from "react";
 
 const CashPage = () => {
-  const [rangeType, setRangeType] = useState<"DAILY" | "WEEKLY" | "MONTHLY">(
-    "DAILY",
+  const [rangeType, setRangeType] = useState<"TODAY" | "WEEKLY" | "MONTHLY">(
+    "TODAY",
   );
   const { user } = useAuth();
   const factory = user?.factory;
@@ -34,13 +34,11 @@ const CashPage = () => {
 
         <div className="p-3 space-y-3 rounded-lg border shadow-md">
           <div className="flex gap-3 justify-between items-center">
-            <h2 className="text-lg font-bold text-foreground">
-              {rangeType === "DAILY" ? "Today" : rangeType}
-            </h2>
+            <h2 className="text-lg font-bold text-foreground">{rangeType}</h2>
             <CustomField.SingleSelectField
               name="cashHistory"
               placeholder="Select Range"
-              options={["DAILY", "WEEKLY", "MONTHLY"]}
+              options={["ALL", "TODAY", "WEEKLY", "MONTHLY"]}
               defaultValue={rangeType}
               onValueChange={(value: any) => setRangeType(value)}
             />

@@ -7,7 +7,7 @@ import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import onFormError from "@/utils/formError";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
-interface CustomerFormComponentProps<T extends Record<string, any>> {
+interface SupplierFormComponentProps<T extends Record<string, any>> {
   form: UseFormReturn<T>;
   onSubmit: (data: T) => void;
   isPending: boolean;
@@ -15,13 +15,13 @@ interface CustomerFormComponentProps<T extends Record<string, any>> {
   selectFactory?: boolean;
 }
 
-export default function CustomerFormComponent<T extends Record<string, any>>({
+export default function SupplierFormComponent<T extends Record<string, any>>({
   form,
   onSubmit,
   isPending,
   operation = "create",
   selectFactory = false,
-}: CustomerFormComponentProps<T>) {
+}: SupplierFormComponentProps<T>) {
   const { options: factoryOption, isLoading } = DataFetcher.fetchFactories({});
 
   return (
@@ -50,7 +50,7 @@ export default function CustomerFormComponent<T extends Record<string, any>>({
           form={form}
           optional={false}
         />
-        <CustomField.Text
+        <CustomField.Number
           name="initialDue"
           labelName="Initial Due"
           placeholder="Enter your initial due"

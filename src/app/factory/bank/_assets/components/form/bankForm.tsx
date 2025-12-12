@@ -51,7 +51,7 @@ export default function BankFormComponent<T extends Record<string, any>>({
           placeholder="Enter your branch address"
         />
 
-        <CustomField.Text
+        <CustomField.Number
           name="balance"
           labelName="Balance"
           form={form}

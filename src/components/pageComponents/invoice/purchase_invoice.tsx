@@ -21,20 +21,20 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
           <h1 className="text-3xl font-bold">Purchase Invoice</h1>
 
           <p className="text-sm">
-            <span className="font-semibold">Invoice No:</span> {data.invoiceNo}
+            <span className="font-semibold">Invoice No:</span> {data?.invoiceNo}
           </p>
 
           <p className="text-sm">
             <span className="font-semibold">Date:</span>{" "}
-            {dateFormat.customFormatDate(data.date)}
+            {dateFormat.customFormatDate(data?.date)}
           </p>
         </div>
 
         <div className="text-right">
           <p className="text-sm font-semibold">
-            Purchaser: {data.purchaserName}
+            Purchaser: {data?.purchaserName}
           </p>
-          <p className="text-sm">Payment Method: {data.paymentMethod}</p>
+          <p className="text-sm">Payment Method: {data?.paymentMethod}</p>
         </div>
       </div>
 
@@ -44,22 +44,22 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
 
         <p className="text-sm">
           <span className="font-semibold">Name:</span>{" "}
-          {data.supplier?.name ?? "N/A"}
+          {data?.supplier?.name ?? "N/A"}
         </p>
 
         <p className="text-sm">
           <span className="font-semibold">Phone:</span>{" "}
-          {data.supplier?.phone ?? "N/A"}
+          {data?.supplier?.phone ?? "N/A"}
         </p>
 
         <p className="text-sm">
           <span className="font-semibold">Address:</span>{" "}
-          {data.supplier?.address ?? "N/A"}
+          {data?.supplier?.address ?? "N/A"}
         </p>
 
         <p className="mt-1 text-sm">
           <span className="font-semibold">Total Supplier Due:</span>{" "}
-          {data.supplier?.totalDueAmount ?? 0}
+          {data?.supplier?.totalDueAmount ?? 0}
         </p>
       </div>
 
@@ -80,7 +80,7 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
             </TableHeader>
 
             <TableBody>
-              {data.items.map((item: any, index: number) => (
+              {data?.items.map((item: any, index: number) => (
                 <TableRow key={item.id}>
                   <TableCell className="text-center">{index + 1}</TableCell>
 
@@ -89,14 +89,14 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
                     {item.productId}
                   </TableCell>
 
-                  <TableCell className="text-right">{item.quantity}</TableCell>
+                  <TableCell className="text-right">{item?.quantity}</TableCell>
 
                   <TableCell className="text-right">
-                    {item.updateBuyPrice ?? item.buyPrice}
+                    {item?.updateBuyPrice ?? item?.buyPrice}
                   </TableCell>
 
                   <TableCell className="text-right">
-                    {item.totalPrice}
+                    {item?.totalPrice}
                   </TableCell>
                 </TableRow>
               ))}
@@ -110,36 +110,36 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
         <div className="space-y-1 w-64 text-sm">
           <div className="flex justify-between">
             <span>Total Purchase Amount:</span>
-            <span>{data.totalPurchaseAmount}</span>
+            <span>{data?.totalPurchaseAmount}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Extra Charge:</span>
-            <span>{data.extraCharge}</span>
+            <span>{data?.extraCharge}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Discount:</span>
             <span>
-              {data.discountType === "CASH"
-                ? data.discountAmount
-                : `${data.discountPercentage ?? 0}%`}
+              {data?.discountType === "CASH"
+                ? data?.discountAmount
+                : `${data?.discountPercentage ?? 0}%`}
             </span>
           </div>
 
           <div className="flex justify-between pt-2 font-semibold border-t">
             <span>Total Amount:</span>
-            <span>{data.totalAmount}</span>
+            <span>{data?.totalAmount}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Paid:</span>
-            <span>{data.paidAmount}</span>
+            <span>{data?.paidAmount}</span>
           </div>
 
           <div className="flex justify-between font-semibold text-red-600">
             <span>Due Amount:</span>
-            <span>{data.currentDueAmount}</span>
+            <span>{data?.currentDueAmount}</span>
           </div>
         </div>
       </div>

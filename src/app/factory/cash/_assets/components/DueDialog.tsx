@@ -81,7 +81,7 @@ export default function TakeDueDialog({
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit, onFormError)}>
           <div className="space-y-3">
-            <CustomField.Text
+            <CustomField.Number
               form={form}
               name="amount"
               labelName="Amount"

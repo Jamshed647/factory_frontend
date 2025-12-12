@@ -84,6 +84,7 @@ const ProductionComponents = () => {
                 render: (row) =>
                   dateFormat.fullDateTime(row?.createdAt, { showTime: false }),
               },
+              { key: "name", header: "Product Name" },
               {
                 key: "batchNo",
                 header: t.batchNo,

@@ -101,6 +101,7 @@ const MultiCard = ({
       <MetricCard
         isLoading={isLoading || factoryLoading}
         title="Total Raw Product"
+        link={`purchaseProduct`}
         value={data?.data?.raw?.totalRawProduct}
         description="Types of raw materials"
         icon={<Boxes className="w-4 h-4 text-muted-foreground" />}
@@ -128,6 +129,7 @@ const MultiCard = ({
       <MetricCard
         isLoading={isLoading || factoryLoading}
         title="Total Sell Product"
+        link={`sellProduct`}
         value={data?.data?.sell?.totalSellProduct}
         description="Types of products sold"
         icon={<ShoppingBasket className="w-4 h-4 text-muted-foreground" />}

@@ -114,16 +114,14 @@ export function fetchProductCategories({
 }) {
   const { data, isLoading, isError } = useFetchData({
     method: "GET",
-    path:
-      path ??
-      `factory/category/factory/ef2187d3-9afc-4c99-ac0e-b95476252148?type=sell-product`,
+    path: path ?? `factory/category/factory?type=sell-product`,
     queryKey: "fetch-product-categories",
     filterData: { ...filter },
     //enabled: !!sessionId,
   });
 
   const options = data?.data?.map((item: any) => ({
-    label: item?.name || item?.title || "Unknown",
+    label: item?.name || item?.title || item?.categoryName || "Unknown",
     value: item?.id,
     code: item?.code,
   }));

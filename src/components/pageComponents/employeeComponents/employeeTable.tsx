@@ -78,7 +78,7 @@ const EmployeeTable = ({
                 ),
               },
               { key: "phone", header: t.contactInfo },
-              { key: "status", header: t.status },
+              // { key: "status", header: t.status },
               { key: "role", header: t.role },
               {
                 key: "factoryName",

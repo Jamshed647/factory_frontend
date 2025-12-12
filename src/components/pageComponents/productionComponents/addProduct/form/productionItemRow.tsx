@@ -3,28 +3,28 @@ import { useFormContext } from "react-hook-form";
 import { ProductionFormType } from "../schema/product-schema";
 import ActionButton from "@/components/common/button/actionButton";
 import { CustomField } from "@/components/common/fields/cusField";
-// import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
-// import { useState } from "react";
+import { useState } from "react";
+import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
+import { useFactory } from "@/utils/factoryInfo";
 
 const ProductionItemRow = ({
-  //  factoryId,
   index,
   remove,
 }: {
   index: number;
   remove: () => void;
-  // factoryId?: string;
 }) => {
   const form = useFormContext<ProductionFormType>();
-  // const [searchProduct, setSearchProduct] = useState("");
-  //
-  // const { options, isLoading } = DataFetcher.fetchFactories({
-  //   path: `factory/product/factory/${factoryId}`,
-  //   filter: {
-  //     type: "RAW",
-  //     search: searchProduct,
-  //   },
-  // });
+  const { factory } = useFactory();
+  const [searchProduct, setSearchProduct] = useState("");
+
+  const { options, isLoading } = DataFetcher.fetchProductCategories({
+    path: `factory/category/factory/${factory?.id}`,
+    filter: {
+      type: "sell-product",
+      search: searchProduct,
+    },
+  });
 
   return (
     <div className="p-4 space-y-4 rounded-md border">
@@ -36,19 +36,9 @@ const ProductionItemRow = ({
             labelName="Select Product"
             form={form}
             name={`items.${index}.name`}
-            options={[
-              {
-                value: "1",
-                label: "Product 1",
-              },
-              {
-                value: "2",
-                label: "Product 2",
-              },
-            ]}
-            //    options={options}
-            //     isLoading={isLoading}
-            //      onSearch={(e) => setSearchProduct(e)}
+            options={options}
+            isLoading={isLoading}
+            onSearch={(e) => setSearchProduct(e)}
           />
         </div>
 

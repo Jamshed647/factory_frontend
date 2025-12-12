@@ -9,8 +9,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 interface ExpenseDashboardProps {
   data: any;
   isLoading: boolean;
-  rangeType: string;
-  setRangeType: any;
+  // rangeType: string;
+  // setRangeType: any;
 }
 
 export default function ExpenseDashboard({
@@ -49,7 +49,7 @@ export default function ExpenseDashboard({
               transactions={data?.data?.history || []}
               isLoading={isLoading}
               pagination={data?.pagination}
-            //              onPageChange={setPage}
+              //   onPageChange={setPage}
             />
           </div>
         </div>

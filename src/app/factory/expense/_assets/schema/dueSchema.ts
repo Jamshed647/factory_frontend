@@ -7,7 +7,10 @@ export const expenseSchema = z
       label: "Factory Id",
     }),
     title: validationSchemas.textSchema({ label: "Title" }),
-    category: validationSchemas.textSchema({ label: "Category" }),
+    category: validationSchemas.textSchema({
+      label: "Category",
+      required: false,
+    }),
     amount: validationSchemas.textSchema({
       label: "Amount",
     }),

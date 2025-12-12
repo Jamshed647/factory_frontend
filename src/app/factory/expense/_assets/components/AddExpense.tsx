@@ -73,12 +73,12 @@ export default function AddExpenseDialog({ factory }: Props) {
               labelName="Title"
             />
 
-            <CustomField.Text
-              form={form}
-              name="category"
-              labelName="Category"
-              placeholder="Enter your category "
-            />
+            {/* <CustomField.Text */}
+            {/*   form={form} */}
+            {/*   name="category" */}
+            {/*   labelName="Category" */}
+            {/*   placeholder="Enter your category " */}
+            {/* /> */}
 
             <CustomField.Text
               form={form}

@@ -18,7 +18,10 @@ export const employeeSchema = z
       label: "Contact Info",
       type: "string",
     }),
-    status: validationSchemas.textSchema({ label: "Factory Status" }),
+    status: validationSchemas.textSchema({
+      label: "Factory Status",
+      required: false,
+    }),
     factoryId: validationSchemas.textSchema({ label: "Factory Owner Id" }),
     pinCode: z.string().min(4).max(4),
     confirmPinCode: z.string().min(4).max(4),

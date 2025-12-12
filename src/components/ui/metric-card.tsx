@@ -60,7 +60,9 @@ export function MetricCard({
   return (
     <Link
       href={link}
-      className={`${link === "#" ? "pointer-events-none" : ""}`}
+      onClick={(e) => {
+        if (link === "#") e.preventDefault();
+      }}
     >
       <Card className="flex flex-col justify-between h-36">
         <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">

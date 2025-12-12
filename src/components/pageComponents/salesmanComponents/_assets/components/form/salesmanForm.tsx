@@ -33,25 +33,25 @@ export default function SalesmanFormComponent<T extends Record<string, any>>({
       >
         <CustomField.Text
           name="firstName"
-          labelName="First Name"
-          placeholder="Enter your first name"
+          labelName="Full Name"
+          placeholder="Enter your full name"
           form={form}
           optional={false}
         />
 
-        <CustomField.Text
-          name="lastName"
-          labelName="Last Name"
-          placeholder="Enter your last name"
-          form={form}
-        />
-
-        <CustomField.Text
-          name="email"
-          labelName="Email"
-          placeholder="Enter your email"
-          form={form}
-        />
+        {/* <CustomField.Text */}
+        {/*   name="lastName" */}
+        {/*   labelName="Last Name" */}
+        {/*   placeholder="Enter your last name" */}
+        {/*   form={form} */}
+        {/* /> */}
+        {/**/}
+        {/* <CustomField.Text */}
+        {/*   name="email" */}
+        {/*   labelName="Email" */}
+        {/*   placeholder="Enter your email" */}
+        {/*   form={form} */}
+        {/* /> */}
 
         <CustomField.Text
           name="phone"
@@ -61,16 +61,17 @@ export default function SalesmanFormComponent<T extends Record<string, any>>({
           optional={false}
         />
 
-        <CustomField.SelectField
-          name="status"
-          labelName="Salesman Status"
-          placeholder="Select Salesman Status"
-          form={form}
-          options={[
-            { value: "ACTIVE", label: "Active" },
-            { value: "DEACTIVATE", label: "Deactivate" },
-          ]}
-        />
+        {/* <CustomField.SelectField */}
+        {/*   name="status" */}
+        {/*   labelName="Salesman Status" */}
+        {/*   placeholder="Select Salesman Status" */}
+        {/*   form={form} */}
+        {/*   options={[ */}
+        {/*     { value: "ACTIVE", label: "Active" }, */}
+        {/*     { value: "DEACTIVATE", label: "Deactivate" }, */}
+        {/*   ]} */}
+        {/* /> */}
+
         {selectFactory && (
           <CustomField.SelectField
             name="factoryId"

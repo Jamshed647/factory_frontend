@@ -7,9 +7,9 @@ import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButt
 import CreateSalesmanModal from "./_assets/components/create/createSalesmanModal";
 import UpdateSalesmanModal from "./_assets/components/update/updateSalesmanModal";
 import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
-import Link from "next/link";
-import { setFactory } from "@/utils/cookie/companyFactoryCookie";
-import ActionButton from "@/components/common/button/actionButton";
+// import Link from "next/link";
+// import { setFactory } from "@/utils/cookie/companyFactoryCookie";
+// import ActionButton from "@/components/common/button/actionButton";
 import { useLanguage } from "@/hooks/useLanguage";
 
 interface TableProps {
@@ -92,19 +92,19 @@ const SalesmanTable = ({
                   <ResponsiveButtonGroup>
                     <UpdateSalesmanModal data={user} />
                     <DeleteSalesmanModal data={user} />
-                    {switchUser === true && (
-                      <Link
-                        href={`/factory/salesman/dashboard`}
-                        onClick={() => {
-                          setFactory(user.factory, user?.id, user?.role);
-                        }}
-                      >
-                        <ActionButton
-                          variant="primaryIcon"
-                          buttonContent={t.goToDashboard}
-                        />
-                      </Link>
-                    )}
+                    {/* {switchUser === true && ( */}
+                    {/*   <Link */}
+                    {/*     href={`/factory/salesman/dashboard`} */}
+                    {/*     onClick={() => { */}
+                    {/*       setFactory(user.factory, user?.id, user?.role); */}
+                    {/*     }} */}
+                    {/*   > */}
+                    {/*     <ActionButton */}
+                    {/*       variant="primaryIcon" */}
+                    {/*       buttonContent={t.goToDashboard} */}
+                    {/*     /> */}
+                    {/*   </Link> */}
+                    {/* )} */}
                   </ResponsiveButtonGroup>
                 ),
               },

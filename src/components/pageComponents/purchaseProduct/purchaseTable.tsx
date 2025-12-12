@@ -7,6 +7,7 @@ import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { useLanguage } from "@/hooks/useLanguage";
+import dateFormat from "@/utils/formatter/DateFormatter";
 // import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 // import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
 // import CreateProductModal from "./_assets/components/create/createProductModal";
@@ -70,21 +71,22 @@ const PurchaseTable = ({ factoryId }: { factoryId: string }) => {
               {
                 key: "date",
                 header: t.date,
-                render: (item) => new Date(item.date).toLocaleString(),
+                render: (item) =>
+                  dateFormat.fullDateTime(item?.date, { showTime: false }),
               },
               {
-                key: "bank",
-                header: t.customerName,
-                render: (item) => item?.bank?.name,
+                key: "supplier",
+                header: t.supplier,
+                render: (item) => item?.supplier?.name,
               },
+              // {
+              //   key: "phone",
+              //   header: t.phone,
+              //   render: (item) => item?.bank?.phone,
+              // },
               {
-                key: "phone",
-                header: t.phone,
-                render: (item) => item?.bank?.phone,
-              },
-              {
-                key: "totalSaleAmount",
-                header: t.totalSale,
+                key: "totalPurchaseAmount",
+                header: t.totalPurchaseAmount,
               },
               {
                 key: "paidAmount",

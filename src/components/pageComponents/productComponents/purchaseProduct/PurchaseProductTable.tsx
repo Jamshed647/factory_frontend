@@ -4,7 +4,6 @@ import DynamicTableWithPagination from "@/components/common/DynamicTable/Dynamic
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
-import DeleteSalesmanModal from "./_assets/components/delete/deleteSalesmanModal";
 import CreateProductModal from "./_assets/components/create/createProductModal";
 import UpdateProductModal from "./_assets/components/update/updateProductModal";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -56,6 +55,11 @@ const PurchaseProductTable = ({ id }: { id?: string }) => {
                 key: "quantity",
                 header: t.quantity,
                 render: (item) => item?.quantity + " " + item?.quantityType,
+              },
+              {
+                key: "totalPrice",
+                header: t.totalPrice,
+                render: (item) => item?.quantity * item?.buyPrice,
               },
               {
                 key: "action",

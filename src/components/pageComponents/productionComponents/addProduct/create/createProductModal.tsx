@@ -4,10 +4,10 @@ import { ProductionFormType, productionSchema } from "../schema/product-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productionDefaultValue } from "../schema/productDefaultValue";
 import AddProductForm from "../form/addProductForm";
-import { useAuth } from "@/hooks/hooks";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useRouter } from "next/navigation";
+import { useFactory } from "@/utils/factoryInfo";
 
 const CreateProductToProductionModal = ({
   productionId,
@@ -15,19 +15,18 @@ const CreateProductToProductionModal = ({
   productionId: string;
 }) => {
   const router = useRouter();
-  const { user } = useAuth();
-  const factoryId = user?.factoryId;
+  const { factory } = useFactory();
 
   const form = useForm<ProductionFormType>({
     resolver: zodResolver(productionSchema),
     defaultValues: productionDefaultValue({
-      factoryId: factoryId as string,
+      factoryId: factory?.id as string,
       productionId: productionId,
     }),
   });
 
-  if (factoryId) {
-    form.setValue("factoryId", factoryId);
+  if (factory?.id) {
+    form.setValue("factoryId", factory?.id);
   }
 
   const addProduct = useApiMutation({

@@ -7,9 +7,9 @@ import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButt
 import UpdateEmployeeModal from "./_assets/components/update/updateEmployeeModal";
 import DeleteEmployeeModal from "./_assets/components/delete/deleteEmployeeModal";
 import CreateEmployeeModal from "./_assets/components/create/createEmployeeModal";
-import Link from "next/link";
-import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
-import ActionButton from "@/components/common/button/actionButton";
+// import Link from "next/link";
+// import { setFactoryId } from "@/utils/cookie/companyFactoryCookie";
+// import ActionButton from "@/components/common/button/actionButton";
 import { useLanguage } from "@/hooks/useLanguage";
 
 interface TableProps {
@@ -92,19 +92,19 @@ const EmployeeTable = ({
                   <ResponsiveButtonGroup>
                     <UpdateEmployeeModal data={user} />
                     <DeleteEmployeeModal data={user} />
-                    {switchUser === true && (
-                      <Link
-                        href={`/factory/employee/dashboard`}
-                        onClick={() => {
-                          setFactoryId(user.factoryId, user?.id, user?.role);
-                        }}
-                      >
-                        <ActionButton
-                          variant="primaryIcon"
-                          buttonContent={t.goToDashboard}
-                        />
-                      </Link>
-                    )}
+                    {/* {switchUser === true && ( */}
+                    {/*   <Link */}
+                    {/*     href={`/factory/employee/dashboard`} */}
+                    {/*     onClick={() => { */}
+                    {/*       setFactoryId(user.factoryId, user?.id, user?.role); */}
+                    {/*     }} */}
+                    {/*   > */}
+                    {/*     <ActionButton */}
+                    {/*       variant="primaryIcon" */}
+                    {/*       buttonContent={t.goToDashboard} */}
+                    {/*     /> */}
+                    {/*   </Link> */}
+                    {/* )} */}
                   </ResponsiveButtonGroup>
                 ),
               },

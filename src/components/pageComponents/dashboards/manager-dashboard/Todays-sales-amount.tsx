@@ -90,10 +90,11 @@ const TodaysSalesAmount = ({
                           </p>
 
                           <span
-                            className={`text-xs px-2 py-1 rounded-full ${isPay
+                            className={`text-xs px-2 py-1 rounded-full ${
+                              isPay
                                 ? "bg-red-100 text-red-700"
                                 : "bg-emerald-100 text-emerald-700"
-                              }`}
+                            }`}
                           >
                             {isPay ? "DUE" : "PAID"}
                           </span>
@@ -117,14 +118,15 @@ const TodaysSalesAmount = ({
                     {/* Right */}
                     <div className="ml-4 text-right">
                       <p
-                        className={`text-lg font-bold ${isPay ? "text-red-600" : "text-emerald-600"
-                          }`}
+                        className={`text-lg font-bold ${
+                          isPay ? "text-red-600" : "text-emerald-600"
+                        }`}
                       >
-                        {isPay ? "−" : "+"}৳ {invoice.paidAmount}
+                        {isPay ? "−" : "+"}৳ {invoice.totalSaleAmount}
                       </p>
 
                       <p className="mt-1 text-xs text-muted-foreground">
-                        {t.total}: ৳ {invoice.totalSaleAmount}
+                        {t.total}: ৳ {invoice.paidAmount}
                       </p>
 
                       {invoice.extraCharge > 0 && (

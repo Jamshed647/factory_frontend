@@ -84,10 +84,15 @@ const ProductionComponents = () => {
                 render: (row) =>
                   dateFormat.fullDateTime(row?.createdAt, { showTime: false }),
               },
-              { key: "name", header: "Product Name" },
+              // { key: "name", header: "Product Name" },
               {
                 key: "batchNo",
                 header: t.batchNo,
+                render: (row) => (
+                  <span className="text-gray-600">
+                    ব্যাচ নং - {row.batchNo}
+                  </span>
+                ),
               },
               {
                 key: "totalProductionAmount",

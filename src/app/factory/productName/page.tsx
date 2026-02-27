@@ -14,6 +14,8 @@ const ProductNamePage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
+  console.log("user", user);
+
   const { data, isLoading } = useFetchData({
     method: "GET",
     path: `factory/category/factory/${user?.factoryId}`,

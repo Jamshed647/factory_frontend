@@ -5,7 +5,6 @@ import React from "react";
 
 export default function DashboardPage() {
   const { factory, isLoading } = useFactory();
-  console.log("factory", factory);
 
   return (
     <div>

@@ -8,17 +8,17 @@ import { useAuth } from "@/hooks/hooks";
 import CreateProductNameModal from "./_assets/component/createProductModal";
 import dateFormat from "@/utils/formatter/DateFormatter";
 import UpdateProductNameModal from "./_assets/component/updateProductNameModal";
+import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
 
 const ProductNamePage = () => {
   const { user } = useAuth();
+  const factory = getFactoryInfo();
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
 
-  console.log("user", user);
-
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/category/factory/${user?.factoryId}`,
+    path: `factory/category/factory/${factory?.id}`,
     queryKey: "getProductNameData",
     filterData: {
       type: "sell-product",
@@ -65,11 +65,7 @@ const ProductNamePage = () => {
                 header: "Action",
                 render: (user) => (
                   <ResponsiveButtonGroup>
-                    <UpdateProductNameModal
-                      factoryId={user?.factoryId as string}
-                      data={user}
-                      componentType="edit"
-                    />
+                    <UpdateProductNameModal data={user} componentType="edit" />
                     {/* <DeleteSalesmanModal data={user} /> */}
                   </ResponsiveButtonGroup>
                 ),

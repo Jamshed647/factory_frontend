@@ -72,17 +72,18 @@ const ManagerTable = ({
           <UpdateManagerModal data={user} />
           <DeleteManagerModal data={user} />
           <Link
+            // href="#"
             href={`/factory/manager/dashboard`}
             onClick={() => {
               setFactory(
                 {
-                  id: user.factoryId,
-                  name: user.factoryName,
-                  address: user.factoryAddress,
-                  status: user.factoryStatus,
+                  id: String(user.factory.id),
+                  name: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
+                  address: user.factoryAddress ?? "",
+                  status: String(user.status),
                 },
-                user.id,
-                user.role,
+                String(user.id),
+                String(user.role),
               );
             }}
           >

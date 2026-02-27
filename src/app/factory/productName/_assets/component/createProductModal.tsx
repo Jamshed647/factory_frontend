@@ -21,6 +21,8 @@ const CreateProductNameModal = ({ factoryId }: { factoryId: string }) => {
       setOpen(false);
       showToast("success", data);
       queryClient.invalidateQueries({ queryKey: ["getProductNameData"] });
+      setPName("");
+      setPType("");
     },
   });
 

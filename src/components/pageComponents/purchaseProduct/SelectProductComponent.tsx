@@ -49,16 +49,16 @@ export const SelectProductComponent = ({
     id: string,
     limit: number,
     name: string,
-    buyPrice: number,
     stock: number,
+    buyPrice: number,
     updateBuyPrice?: number,
   ) => {
     const updated = cart.update(
       id,
       limit,
       name,
-      buyPrice,
       stock,
+      buyPrice,
       updateBuyPrice,
     );
     setSelectedProducts(updated);
@@ -101,14 +101,14 @@ export const SelectProductComponent = ({
 
             return (
               <div
-                // onClick={
-                //   isClickable
-                //     ? () => {
-                //         setOpen(true);
-                //         setUpdateProduct(p);
-                //       }
-                //     : undefined
-                // }
+                onClick={
+                  isClickable
+                    ? () => {
+                        setOpen(true);
+                        setUpdateProduct(p);
+                      }
+                    : undefined
+                }
                 key={p.id}
                 className="flex flex-col h-full"
               >
@@ -189,34 +189,36 @@ export const SelectProductComponent = ({
                             p.id,
                             limit - 1,
                             p?.name,
-                            p?.buyPrice,
                             p?.quantity ?? p?.stock,
+                            p?.buyPrice,
                             //p?.updateSellPrice,
                           );
                           e.stopPropagation();
                         }}
                         btnStyle="bg-red-500 text-white"
                       />
-
                       <Input
                         type="number"
                         value={limit}
                         onClick={(e) => e.stopPropagation()}
-                        onChange={(e) =>
-                          updateLimit(
-                            p.id,
-                            Number(e.target.value),
-                            p?.name,
-                            p?.quantity ?? p?.stock,
-                            p?.sellPrice,
-                            p?.buyPrice,
-                          )
-                        }
+                        onChange={(e) => {
+                          const newLimit = Number(e.target.value);
+                          // Only update if it's a valid number
+                          if (!isNaN(newLimit)) {
+                            updateLimit(
+                              p.id,
+                              newLimit,
+                              p?.name,
+                              p?.quantity ?? p?.stock, // stock (5th parameter)
+                              p?.buyPrice, // buyPrice (4th parameter)
+                              p?.updateBuyPrice, // updateBuyPrice (6th parameter)
+                            );
+                          }
+                        }}
                         name="limit"
                         placeholder="Limit"
                         className="appearance-none bg-white text-center [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden w-fit"
-                      />
-
+                      />{" "}
                       <ActionButton
                         type="button"
                         // disabled={!isStock}
@@ -227,8 +229,8 @@ export const SelectProductComponent = ({
                             p.id,
                             limit + 1,
                             p?.name,
-                            p?.buyPrice,
                             p?.quantity ?? p?.stock,
+                            p?.buyPrice,
                             p?.updateSellPrice,
                           );
                           e.stopPropagation();

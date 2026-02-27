@@ -4,8 +4,7 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { CustomField } from "@/components/common/fields/cusField";
 import { CookieCart } from "@/utils/cookie/cart-utils";
 import { useState } from "react";
-import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
-import { useAuth } from "@/hooks/hooks";
+import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
 import DataLoader from "@/components/common/GlobalLoader/dataLoader";
 import SelectSupplier from "../_assets/components/selectSupplier";
 import { SelectProductComponent } from "@/components/pageComponents/purchaseProduct/SelectProductComponent";
@@ -14,9 +13,7 @@ const CreateSellPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
 
-  const { user } = useAuth();
-  const factoryId = user?.factoryId || getFactoryId();
-
+  const factory = getFactoryInfo();
   const cart = CookieCart("purchase_products");
 
   const [selectedProducts, setSelectedProducts] = useState<
@@ -32,7 +29,7 @@ const CreateSellPage = () => {
 
   const { data, isLoading } = useFetchData({
     method: "GET",
-    path: `factory/product/factory/${factoryId}`,
+    path: `factory/product/factory/${factory.id}`,
     queryKey: "getProductDataByFactory",
     filterData: { type: "RAW", search: searchTerm, page },
   });
@@ -79,7 +76,7 @@ const CreateSellPage = () => {
 
         <SelectSupplier
           enabled={selectedProducts.length > 0}
-          factoryId={factoryId as string}
+          factoryId={factory.id as string}
         />
       </div>
     </div>

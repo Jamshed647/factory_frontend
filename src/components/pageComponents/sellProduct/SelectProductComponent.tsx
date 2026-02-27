@@ -141,7 +141,8 @@ export const SelectProductComponent = ({
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Stock:</span>
                         <span className="font-medium">
-                          {p?.quantity ?? p?.stock} {p?.quantityType}
+                          {p?.quantity ?? p?.stock} Bag
+                          {/* {p?.quantityType} */}
                         </span>
                       </div>
 

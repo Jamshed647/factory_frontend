@@ -17,12 +17,14 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useRouter } from "next/navigation";
 import useSellInvoiceStore from "@/store/sellInvoiceStore";
+import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
 
 const CartPage = () => {
   const cart = CookieCart("selected_products");
   const customerCart = CookieCart("customerInfo");
   const customer = customerCart.get();
   const { user } = useAuth();
+  const { id: factoryId } = getFactoryInfo();
   const router = useRouter();
 
   const { options: bankOptions, isLoading: isLoadingBank } =
@@ -55,7 +57,7 @@ const CartPage = () => {
   const form = useForm<CartFormType>({
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
-      factoryId: user?.factoryId,
+      factoryId: factoryId,
       sellerId: user?.id,
       sellerName: user?.name,
       items: [], // Initialize empty, will be populated in useEffect
@@ -143,18 +145,10 @@ const CartPage = () => {
 
   // Initialize user fields when user data is available
   useEffect(() => {
-    if (user && user.factoryId) {
-      const currentFactoryId = form.getValues("factoryId");
-      const currentSellerId = form.getValues("sellerId");
-      const currentSellerName = form.getValues("sellerName");
+    if (user && factoryId) {
+      form.setValue("factoryId", factoryId as string);
 
-      if (currentFactoryId !== user.factoryId) {
-        form.setValue("factoryId", user.factoryId as string);
-      }
-
-      if (currentSellerId !== user.id) {
-        form.setValue("sellerId", user.id as string);
-      }
+      form.setValue("sellerId", user.id as string);
 
       const sellerName =
         user?.name ??
@@ -164,11 +158,9 @@ const CartPage = () => {
             : user.firstName
           : (user?.lastName ?? ""));
 
-      if (currentSellerName !== sellerName) {
-        form.setValue("sellerName", sellerName);
-      }
+      form.setValue("sellerName", sellerName);
     }
-  }, [user, form]);
+  }, [user, form, factoryId]);
 
   // Auto-set paidAmount to total when there's no customer
   useEffect(() => {
@@ -220,6 +212,7 @@ const CartPage = () => {
     };
 
     const { discountPercentage, ...restData } = submitData;
+    console.log("🚀 Submit Data", discountPercentage);
 
     if (data?.discountType === "CASH") {
       sellProduct.mutate(restData);
@@ -236,7 +229,10 @@ const CartPage = () => {
     <>
       <FormProvider {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => handleSubmit(data))}
+          onSubmit={form.handleSubmit(
+            (data) => handleSubmit(data),
+            onFormError,
+          )}
           className="grid grid-cols-1 gap-10 p-8 bg-white rounded-2xl border shadow-lg lg:grid-cols-2"
         >
           {/* Left Fields */}

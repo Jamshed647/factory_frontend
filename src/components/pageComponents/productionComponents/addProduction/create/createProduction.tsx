@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { ProductionFormType, productionSchema } from "../schema/product-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productionDefaultValue } from "../schema/productDefaultValue";
-import { useAuth } from "@/hooks/hooks";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { Product, SelectedProduct } from "../schema/product-type";
@@ -12,6 +11,7 @@ import CreateProductionForm from "../form/createProductionForm";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
 
 interface ProductionModalProps {
   product?: Product[];
@@ -24,8 +24,7 @@ const CreateProduction = ({
   product,
   setSelectedProducts,
 }: ProductionModalProps) => {
-  const { user } = useAuth();
-  const factoryId = user?.factoryId;
+  const { id: factoryId } = getFactoryInfo();
   const queryClient = useQueryClient();
   const router = useRouter();
 

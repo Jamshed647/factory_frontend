@@ -16,6 +16,7 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useRouter } from "next/navigation";
 import { SelectProductComponent } from "@/components/pageComponents/purchaseProduct/SelectProductComponent";
+import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
 
 const CartPage = () => {
   const router = useRouter();
@@ -23,6 +24,8 @@ const CartPage = () => {
   const supplierCart = CookieCart("supplierInfo");
   const supplier = supplierCart.get();
   const { user } = useAuth();
+  const { id: factoryId } = getFactoryInfo();
+  // console.log("🚀 cart", factoryId);
 
   const { options: bankOptions, isLoading: isLoadingBank } =
     DataFetcher.fetchBankAccounts({});
@@ -49,7 +52,7 @@ const CartPage = () => {
   const form = useForm<CartFormType>({
     resolver: zodResolver(cartSchema),
     defaultValues: cartDefaultValue({
-      factoryId: user?.factoryId,
+      factoryId: factoryId,
       supplierId: supplier?.id,
       purchaserId: user?.id,
       purchaserName: user?.name,
@@ -98,11 +101,11 @@ const CartPage = () => {
     form.setValue("totalAmount", grandTotal);
     form.setValue("currentDueAmount", due);
     form.setValue("discountAmount", discountAmount);
+    form.setValue("factoryId", factoryId);
     // if (isBigAmount) {
     //   form.setValue("paidAmount", total);
     // }
     if (user) {
-      form.setValue("factoryId", user.factoryId as string);
       form.setValue("purchaserId", user.id as string);
       form.setValue(
         "purchaserName",
@@ -125,6 +128,7 @@ const CartPage = () => {
     totalPrice,
     isBigAmount,
     purchasePrice,
+    factoryId,
   ]);
 
   const sellProduct = useApiMutation({
@@ -141,8 +145,7 @@ const CartPage = () => {
 
   const handleSubmit = (data: CartFormType) => {
     const { discountPercentage, ...restData } = data;
-
-    //    console.log("TanstackQueries", data);
+    console.log("TanstackQueries", discountPercentage);
 
     if (data?.discountType === "CASH") {
       sellProduct.mutate(restData);
@@ -155,7 +158,10 @@ const CartPage = () => {
     <>
       <FormProvider {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => handleSubmit(data))}
+          onSubmit={form.handleSubmit(
+            (data) => handleSubmit(data),
+            onFormError,
+          )}
           className="grid grid-cols-1 gap-10 p-8 bg-white rounded-2xl border shadow-lg lg:grid-cols-2"
         >
           {/* Left Fields */}

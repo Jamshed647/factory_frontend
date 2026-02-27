@@ -13,8 +13,6 @@ import { showToast } from "@/components/common/TostMessage/customTostMessage";
 import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
-import { getFactoryId } from "@/utils/cookie/companyFactoryCookie";
-import { useAuth } from "@/hooks/hooks";
 import { useFactory } from "@/utils/factoryInfo";
 
 interface TakeDueDialogProps {

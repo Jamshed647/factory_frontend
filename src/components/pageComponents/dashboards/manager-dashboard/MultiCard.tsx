@@ -32,6 +32,8 @@ const MultiCard = ({
     },
   });
 
+  console.log("Got Invoice Data:", data);
+
   return (
     <>
       {/* FULL WIDTH + SMALL HEIGHT */}

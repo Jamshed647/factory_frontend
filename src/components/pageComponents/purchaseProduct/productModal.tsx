@@ -26,8 +26,9 @@ interface CreateSalesmanModalProps {
     id: string,
     limit: number,
     name: string,
-    sellPrice: number,
     stock: number,
+    buyPrice: number,
+    updateBuyPrice?: number,
   ) => void;
 }
 
@@ -54,18 +55,18 @@ const ProductModal = ({
   productData,
   updateLimit,
 }: CreateSalesmanModalProps) => {
-  console.log("ProductModal", productData);
-  const { id, limit, name, buyPrice, stock } = (productData as Item) || {};
+  const { id, limit, name, buyPrice, stock, updateBuyPrice } =
+    (productData as Item) || {};
 
   const form = useForm<z.infer<typeof productModalSchema>>({
     resolver: zodResolver(productModalSchema),
     defaultValues: {
       id: id,
       name: name,
-      buyPrice: buyPrice || 0,
-      stock: stock || 0,
+      stock: 40,
+      buyPrice: buyPrice,
       limit: Math.min(limit || 0, stock || 0),
-      updateBuyPrice: buyPrice || 0,
+      updateBuyPrice: updateBuyPrice ?? buyPrice,
     },
   });
 
@@ -73,16 +74,16 @@ const ProductModal = ({
   useEffect(() => {
     if (productData) {
       form.setValue("limit", limit);
-      form.setValue("updateBuyPrice", buyPrice);
+      form.setValue("buyPrice", buyPrice);
       form.setValue("name", name);
       form.setValue("id", id);
       form.setValue("stock", stock);
+      form.setValue("updateBuyPrice", updateBuyPrice ?? buyPrice);
     }
-  }, [productData, limit, buyPrice, form, name, id, stock]);
+  }, [productData, limit, buyPrice, form, name, id, stock, updateBuyPrice]);
 
   const onSubmit = async (data: z.infer<typeof productModalSchema>) => {
-    console.log(data);
-    updateLimit(id, data.limit, name, buyPrice, stock);
+    updateLimit(id, data.limit, name, stock, buyPrice, data?.updateBuyPrice);
     setOpen(false);
   };
 

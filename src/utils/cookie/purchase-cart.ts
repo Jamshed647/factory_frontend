@@ -26,14 +26,15 @@ export const CookieCart = (key: string) => ({
     id: string,
     limit: number,
     name: string,
-    buyPrice: number,
     stock: number,
+    buyPrice: number,
     updateBuyPrice?: number,
   ) {
     let cart = this.get();
 
     // Convert to number before using
     limit = Number(limit);
+    stock = Number(stock);
 
     // Ensure limit does not exceed stock
     if (limit > stock) {

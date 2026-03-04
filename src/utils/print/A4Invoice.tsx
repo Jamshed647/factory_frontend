@@ -4,14 +4,14 @@
 
 import {
   Table,
-  TableBody,
-  TableCell,
-  TableHead,
   TableHeader,
   TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
 } from "@/components/ui/table";
 
-export default function SellInvoicePreview({ data }: { data: any }) {
+export const A4Invoice = ({ data }: { data: any }) => {
   const invoiceDate = new Date(data?.date).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
@@ -28,12 +28,12 @@ export default function SellInvoicePreview({ data }: { data: any }) {
     }, 0) || 0;
 
   return (
-    <div className="p-4 mx-auto text-gray-900 bg-white rounded-lg border shadow-sm print:shadow-none print:border-none">
+    <div className="p-6 mx-auto text-gray-900 bg-white a4-invoice">
       {/* Header */}
-      <div className="flex justify-between items-start pb-4 border-b">
+      <div className="flex justify-between items-start pb-4 border-b border-gray-300">
         <div>
-          <h1 className="text-3xl font-bold">Invoice</h1>
-          <p className="text-sm">
+          <h1 className="text-3xl font-bold text-gray-800">INVOICE</h1>
+          <p className="mt-2 text-sm">
             <span className="font-semibold">Invoice ID:</span>{" "}
             {data?.invoiceNo || "N/A"}
           </p>
@@ -61,35 +61,37 @@ export default function SellInvoicePreview({ data }: { data: any }) {
       </div>
 
       {/* Customer Info */}
-      <div className="pb-4 mt-4 border-b">
-        <h2 className="mb-2 text-lg font-semibold">Customer Details</h2>
-        <p className="text-sm">
-          <span className="font-semibold">Name:</span>{" "}
-          {data?.bank?.name || "N/A"}
-        </p>
-        <p className="text-sm">
-          <span className="font-semibold">Phone:</span>{" "}
-          {data?.bank?.phone || "N/A"}
-        </p>
-        <p className="text-sm">
-          <span className="font-semibold">Address:</span>{" "}
-          {data?.bank?.address || "N/A"}
-        </p>
-        {/* <p className="text-sm"> */}
-        {/*   <span className="font-semibold">Customer ID:</span>{" "} */}
-        {/*   {data?.bankId || "N/A"} */}
-        {/* </p> */}
-        <p className="text-sm">
-          <span className="font-semibold">Total Due:</span> ৳
-          {data?.bank?.totalDueAmount || 0}
-        </p>
+      <div className="py-4 border-b border-gray-300">
+        <h2 className="mb-3 text-lg font-semibold">Customer Details</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <p className="text-sm">
+              <span className="font-semibold">Name:</span>{" "}
+              {data?.bank?.name || "N/A"}
+            </p>
+            <p className="text-sm">
+              <span className="font-semibold">Phone:</span>{" "}
+              {data?.bank?.phone || "N/A"}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm">
+              <span className="font-semibold">Address:</span>{" "}
+              {data?.bank?.address || "N/A"}
+            </p>
+            <p className="text-sm">
+              <span className="font-semibold">Total Due:</span> ৳
+              {data?.bank?.totalDueAmount || 0}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* Items */}
-      <div className="mt-6">
+      {/* Items Table */}
+      <div className="mt-4">
         <h3 className="mb-3 text-lg font-semibold">Item List</h3>
 
-        <div className="overflow-hidden rounded-md border">
+        <div className="overflow-hidden rounded-md border border-gray-300">
           <Table>
             <TableHeader className="bg-gray-100">
               <TableRow>
@@ -112,10 +114,10 @@ export default function SellInvoicePreview({ data }: { data: any }) {
                     {item?.quantity || 0}
                   </TableCell>
                   <TableCell className="text-right">
-                    ৳{item?.sellPrice || 0}
+                    ৳{item?.sellPrice?.toFixed(2) || 0}
                   </TableCell>
                   <TableCell className="text-right">
-                    ৳{item?.totalPrice || 0}
+                    ৳{item?.totalPrice?.toFixed(2) || 0}
                   </TableCell>
                 </TableRow>
               )) || (
@@ -132,52 +134,52 @@ export default function SellInvoicePreview({ data }: { data: any }) {
 
       {/* Summary */}
       <div className="flex justify-end mt-6">
-        <div className="space-y-2 w-64 text-sm">
+        <div className="space-y-2 w-72 text-sm">
           <div className="flex justify-between">
             <span>Total Sale Amount:</span>
-            <span>৳{data?.totalSaleAmount || 0}</span>
+            <span>৳{data?.totalSaleAmount?.toFixed(2) || 0}</span>
           </div>
 
           {(data?.extraCharge || 0) > 0 && (
             <div className="flex justify-between">
               <span>Extra Charge:</span>
-              <span>+ ৳{data?.extraCharge}</span>
+              <span>+ ৳{data?.extraCharge?.toFixed(2)}</span>
             </div>
           )}
 
           {(data?.discountAmount || 0) > 0 && (
             <div className="flex justify-between text-green-600">
               <span>Discount ({data?.discountType || "N/A"}):</span>
-              <span>- ৳{data?.discountAmount}</span>
+              <span>- ৳{data?.discountAmount?.toFixed(2)}</span>
             </div>
           )}
 
-          <div className="flex justify-between pt-2 font-semibold border-t">
+          <div className="flex justify-between pt-2 font-semibold border-t border-gray-300">
             <span>Total Amount:</span>
-            <span>৳{data?.totalAmount || 0}</span>
+            <span>৳{data?.totalAmount?.toFixed(2) || 0}</span>
           </div>
 
           <div className="flex justify-between">
             <span>Paid Amount:</span>
-            <span>৳{data?.paidAmount || 0}</span>
+            <span>৳{data?.paidAmount?.toFixed(2) || 0}</span>
           </div>
 
           {(data?.preDueAmount || 0) > 0 && (
             <div className="flex justify-between text-orange-600">
               <span>Previous Due:</span>
-              <span>৳{data?.preDueAmount}</span>
+              <span>৳{data?.preDueAmount?.toFixed(2)}</span>
             </div>
           )}
 
-          <div className="flex justify-between pt-2 font-semibold text-red-600 border-t">
+          <div className="flex justify-between pt-2 font-semibold text-red-600 border-t border-gray-300">
             <span>Current Due:</span>
-            <span>৳{data?.currentDueAmount || 0}</span>
+            <span>৳{data?.currentDueAmount?.toFixed(2) || 0}</span>
           </div>
 
           {/* Profit Calculation */}
-          <div className="flex justify-between pt-2 text-blue-600 border-t">
+          <div className="flex justify-between pt-2 text-blue-600 border-t border-gray-300">
             <span>Estimated Profit:</span>
-            <span>৳{estimatedProfit.toFixed(2)}</span>
+            <span>৳{estimatedProfit?.toFixed(2)}</span>
           </div>
         </div>
       </div>
@@ -191,4 +193,4 @@ export default function SellInvoicePreview({ data }: { data: any }) {
       </div>
     </div>
   );
-}
+};

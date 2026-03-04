@@ -26,7 +26,10 @@ export default function AddExpenseDialog({ factory }: Props) {
 
   const form = useForm<ExpenseFormType>({
     resolver: zodResolver(expenseSchema),
-    defaultValues: expenseDefaultValue({ factoryId: factory?.id }),
+    defaultValues: expenseDefaultValue({
+      factoryId: factory?.id,
+      category: "OTHER",
+    }),
   });
 
   const takeDue = useApiMutation({

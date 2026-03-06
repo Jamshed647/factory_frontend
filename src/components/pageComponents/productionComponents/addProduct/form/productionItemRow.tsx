@@ -25,6 +25,10 @@ const ProductionItemRow = ({
       search: searchProduct,
     },
   });
+  const transformArray = (
+    arr: Array<{ label: string; value: string }>,
+  ): Array<{ label: string; value: string }> =>
+    arr?.map((item) => ({ label: item.label, value: item.label }));
 
   return (
     <div className="p-4 space-y-4 rounded-md border">
@@ -36,7 +40,7 @@ const ProductionItemRow = ({
             labelName="Select Product"
             form={form}
             name={`items.${index}.name`}
-            options={options}
+            options={transformArray(options)}
             isLoading={isLoading}
             onSearch={(e) => setSearchProduct(e)}
           />

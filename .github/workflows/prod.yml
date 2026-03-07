@@ -9,7 +9,7 @@ jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
+
 steps:
   - name: Deploy to server via SSH
     uses: appleboy/ssh-action@v1.0.3
@@ -23,7 +23,7 @@ steps:
 
         cd /root/Project/factory_frontend
 
-        echo "Pulling latest code"
+        echo " Pulling latest code"
         git pull origin main
 
         cd /root/Project
@@ -32,7 +32,6 @@ steps:
         docker compose up -d --build frontend
 
         echo "Deployment finished"
-```
 
 
 

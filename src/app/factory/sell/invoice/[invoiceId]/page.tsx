@@ -1,42 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// "use client";
-// import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
-// import SellInvoicePreview from "@/components/pageComponents/invoice/sell_invoice";
-// import React from "react";
-//
-// interface InvoicePageProps {
-//   params: Promise<{ invoiceId: string }>;
-// }
-//
-// const SellInvoicePage = ({ params }: InvoicePageProps) => {
-//   const { invoiceId } = React.use(params);
-//   // const invoice = useSellInvoiceStore();
-//
-//   const { data, isLoading } = useFetchData({
-//     path: `factory/sale/${invoiceId}`,
-//     queryKey: "getSingleInvoiceData",
-//   });
-//
-//   return (
-//     <>
-//       <SellInvoicePreview data={data?.data} />
-//     </>
-//   );
-// };
-//
-// export default SellInvoicePage;
-
-// Updated component
 "use client";
 import React from "react";
 import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import SellInvoicePreview from "@/components/pageComponents/invoice/sell_invoice";
 import { useState } from "react";
 import { usePrint } from "@/hooks/usePrint";
-import { useDownloadOneClick } from "@/hooks/useDownload";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+// import { useDownloadOneClick } from "@/hooks/useDownload";
 import { Pos80Receipt } from "@/utils/print/Poss80Receipt";
 import { A4Invoice } from "@/utils/print/A4Invoice";
+import { InvoicePOS80mm } from "@/utils/print/test";
 
 interface InvoicePageProps {
   params: Promise<{ invoiceId: string }>;
@@ -53,7 +25,7 @@ const SellInvoicePage = ({ params }: InvoicePageProps) => {
 
   const { componentRef: printRef, printWithSize } = usePrint();
 
-  const { downloadRef, download } = useDownloadOneClick();
+  //  const { downloadRef, download } = useDownloadOneClick();
 
   if (isLoading) {
     return <div className="p-6">Loading...</div>;
@@ -107,6 +79,9 @@ const SellInvoicePage = ({ params }: InvoicePageProps) => {
       {/* Preview */}
       <div className="p-4 rounded border">
         <SellInvoicePreview data={data?.data} />
+      </div>
+      <div className="p-4 rounded border border-amber-600">
+        <InvoicePOS80mm data={data?.data} />
       </div>
     </div>
   );

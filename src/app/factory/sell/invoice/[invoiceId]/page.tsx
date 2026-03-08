@@ -80,9 +80,9 @@ const SellInvoicePage = ({ params }: InvoicePageProps) => {
       <div className="p-4 rounded border">
         <SellInvoicePreview data={data?.data} />
       </div>
-      <div className="p-4 rounded border border-amber-600">
-        <InvoicePOS80mm data={data?.data} />
-      </div>
+      {/* <div className="p-4 rounded border border-amber-600"> */}
+      {/*   <InvoicePOS80mm data={data?.data} /> */}
+      {/* </div> */}
     </div>
   );
 };

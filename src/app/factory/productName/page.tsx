@@ -45,9 +45,9 @@ const ProductNamePage = () => {
 
         {/* Table Body */}
         <DynamicTableWithPagination
-          data={data?.data}
+          data={data?.data?.data}
           isLoading={isLoading}
-          pagination={data?.pagination}
+          pagination={data?.data?.pagination}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           config={{

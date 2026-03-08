@@ -120,7 +120,7 @@ export function fetchProductCategories({
     //enabled: !!sessionId,
   });
 
-  const options = data?.data?.map((item: any) => ({
+  const options = data?.data?.data?.map((item: any) => ({
     label: item?.name || item?.title || item?.categoryName || "Unknown",
     value: item?.id,
     code: item?.code,

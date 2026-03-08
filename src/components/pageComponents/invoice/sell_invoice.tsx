@@ -62,27 +62,49 @@ export default function SellInvoicePreview({ data }: { data: any }) {
 
       {/* Customer Info */}
       <div className="pb-4 mt-4 border-b">
-        <h2 className="mb-2 text-lg font-semibold">Customer Details</h2>
-        <p className="text-sm">
-          <span className="font-semibold">Name:</span>{" "}
-          {data?.bank?.name || "N/A"}
-        </p>
-        <p className="text-sm">
-          <span className="font-semibold">Phone:</span>{" "}
-          {data?.bank?.phone || "N/A"}
-        </p>
-        <p className="text-sm">
-          <span className="font-semibold">Address:</span>{" "}
-          {data?.bank?.address || "N/A"}
-        </p>
-        {/* <p className="text-sm"> */}
-        {/*   <span className="font-semibold">Customer ID:</span>{" "} */}
-        {/*   {data?.bankId || "N/A"} */}
-        {/* </p> */}
-        <p className="text-sm">
-          <span className="font-semibold">Total Due:</span> ৳
-          {data?.bank?.totalDueAmount || 0}
-        </p>
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="text-lg font-semibold">
+            {data?.bank ? "Customer Details" : "Quick Sell"}
+          </h2>
+
+          {!data?.bank && (
+            <span className="py-1 px-3 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full">
+              Quick Sell Mode
+            </span>
+          )}
+        </div>
+
+        {data?.bank ? (
+          <div className="space-y-1 text-sm">
+            <p>
+              <span className="font-semibold">Name:</span>{" "}
+              {data.bank.name || "N/A"}
+            </p>
+
+            <p>
+              <span className="font-semibold">Phone:</span>{" "}
+              {data.bank.phone || "N/A"}
+            </p>
+
+            <p>
+              <span className="font-semibold">Address:</span>{" "}
+              {data.bank.address || "N/A"}
+            </p>
+
+            <p className="pt-2 mt-2 font-semibold border-t">
+              Total Due:{" "}
+              <span className="text-red-600">
+                ৳{data.bank.totalDueAmount || 0}
+              </span>
+            </p>
+          </div>
+        ) : (
+          <div className="p-3 text-sm text-gray-600 bg-gray-50 rounded-md border">
+            This sale is recorded as a{" "}
+            <span className="font-semibold">Quick Sell</span>. Customer
+            information was not entered for this transaction.
+          </div>
+        )}
       </div>
 
       {/* Items */}

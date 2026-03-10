@@ -5,8 +5,8 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import SellInvoicePreview from "@/components/pageComponents/invoice/sell_invoice";
 import { useState } from "react";
 import { usePrint } from "@/hooks/usePrint";
-import { Pos80Receipt } from "@/utils/print/Poss80Receipt";
-import { A4Invoice } from "@/utils/print/A4Invoice";
+import { Pos80Receipt } from "@/utils/sell-print/Poss80Receipt";
+import { A4Invoice } from "@/utils/sell-print/A4Invoice";
 
 interface InvoicePageProps {
   params: Promise<{ invoiceId: string }>;
@@ -54,7 +54,7 @@ const SellInvoicePage = ({ params }: InvoicePageProps) => {
           {format === "POS_80" ? (
             <Pos80Receipt data={data?.data} />
           ) : (
-            <A4Invoice data={data} />
+            <A4Invoice data={data?.data} />
           )}
         </div>{" "}
       </div>

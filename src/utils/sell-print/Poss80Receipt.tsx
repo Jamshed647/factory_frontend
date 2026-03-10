@@ -13,77 +13,103 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
   const discountAmount = data.discountAmount || 0;
   const discountType = data.discountType;
   const discountPercentage = data.discountPercentage;
-
   const extraCharge = data.extraCharge || 0;
-
   const previousDue = data.preDueAmount || 0;
   const grandTotal = data.totalAmount || 0;
-
   const paidAmount = data.paidAmount || 0;
   const currentDue = data.currentDueAmount || 0;
-
   const isQuickSell = !data.customer;
-
-  const line = "-".repeat(32);
 
   return (
     <div
       style={{
         width: "72mm",
-        padding: "1.5mm",
+        padding: "2mm",
         backgroundColor: "white",
         fontFamily: "'Courier New', monospace",
         fontSize: "10px",
-        lineHeight: "1.2",
+        lineHeight: "1.3",
         color: "#000",
       }}
     >
       {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: "1mm" }}>
-        <div style={{ fontSize: "13px", fontWeight: "bold" }}>
+      <div style={{ textAlign: "center", marginBottom: "2mm" }}>
+        <div style={{ fontSize: "14px", fontWeight: "bold" }}>
           {factory?.name}
         </div>
 
-        <div style={{ fontSize: "10px", fontWeight: "bold" }}>
+        <div
+          style={{ fontSize: "10px", fontWeight: "bold", marginTop: "0.5mm" }}
+        >
           SALES RECEIPT
         </div>
 
-        <div style={{ fontSize: "8px", letterSpacing: "1px" }}>{line}</div>
+        <div
+          style={{
+            borderTop: "1px dashed #000",
+            marginTop: "1mm",
+            width: "100%",
+          }}
+        />
       </div>
 
       {/* Invoice Info */}
-      <div style={{ marginBottom: "1mm" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ marginBottom: "2mm" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "1mm",
+          }}
+        >
           <span>Invoice:</span>
           <span>{data.invoiceNo}</span>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "1mm",
+          }}
+        >
           <span>Date:</span>
           <span>{dateFormat.fullDateTime(data.date)}</span>
         </div>
       </div>
 
-      <div style={{ fontSize: "8px", letterSpacing: "1px" }}>{line}</div>
+      <div
+        style={{
+          borderTop: "1px dashed #000",
+          margin: "1mm 0",
+          width: "100%",
+        }}
+      />
 
       {/* Customer */}
-      <div style={{ margin: "1mm 0" }}>
+      <div style={{ marginBottom: "2mm" }}>
         {isQuickSell ? (
-          <div style={{ textAlign: "center", fontWeight: "bold" }}>
+          <div
+            style={{
+              textAlign: "center",
+              fontWeight: "bold",
+              marginBottom: "1mm",
+            }}
+          >
             Customer: Quick Sell
           </div>
         ) : (
           <>
-            <div>
+            <div style={{ marginBottom: "0.5mm" }}>
               <b>Customer:</b> {data.customer?.name}
             </div>
 
-            <div>
+            <div style={{ marginBottom: "0.5mm" }}>
               <b>Phone:</b> {data.customer?.phone}
             </div>
 
             {data.customer?.address && (
-              <div>
+              <div style={{ marginBottom: "0.5mm" }}>
                 <b>Address:</b> {data.customer.address}
               </div>
             )}
@@ -91,44 +117,50 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
         )}
       </div>
 
-      <div style={{ fontSize: "8px", letterSpacing: "1px" }}>{line}</div>
+      <div
+        style={{
+          borderTop: "1px dashed #000",
+          margin: "1mm 0",
+          width: "100%",
+        }}
+      />
 
       {/* Items Header */}
-      <div style={{ marginTop: "1mm" }}>
+      <div style={{ marginBottom: "1mm" }}>
         <div
           style={{
             display: "flex",
             fontWeight: "bold",
             fontSize: "9px",
+            marginBottom: "0.5mm",
           }}
         >
-          <span style={{ width: "40%" }}>Item</span>
+          <span style={{ width: "6%" }}>SL</span>
+          <span style={{ width: "40%" }}>Product</span>
           <span style={{ width: "15%", textAlign: "center" }}>Qty</span>
-          <span style={{ width: "20%", textAlign: "right" }}>Price</span>
+          <span style={{ width: "20%", textAlign: "right" }}>Unit</span>
           <span style={{ width: "25%", textAlign: "right" }}>Total</span>
         </div>
 
-        {data?.items?.map((item, index: number) => (
+        {data?.items?.map((item, i: number) => (
           <div
             key={item.id}
             style={{
               display: "flex",
               fontSize: "9px",
-              marginTop: "0.5mm",
+              marginTop: "0.8mm",
             }}
           >
+            <span style={{ width: "6%" }}>{i + 1}</span>
             <span style={{ width: "40%" }}>
-              {item.productName || `Item ${index + 1}`}
+              {item?.productName || item?.productId}
             </span>
-
             <span style={{ width: "15%", textAlign: "center" }}>
               {item.quantity}
             </span>
-
             <span style={{ width: "20%", textAlign: "right" }}>
               {item.sellPrice.toFixed(2)}
             </span>
-
             <span style={{ width: "25%", textAlign: "right" }}>
               {item.totalPrice.toFixed(2)}
             </span>
@@ -136,19 +168,35 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
         ))}
       </div>
 
-      <div style={{ fontSize: "8px", letterSpacing: "1px", marginTop: "1mm" }}>
-        {line}
-      </div>
+      <div
+        style={{
+          borderTop: "1px dashed #000",
+          margin: "1mm 0",
+          width: "100%",
+        }}
+      />
 
       {/* Financial Summary */}
-      <div style={{ marginTop: "1mm" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ marginBottom: "2mm" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "0.5mm",
+          }}
+        >
           <span>Items Total</span>
           <span>{saleTotal.toFixed(2)}</span>
         </div>
 
         {discountAmount > 0 && (
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "0.5mm",
+            }}
+          >
             <span>
               Discount
               {discountType === "PERCENTAGE" && ` (${discountPercentage}%)`}
@@ -158,19 +206,37 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
         )}
 
         {extraCharge > 0 && (
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "0.5mm",
+            }}
+          >
             <span>Extra Charge</span>
             <span>{extraCharge.toFixed(2)}</span>
           </div>
         )}
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "0.5mm",
+          }}
+        >
           <span>Sale Total</span>
           <span>{saleTotal.toFixed(2)}</span>
         </div>
 
         {previousDue > 0 && (
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "0.5mm",
+            }}
+          >
             <span>Previous Due</span>
             <span>{previousDue.toFixed(2)}</span>
           </div>
@@ -181,14 +247,20 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
             display: "flex",
             justifyContent: "space-between",
             fontWeight: "bold",
-            marginTop: "0.5mm",
+            marginBottom: "0.5mm",
           }}
         >
           <span>Grand Total</span>
           <span>{grandTotal.toFixed(2)}</span>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "0.5mm",
+          }}
+        >
           <span>Paid</span>
           <span>{paidAmount.toFixed(2)}</span>
         </div>
@@ -207,12 +279,16 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
         )}
       </div>
 
-      <div style={{ fontSize: "8px", letterSpacing: "1px", marginTop: "1mm" }}>
-        {line}
-      </div>
+      <div
+        style={{
+          borderTop: "1px dashed #000",
+          margin: "1mm 0",
+          width: "100%",
+        }}
+      />
 
       {/* Footer */}
-      <div style={{ textAlign: "center", marginTop: "1mm" }}>
+      <div style={{ textAlign: "center", marginTop: "1.5mm" }}>
         <div>
           <b>Payment:</b> {data.paymentMethod}
         </div>

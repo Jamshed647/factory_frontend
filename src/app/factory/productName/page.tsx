@@ -4,14 +4,12 @@ import DynamicTableWithPagination from "@/components/common/DynamicTable/Dynamic
 import { CustomField } from "@/components/common/fields/cusField";
 import React from "react";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
-import { useAuth } from "@/hooks/hooks";
 import CreateProductNameModal from "./_assets/component/createProductModal";
 import dateFormat from "@/utils/formatter/DateFormatter";
 import UpdateProductNameModal from "./_assets/component/updateProductNameModal";
 import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
 
 const ProductNamePage = () => {
-  const { user } = useAuth();
   const factory = getFactoryInfo();
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchText, setSearchText] = React.useState("");
@@ -39,7 +37,7 @@ const ProductNamePage = () => {
               searchText={searchText}
               setSearchText={setSearchText}
             />
-            <CreateProductNameModal factoryId={user?.factoryId as string} />
+            <CreateProductNameModal factoryId={factory?.id as string} />
           </div>
         </div>
 

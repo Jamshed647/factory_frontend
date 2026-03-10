@@ -181,7 +181,7 @@ export const SelectProductComponent = ({
                           </span>
                         </div>
                         <span className="font-semibold text-emerald-700">
-                          ৳{total}
+                          ৳{total.toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -205,7 +205,7 @@ export const SelectProductComponent = ({
                           );
                           e.stopPropagation();
                         }}
-                        btnStyle="bg-red-500 text-white"
+                        btnStyle="bg-red-500 text-white w-[1rem]"
                       />
 
                       <Input
@@ -225,7 +225,7 @@ export const SelectProductComponent = ({
                         }
                         name="limit"
                         placeholder="Limit"
-                        className="appearance-none bg-white text-center [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden w-fit"
+                        className="appearance-none bg-white min-w-[4rem] text-center [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden w-fit"
                       />
 
                       <ActionButton
@@ -245,7 +245,7 @@ export const SelectProductComponent = ({
                           );
                           e.stopPropagation();
                         }}
-                        btnStyle="bg-green-500 text-white"
+                        btnStyle="bg-green-500 text-white w-[1rem]"
                       />
                     </div>
                   </CardContent>

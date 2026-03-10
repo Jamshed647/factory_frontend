@@ -1,6 +1,31 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Invoice } from "@/lib/invoice-types";
+import { getFactoryInfo } from "../cookie/companyFactoryCookie";
+import dateFormat from "../formatter/DateFormatter";
 
-export const Pos80Receipt = ({ data }: { data: any }) => {
+interface InvoicePOS80mmProps {
+  data: Invoice;
+}
+
+export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
+  const factory = getFactoryInfo();
+
+  const saleTotal = data.totalSaleAmount || 0;
+  const discountAmount = data.discountAmount || 0;
+  const discountType = data.discountType;
+  const discountPercentage = data.discountPercentage;
+
+  const extraCharge = data.extraCharge || 0;
+
+  const previousDue = data.preDueAmount || 0;
+  const grandTotal = data.totalAmount || 0;
+
+  const paidAmount = data.paidAmount || 0;
+  const currentDue = data.currentDueAmount || 0;
+
+  const isQuickSell = !data.customer;
+
+  const line = "-".repeat(32);
+
   return (
     <div
       style={{
@@ -13,77 +38,66 @@ export const Pos80Receipt = ({ data }: { data: any }) => {
         color: "#000",
       }}
     >
-      {/* Store Header */}
+      {/* Header */}
       <div style={{ textAlign: "center", marginBottom: "1mm" }}>
-        <div style={{ fontSize: "14px", fontWeight: "bold" }}>YOUR STORE</div>
-        <div style={{ fontSize: "9px" }}>123 Main Street</div>
-        <div style={{ fontSize: "9px", marginBottom: "0.5mm" }}>
-          Tel: 555-0123
+        <div style={{ fontSize: "13px", fontWeight: "bold" }}>
+          {factory?.name}
         </div>
-        <div style={{ fontSize: "8px", letterSpacing: "1px" }}>
-          {"-".repeat(32)}
+
+        <div style={{ fontSize: "10px", fontWeight: "bold" }}>
+          SALES RECEIPT
         </div>
+
+        <div style={{ fontSize: "8px", letterSpacing: "1px" }}>{line}</div>
       </div>
 
-      {/* Invoice Info - Added for clarity */}
+      {/* Invoice Info */}
       <div style={{ marginBottom: "1mm" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "9px",
-          }}
-        >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>Invoice:</span>
-          <span>{data?.invoiceNo || "N/A"}</span>
+          <span>{data.invoiceNo}</span>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "9px",
-          }}
-        >
+
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <span>Date:</span>
-          <span>Invoice generated on {data?.date || "N/A"}</span>
+          <span>{dateFormat.fullDateTime(data.date)}</span>
         </div>
       </div>
 
-      {/* Seller & Payment Info */}
-      <div style={{ marginBottom: "1mm" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "9px",
-          }}
-        >
-          <span>Seller:</span>
-          <span>{data?.sellerName || "Jamshed"}</span>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "9px",
-          }}
-        >
-          <span>Payment:</span>
-          <span>{data?.paymentMethod || "CASH"}</span>
-        </div>
-        <div
-          style={{ fontSize: "8px", letterSpacing: "1px", marginTop: "0.5mm" }}
-        >
-          {"-".repeat(32)}
-        </div>
+      <div style={{ fontSize: "8px", letterSpacing: "1px" }}>{line}</div>
+
+      {/* Customer */}
+      <div style={{ margin: "1mm 0" }}>
+        {isQuickSell ? (
+          <div style={{ textAlign: "center", fontWeight: "bold" }}>
+            Customer: Quick Sell
+          </div>
+        ) : (
+          <>
+            <div>
+              <b>Customer:</b> {data.customer?.name}
+            </div>
+
+            <div>
+              <b>Phone:</b> {data.customer?.phone}
+            </div>
+
+            {data.customer?.address && (
+              <div>
+                <b>Address:</b> {data.customer.address}
+              </div>
+            )}
+          </>
+        )}
       </div>
+
+      <div style={{ fontSize: "8px", letterSpacing: "1px" }}>{line}</div>
 
       {/* Items Header */}
-      <div style={{ marginBottom: "1mm" }}>
+      <div style={{ marginTop: "1mm" }}>
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
             fontWeight: "bold",
             fontSize: "9px",
           }}
@@ -94,55 +108,71 @@ export const Pos80Receipt = ({ data }: { data: any }) => {
           <span style={{ width: "25%", textAlign: "right" }}>Total</span>
         </div>
 
-        {/* Items */}
-        {data?.items?.map((item: any, index: number) => (
+        {data?.items?.map((item, index: number) => (
           <div
-            key={index}
-            style={{ display: "flex", fontSize: "9px", marginTop: "0.5mm" }}
+            key={item.id}
+            style={{
+              display: "flex",
+              fontSize: "9px",
+              marginTop: "0.5mm",
+            }}
           >
-            <span style={{ width: "40%" }}>{item?.productId || "Item"}</span>
+            <span style={{ width: "40%" }}>
+              {item.productName || `Item ${index + 1}`}
+            </span>
+
             <span style={{ width: "15%", textAlign: "center" }}>
-              {item?.quantity || 1}
+              {item.quantity}
             </span>
+
             <span style={{ width: "20%", textAlign: "right" }}>
-              ৳{item?.sellPrice || 0}
+              {item.sellPrice.toFixed(2)}
             </span>
+
             <span style={{ width: "25%", textAlign: "right" }}>
-              ৳{item?.totalPrice || 0}
+              {item.totalPrice.toFixed(2)}
             </span>
           </div>
         ))}
-
-        <div
-          style={{ fontSize: "8px", letterSpacing: "1px", marginTop: "0.5mm" }}
-        >
-          {"-".repeat(32)}
-        </div>
       </div>
 
-      {/* Totals */}
-      <div style={{ marginBottom: "1mm" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "9px",
-          }}
-        >
-          <span>Subtotal:</span>
-          <span>৳{data?.totalSaleAmount || 0}</span>
+      <div style={{ fontSize: "8px", letterSpacing: "1px", marginTop: "1mm" }}>
+        {line}
+      </div>
+
+      {/* Financial Summary */}
+      <div style={{ marginTop: "1mm" }}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span>Items Total</span>
+          <span>{saleTotal.toFixed(2)}</span>
         </div>
 
-        {data?.discountAmount > 0 && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: "9px",
-            }}
-          >
-            <span>Discount:</span>
-            <span>-৳{data?.discountAmount}</span>
+        {discountAmount > 0 && (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span>
+              Discount
+              {discountType === "PERCENTAGE" && ` (${discountPercentage}%)`}
+            </span>
+            <span>-{discountAmount.toFixed(2)}</span>
+          </div>
+        )}
+
+        {extraCharge > 0 && (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span>Extra Charge</span>
+            <span>{extraCharge.toFixed(2)}</span>
+          </div>
+        )}
+
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span>Sale Total</span>
+          <span>{saleTotal.toFixed(2)}</span>
+        </div>
+
+        {previousDue > 0 && (
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span>Previous Due</span>
+            <span>{previousDue.toFixed(2)}</span>
           </div>
         )}
 
@@ -151,56 +181,54 @@ export const Pos80Receipt = ({ data }: { data: any }) => {
             display: "flex",
             justifyContent: "space-between",
             fontWeight: "bold",
-            fontSize: "10px",
             marginTop: "0.5mm",
           }}
         >
-          <span>TOTAL:</span>
-          <span>৳{data?.totalAmount || 0}</span>
+          <span>Grand Total</span>
+          <span>{grandTotal.toFixed(2)}</span>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "9px",
-            marginTop: "0.5mm",
-          }}
-        >
-          <span>Paid:</span>
-          <span>৳{data?.paidAmount || 0}</span>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span>Paid</span>
+          <span>{paidAmount.toFixed(2)}</span>
         </div>
 
-        {data?.currentDueAmount > 0 && (
+        {currentDue > 0 && (
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
-              fontSize: "9px",
-              color: "#dc2626",
+              fontWeight: "bold",
             }}
           >
-            <span>Due:</span>
-            <span>৳{data?.currentDueAmount}</span>
+            <span>Current Due</span>
+            <span>{currentDue.toFixed(2)}</span>
           </div>
         )}
       </div>
 
+      <div style={{ fontSize: "8px", letterSpacing: "1px", marginTop: "1mm" }}>
+        {line}
+      </div>
+
       {/* Footer */}
-      <div
-        style={{
-          textAlign: "center",
-          borderTop: "1px dashed #000",
-          paddingTop: "0.5mm",
-          marginTop: "0.5mm",
-        }}
-      >
-        <div style={{ fontSize: "10px", fontWeight: "bold" }}>THANK YOU!</div>
-        <div style={{ fontSize: "8px" }}>Visit again</div>
-        <div style={{ fontSize: "7px", marginTop: "0.5mm" }}>
-          Invoice generated on {new Date().toLocaleDateString()}
+      <div style={{ textAlign: "center", marginTop: "1mm" }}>
+        <div>
+          <b>Payment:</b> {data.paymentMethod}
+        </div>
+
+        {data.paymentMethod === "BANK" && data.bank && (
+          <div>Bank: {data.bank.name}</div>
+        )}
+
+        <div>Seller: {data.sellerName}</div>
+
+        {data.note && <div>Note: {data.note}</div>}
+
+        <div style={{ marginTop: "1mm", fontWeight: "bold" }}>
+          Thank you for shopping!
         </div>
       </div>
     </div>
   );
-};
+}

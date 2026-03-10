@@ -5,10 +5,8 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import SellInvoicePreview from "@/components/pageComponents/invoice/sell_invoice";
 import { useState } from "react";
 import { usePrint } from "@/hooks/usePrint";
-// import { useDownloadOneClick } from "@/hooks/useDownload";
 import { Pos80Receipt } from "@/utils/print/Poss80Receipt";
 import { A4Invoice } from "@/utils/print/A4Invoice";
-import { InvoicePOS80mm } from "@/utils/print/test";
 
 interface InvoicePageProps {
   params: Promise<{ invoiceId: string }>;
@@ -16,7 +14,7 @@ interface InvoicePageProps {
 
 const SellInvoicePage = ({ params }: InvoicePageProps) => {
   const { invoiceId } = React.use(params);
-  const [format, setFormat] = useState<"A4" | "POS_80">("A4");
+  const [format, setFormat] = useState<"A4" | "POS_80">("POS_80");
 
   const { data, isLoading } = useFetchData({
     path: `factory/sale/${invoiceId}`,
@@ -48,28 +46,13 @@ const SellInvoicePage = ({ params }: InvoicePageProps) => {
         >
           Print
         </button>
-        {/* <button */}
-        {/*   onClick={download} */}
-        {/*   className="py-2 px-4 mt-4 text-white bg-black" */}
-        {/* > */}
-        {/*   Download PDF */}
-        {/* </button>{" "} */}
-        {/* <PDFDownloadLink */}
-        {/*   document={<SellInvoicePreview data={data?.data} format="A4" />} */}
-        {/*   fileName="invoice.pdf" */}
-        {/*   className="py-2 px-4 text-white bg-black" */}
-        {/* > */}
-        {/*   {({ loading }) => */}
-        {/*     loading ? "Preparing document..." : "Download PDF" */}
-        {/*   } */}
-        {/* </PDFDownloadLink> */}
       </div>
 
       {/* Hidden print area */}
       <div className="hidden">
         <div ref={printRef}>
           {format === "POS_80" ? (
-            <Pos80Receipt data={data} />
+            <Pos80Receipt data={data?.data} />
           ) : (
             <A4Invoice data={data} />
           )}
@@ -80,9 +63,6 @@ const SellInvoicePage = ({ params }: InvoicePageProps) => {
       <div className="p-4 rounded border">
         <SellInvoicePreview data={data?.data} />
       </div>
-      {/* <div className="p-4 rounded border border-amber-600"> */}
-      {/*   <InvoicePOS80mm data={data?.data} /> */}
-      {/* </div> */}
     </div>
   );
 };

@@ -26,7 +26,26 @@ export default function LayoutContainer({
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      {/* Sidebar with proper scrolling and responsive height */}
+      {/* Header - Full Width */}
+      {HeaderBar && (
+        <Header
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 64,
+            padding: "0 16px",
+            background: "#fff",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+            zIndex: 100,
+          }}
+        >
+          {HeaderBar}
+        </Header>
+      )}
+
+      {/* Sidebar */}
       <Sider
         collapsible
         trigger={null}
@@ -35,13 +54,12 @@ export default function LayoutContainer({
         style={{
           background: "#fff",
           position: "fixed",
-          top: 80,
-          bottom: 20,
-          left: 16,
-          borderRadius: 8,
-          overflow: "auto",
-          scrollbarGutter: "stable",
-          transition: "all 0.3s ease",
+          top: 64, // start under the header
+          bottom: 0,
+          left: 0,
+          overflowY: "auto",
+          transition: "all 0.3s",
+          borderRight: "1px solid #f0f0f0",
         }}
       >
         <Sidebar
@@ -51,43 +69,20 @@ export default function LayoutContainer({
         />
       </Sider>
 
-      {/* Main Layout */}
+      {/* Main Content */}
       <Layout
         style={{
-          marginLeft: sidebarWidth + (!collapsed ? 40 : 10),
-          transition: "margin-left 0.2s",
+          marginLeft: collapsed ? 80 : sidebarWidth, // adjust if sidebar collapsed
+          marginTop: 64, // leave space for header
           minHeight: "100vh",
-          overflow: "auto",
+          transition: "margin-left 0.2s",
         }}
       >
-        {HeaderBar && (
-          <Header
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              background: "#fff",
-              height: 64,
-              paddingInline: 16,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-              // zIndex: 100,
-            }}
-          >
-            {HeaderBar}
-          </Header>
-        )}
-
         <Content
           style={{
-            marginTop: HeaderBar ? 80 : 16,
-            marginRight: 10,
-            marginBottom: 40,
-            background: "#fff",
-            borderRadius: 8,
             padding: 24,
-            minHeight: `calc(100vh - ${HeaderBar ? 80 : 16}px - 40px)`,
-            overflow: "auto",
+            minHeight: "calc(100vh - 64px)",
+            overflowY: "auto",
           }}
         >
           {children}

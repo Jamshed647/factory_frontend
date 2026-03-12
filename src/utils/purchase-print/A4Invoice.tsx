@@ -97,7 +97,7 @@ export const PurchaseA4Invoice = ({ data }: { data: any }) => {
                 <tr key={item.id}>
                   <td className="py-2 px-2 text-center border">{index + 1}</td>
                   <td className="py-2 px-3 font-medium border">
-                    {item.productId || "N/A"}
+                    {item.name ?? item.productId}
                   </td>
                   <td className="py-2 px-3 text-right border">
                     {item.quantity || 0}

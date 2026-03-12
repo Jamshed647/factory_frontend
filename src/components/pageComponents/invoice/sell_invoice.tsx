@@ -133,7 +133,7 @@ export default function SellInvoicePreview({ data }: { data: any }) {
                 <TableRow key={item?.id}>
                   <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell>
-                    {item.productName || item.productId || "N/A"}
+                    {item?.name || item?.productId || "N/A"}
                   </TableCell>
                   <TableCell className="text-right">{item.quantity}</TableCell>
                   <TableCell className="text-right">

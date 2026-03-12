@@ -191,7 +191,7 @@ export const SelectProductComponent = ({
                             p?.name,
                             p?.quantity ?? p?.stock,
                             p?.buyPrice,
-                            //p?.updateSellPrice,
+                            p?.updateBuyPrice,
                           );
                           e.stopPropagation();
                         }}
@@ -231,7 +231,7 @@ export const SelectProductComponent = ({
                             p?.name,
                             p?.quantity ?? p?.stock,
                             p?.buyPrice,
-                            p?.updateSellPrice,
+                            p?.updateBuyPrice,
                           );
                           e.stopPropagation();
                         }}

@@ -31,14 +31,14 @@ const AddProductForm = ({ isPending, form, onSubmit }: ProductionFormType) => {
 
         <div className="grid grid-cols-2 gap-4">
           {/* NAME */}
-          <div>
-            <CustomField.Text
-              labelName="Name"
-              placeholder="Enter Production Name"
-              form={form}
-              name="name"
-            />
-          </div>
+          {/* <div> */}
+          {/*   <CustomField.Text */}
+          {/*     labelName="Name" */}
+          {/*     placeholder="Enter Production Name" */}
+          {/*     form={form} */}
+          {/*     name="name" */}
+          {/*   /> */}
+          {/* </div> */}
 
           {/* AMOUNTS */}
           <div>

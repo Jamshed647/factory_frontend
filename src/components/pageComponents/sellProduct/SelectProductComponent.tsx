@@ -55,7 +55,12 @@ export const SelectProductComponent = ({
     buyPrice?: number,
     updateSellPrice?: number,
   ) => {
-    if (limit > stock) showToast("error", "Limit cannot be greater than stock");
+    if (limit < 0) return;
+
+    if (limit > stock) {
+      showToast("error", "Limit cannot be greater than stock");
+      return;
+    }
 
     const updated = cart.update(
       id,

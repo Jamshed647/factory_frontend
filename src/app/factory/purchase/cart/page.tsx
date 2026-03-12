@@ -3,7 +3,7 @@
 
 import { CustomField } from "@/components/common/fields/cusField";
 import { CookieCart } from "@/utils/cookie/cart-utils";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import cartSchema, { CartFormType } from "./_assets/schema/cartSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,7 @@ import { useApiMutation } from "@/app/utils/TanstackQueries/useApiMutation";
 import { useRouter } from "next/navigation";
 import { SelectProductComponent } from "@/components/pageComponents/purchaseProduct/SelectProductComponent";
 import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
+import { formatTwoDecimal } from "@/utils/formatter/DecimalFn";
 
 const CartPage = () => {
   const router = useRouter();
@@ -25,7 +26,6 @@ const CartPage = () => {
   const supplier = supplierCart.get();
   const { user } = useAuth();
   const { id: factoryId } = getFactoryInfo();
-  // console.log("🚀 cart", factoryId);
 
   const { options: bankOptions, isLoading: isLoadingBank } =
     DataFetcher.fetchBankAccounts({});
@@ -41,13 +41,15 @@ const CartPage = () => {
     }[]
   >(cart.get() || []);
 
-  const products = selectedProducts.map((item) => ({
-    productId: item.id,
-    quantity: item.limit,
-    buyPrice: item.buyPrice,
-    updateBuyPrice: item?.updateBuyPrice ?? item.buyPrice,
-    totalPrice: item.buyPrice * item.limit,
-  }));
+  const products = useMemo(() => {
+    return selectedProducts.map((item) => ({
+      productId: item.id,
+      quantity: item.limit,
+      buyPrice: item.buyPrice,
+      updateBuyPrice: item?.updateBuyPrice ?? item.buyPrice,
+      totalPrice: (item?.updateBuyPrice ?? item.buyPrice) * item.limit,
+    }));
+  }, [selectedProducts]);
 
   const form = useForm<CartFormType>({
     resolver: zodResolver(cartSchema),
@@ -59,6 +61,13 @@ const CartPage = () => {
       items: products,
     }),
   });
+
+  // Sync products with form items
+  useEffect(() => {
+    if (products.length > 0) {
+      form.setValue("items", products);
+    }
+  }, [products, form]);
 
   const values = form.watch();
 
@@ -95,41 +104,30 @@ const CartPage = () => {
   // const due = Number(grandTotal - Number(values.paidAmount || 0) || 0);
   const due = Math.max(0, Number(grandTotal) - Number(values.paidAmount || 0));
 
-  // update values AFTER user/bank loads
   useEffect(() => {
     form.setValue("totalPurchaseAmount", purchasePrice);
     form.setValue("totalAmount", grandTotal);
     form.setValue("currentDueAmount", due);
     form.setValue("discountAmount", discountAmount);
+  }, [purchasePrice, grandTotal, due, discountAmount, form]);
+
+  useEffect(() => {
     form.setValue("factoryId", factoryId);
-    // if (isBigAmount) {
-    //   form.setValue("paidAmount", total);
-    // }
+
     if (user) {
-      form.setValue("purchaserId", user.id as string);
-      form.setValue(
-        "purchaserName",
+      form.setValue("purchaserId", user.id);
+
+      const purchaserName =
         user?.name ??
-          (user?.firstName
-            ? user.lastName
-              ? `${user.firstName} ${user.lastName}`
-              : user.firstName
-            : (user?.lastName ?? "")),
-      );
+        (user?.firstName
+          ? user.lastName
+            ? `${user.firstName} ${user.lastName}`
+            : user.firstName
+          : (user?.lastName ?? ""));
+
+      form.setValue("purchaserName", purchaserName);
     }
-  }, [
-    user,
-    form,
-    values.discountType,
-    discountAmount,
-    grandTotal,
-    due,
-    total,
-    totalPrice,
-    isBigAmount,
-    purchasePrice,
-    factoryId,
-  ]);
+  }, [user, factoryId, form]);
 
   const sellProduct = useApiMutation({
     path: "factory/purchase",
@@ -276,16 +274,16 @@ const CartPage = () => {
                     ? `(${values.discountPercentage || 0}%)`
                     : ""
                 }`}
-                value={`-${discountAmount}`}
+                value={`-${formatTwoDecimal(discountAmount)}`}
               />
 
-              <SummaryItem label="Advance" value={values.paidAmount || 0} />
+              <SummaryItem label="Advance" value={formatTwoDecimal(values.paidAmount as number || 0)} />
               <SummaryItem
                 label="Previous Due"
-                value={supplier?.totalDueAmount || 0}
+                value={formatTwoDecimal(supplier?.totalDueAmount || 0)}
               />
 
-              <SummaryItem label="Total Sell Price" value={grandTotal} />
+              <SummaryItem label="Total Sell Price" value={formatTwoDecimal(grandTotal)} />
             </div>
 
             <hr className="my-2" />
@@ -293,7 +291,7 @@ const CartPage = () => {
             <div className="flex justify-between text-lg font-bold text-gray-900">
               <span>Due (Bokeya)</span>
               {/* <span>{due.toFixed(2)}</span> */}
-              <span>৳{due}</span>
+              <span>৳{formatTwoDecimal(due)}</span>
             </div>
 
             <ActionButton

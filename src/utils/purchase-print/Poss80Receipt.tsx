@@ -114,7 +114,7 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
             style={{ display: "flex", fontSize: "9px", marginTop: "0.8mm" }}
           >
             <span style={{ width: "6%" }}>{i + 1}</span>
-            <span style={{ width: "40%" }}>{item?.productId || "Item"}</span>
+            <span style={{ width: "40%" }}>{item.name ?? item.productId}</span>
             <span style={{ width: "15%", textAlign: "center" }}>
               {item?.quantity || 0}
             </span>

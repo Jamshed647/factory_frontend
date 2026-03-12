@@ -153,7 +153,7 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
           >
             <span style={{ width: "6%" }}>{i + 1}</span>
             <span style={{ width: "40%" }}>
-              {item?.productName || item?.productId}
+              {item?.name || item?.productId}
             </span>
             <span style={{ width: "15%", textAlign: "center" }}>
               {item.quantity}

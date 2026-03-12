@@ -102,7 +102,7 @@ export default function PurchaseInvoicePreview({ data }: { data: any }) {
                 <TableRow key={item.id}>
                   <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell className="font-medium">
-                    {item?.productId || "N/A"}
+                    {item?.name ?? item?.productId}
                   </TableCell>
                   <TableCell className="text-right">
                     {item?.quantity || 0}

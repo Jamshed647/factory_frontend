@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const productionSchema = z.object({
   factoryId: z.string(),
-  name: validationSchemas.textSchema({ label: "Production Name" }),
+  // name: validationSchemas.textSchema({ label: "Production Name" }).optional(),
   totalProductionAmount: validationSchemas.numberSchema({
     label: "Total Production Amount",
     type: "number",

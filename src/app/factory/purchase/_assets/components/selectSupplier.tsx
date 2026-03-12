@@ -5,6 +5,7 @@ import useFetchData from "@/app/utils/TanstackQueries/useFetchData";
 import { CustomField } from "@/components/common/fields/cusField";
 import { Card } from "@/components/ui/card";
 import { CookieCart } from "@/utils/cookie/cart-utils";
+import { formatTwoDecimal } from "@/utils/formatter/DecimalFn";
 // import { Edit2Icon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -72,7 +73,7 @@ const SelectSupplier = ({
                 </span>
                 {/* <StatusWithIcon status={c?.status} /> */}
 
-                <p>৳{c?.totalDueAmount}</p>
+                <p>৳{formatTwoDecimal(c?.totalDueAmount)}</p>
               </div>
             </Card>
           </Link>

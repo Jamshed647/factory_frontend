@@ -31,7 +31,7 @@ const CreateSellPage = () => {
     method: "GET",
     path: `factory/product/factory/${factory.id}`,
     queryKey: "getProductDataByFactory",
-    filterData: { type: "RAW", search: searchTerm, page },
+    filterData: { type: "RAW", search: searchTerm, page, inStock: true },
   });
 
   return (

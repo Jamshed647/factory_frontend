@@ -30,7 +30,7 @@ const CreateSellPage = () => {
     method: "GET",
     path: `factory/product/factory/${factory?.id}`,
     queryKey: "getProductDataByFactory",
-    filterData: { type: "FINISHED", search: searchTerm, page },
+    filterData: { type: "FINISHED", search: searchTerm, page, inStock: true },
   });
 
   return (

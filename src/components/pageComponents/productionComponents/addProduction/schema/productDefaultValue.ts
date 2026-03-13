@@ -4,7 +4,7 @@ export const productionDefaultValue = (
   v?: Partial<ProductionFormType>,
 ): ProductionFormType => ({
   factoryId: v?.factoryId ?? "",
-  name: v?.name ?? "",
+  // name: v?.name ,
   extraCost: v?.extraCost ?? 0,
   status: v?.status ?? "PENDING",
   note: v?.note ?? "",

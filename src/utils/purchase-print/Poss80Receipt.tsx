@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getFactoryInfo } from "../cookie/companyFactoryCookie";
 import dateFormat from "../formatter/DateFormatter";
+import { formatTwoDecimal } from "../formatter/DecimalFn";
 
 export const PurchasePos80Receipt = ({ data }: { data: any }) => {
   const factory = getFactoryInfo();
@@ -114,15 +115,17 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
             style={{ display: "flex", fontSize: "9px", marginTop: "0.8mm" }}
           >
             <span style={{ width: "6%" }}>{i + 1}</span>
-            <span style={{ width: "40%" }}>{item.name ?? item.productId}</span>
+            <span style={{ width: "40%" }}>
+              {item?.product?.name ?? item.productId}
+            </span>
             <span style={{ width: "15%", textAlign: "center" }}>
               {item?.quantity || 0}
             </span>
             <span style={{ width: "20%", textAlign: "right" }}>
-              ৳{item?.buyPrice || 0}
+              ৳{formatTwoDecimal(item?.buyPrice || 0)}
             </span>
             <span style={{ width: "25%", textAlign: "right" }}>
-              ৳{item?.totalPrice || 0}
+              ৳{formatTwoDecimal(item?.totalPrice || 0)}
             </span>
           </div>
         ))}
@@ -144,7 +147,7 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
           }}
         >
           <span>Total Purchase:</span>
-          <span>৳{data?.totalPurchaseAmount || 0}</span>
+          <span>৳{formatTwoDecimal(data?.totalPurchaseAmount || 0)}</span>
         </div>
 
         {data?.extraCharge > 0 && (
@@ -156,7 +159,7 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
             }}
           >
             <span>Extra Charge:</span>
-            <span>+ ৳{data?.extraCharge}</span>
+            <span>+ ৳{formatTwoDecimal(data?.extraCharge)}</span>
           </div>
         )}
 
@@ -169,7 +172,7 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
             }}
           >
             <span>Discount ({data?.discountType}):</span>
-            <span>- ৳{data?.discountAmount}</span>
+            <span>- ৳{formatTwoDecimal(data?.discountAmount)}</span>
           </div>
         )}
 
@@ -182,7 +185,7 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
           }}
         >
           <span>Grand Total:</span>
-          <span>৳{data?.totalAmount || 0}</span>
+          <span>৳{formatTwoDecimal(data?.totalAmount || 0)}</span>
         </div>
 
         <div
@@ -193,7 +196,7 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
           }}
         >
           <span>Paid:</span>
-          <span>৳{data?.paidAmount || 0}</span>
+          <span>৳{formatTwoDecimal(data?.paidAmount || 0)}</span>
         </div>
 
         <div
@@ -205,7 +208,7 @@ export const PurchasePos80Receipt = ({ data }: { data: any }) => {
           }}
         >
           <span>Due:</span>
-          <span>৳{data?.currentDueAmount || 0}</span>
+          <span>৳{formatTwoDecimal(data?.currentDueAmount || 0)}</span>
         </div>
       </div>
 

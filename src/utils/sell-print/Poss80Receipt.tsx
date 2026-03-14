@@ -1,6 +1,7 @@
 import { Invoice } from "@/lib/invoice-types";
 import { getFactoryInfo } from "../cookie/companyFactoryCookie";
 import dateFormat from "../formatter/DateFormatter";
+import { formatTwoDecimal } from "../formatter/DecimalFn";
 
 interface InvoicePOS80mmProps {
   data: Invoice;
@@ -9,15 +10,15 @@ interface InvoicePOS80mmProps {
 export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
   const factory = getFactoryInfo();
 
-  const saleTotal = data.totalSaleAmount || 0;
-  const discountAmount = data.discountAmount || 0;
+  const saleTotal = formatTwoDecimal(data.totalSaleAmount || 0);
+  const discountAmount = formatTwoDecimal(data.discountAmount || 0);
   const discountType = data.discountType;
   const discountPercentage = data.discountPercentage;
-  const extraCharge = data.extraCharge || 0;
-  const previousDue = data.preDueAmount || 0;
-  const grandTotal = data.totalAmount || 0;
-  const paidAmount = data.paidAmount || 0;
-  const currentDue = data.currentDueAmount || 0;
+  const extraCharge = formatTwoDecimal(data.extraCharge || 0);
+  const previousDue = formatTwoDecimal(data.preDueAmount || 0);
+  const grandTotal = formatTwoDecimal(data.totalAmount || 0);
+  const paidAmount = formatTwoDecimal(data.paidAmount || 0);
+  const currentDue = formatTwoDecimal(data.currentDueAmount || 0);
   const isQuickSell = !data.customer;
 
   return (
@@ -153,7 +154,7 @@ export function Pos80Receipt({ data }: InvoicePOS80mmProps) {
           >
             <span style={{ width: "6%" }}>{i + 1}</span>
             <span style={{ width: "40%" }}>
-              {item?.name || item?.productId}
+              {item?.product?.name || item?.productId}
             </span>
             <span style={{ width: "15%", textAlign: "center" }}>
               {item.quantity}

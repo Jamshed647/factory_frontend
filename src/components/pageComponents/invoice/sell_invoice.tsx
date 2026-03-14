@@ -10,17 +10,19 @@ import {
 } from "@/components/ui/table";
 import { getFactoryInfo } from "@/utils/cookie/companyFactoryCookie";
 import dateFormat from "@/utils/formatter/DateFormatter";
+import { formatTwoDecimal } from "@/utils/formatter/DecimalFn";
 
 export default function SellInvoicePreview({ data }: { data: any }) {
   const factory = getFactoryInfo();
 
-  const saleTotal = data?.totalSaleAmount || 0;
-  const discountAmount = data?.discountAmount || 0;
-  const extraCharge = data?.extraCharge || 0;
-  const previousDue = data?.preDueAmount || 0;
-  const currentDue = data?.currentDueAmount || 0;
-  const grandTotal = data?.totalAmount || 0;
-  const paidAmount = data?.paidAmount || 0;
+  // Calculate values with proper decimal formatting
+  const saleTotal = formatTwoDecimal(data?.totalSaleAmount || 0);
+  const extraCharge = formatTwoDecimal(data?.extraCharge || 0);
+  const discountAmount = formatTwoDecimal(data?.discountAmount || 0);
+  const grandTotal = formatTwoDecimal(data?.totalAmount || 0);
+  const paidAmount = formatTwoDecimal(data?.paidAmount || 0);
+  const preDueAmount = formatTwoDecimal(data?.preDueAmount || 0);
+  const currentDue = formatTwoDecimal(data?.currentDueAmount || 0);
   const isQuickSell = !data?.customer;
 
   return (
@@ -40,30 +42,30 @@ export default function SellInvoicePreview({ data }: { data: any }) {
       {/* Invoice Info */}
       <div className="flex justify-between items-start pb-4 mb-4 border-b">
         <div>
-          <h2 className="text-xl font-semibold">Invoice</h2>
-          <p>
+          <h2 className="text-xl font-semibold">Sales Invoice</h2>
+          <p className="text-sm">
             <span className="font-semibold">Invoice ID:</span>{" "}
             {data?.invoiceNo || "N/A"}
           </p>
-          <p>
+          <p className="text-sm">
             <span className="font-semibold">Date:</span>{" "}
             {dateFormat.fullDateTime(data?.date)}
           </p>
-          <p>
+          <p className="text-sm">
             <span className="font-semibold">Type:</span> {data?.type || "SALE"}
           </p>
         </div>
         <div className="text-right">
-          <p>
+          <p className="text-sm">
             <span className="font-semibold">Seller:</span>{" "}
             {data?.sellerName || "N/A"}
           </p>
-          <p>
+          <p className="text-sm">
             <span className="font-semibold">Payment:</span>{" "}
             {data?.paymentMethod || "CASH"}
           </p>
           {data?.note && (
-            <p>
+            <p className="text-sm">
               <span className="font-semibold">Note:</span> {data.note}
             </p>
           )}
@@ -86,26 +88,26 @@ export default function SellInvoicePreview({ data }: { data: any }) {
               <div>
                 <p>
                   <span className="font-semibold">Name:</span>{" "}
-                  {data.customer?.name}
+                  {data?.customer?.name || "N/A"}
                 </p>
                 <p>
                   <span className="font-semibold">Phone:</span>{" "}
-                  {data.customer?.phone}
+                  {data?.customer?.phone || "N/A"}
                 </p>
               </div>
               <div>
-                {data.customer?.address && (
+                {data?.customer?.address && (
                   <p>
                     <span className="font-semibold">Address:</span>{" "}
                     {data.customer.address}
                   </p>
                 )}
-                {previousDue > 0 && (
+                {preDueAmount !== 0 && (
                   <p>
                     <span className="font-semibold text-orange-600">
                       Previous Due:
                     </span>{" "}
-                    ৳{previousDue.toFixed(2)}
+                    ৳{preDueAmount}
                   </p>
                 )}
               </div>
@@ -130,17 +132,19 @@ export default function SellInvoicePreview({ data }: { data: any }) {
           <TableBody>
             {data?.items?.length ? (
               data.items.map((item: any, index: number) => (
-                <TableRow key={item?.id}>
+                <TableRow key={item?.id || index}>
                   <TableCell className="text-center">{index + 1}</TableCell>
                   <TableCell>
-                    {item?.name || item?.productId || "N/A"}
+                    {item?.product?.name || item?.productId || "N/A"}
                   </TableCell>
-                  <TableCell className="text-right">{item.quantity}</TableCell>
                   <TableCell className="text-right">
-                    ৳{item.sellPrice.toFixed(2)}
+                    {formatTwoDecimal(item?.quantity || 0)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    ৳{formatTwoDecimal(item?.sellPrice || 0)}
                   </TableCell>
                   <TableCell className="font-semibold text-right">
-                    ৳{item.totalPrice.toFixed(2)}
+                    ৳{formatTwoDecimal(item?.totalPrice || 0)}
                   </TableCell>
                 </TableRow>
               ))
@@ -162,29 +166,33 @@ export default function SellInvoicePreview({ data }: { data: any }) {
       <div className="flex justify-end">
         <div className="space-y-2 w-64 text-sm">
           <div className="flex justify-between">
-            <span>Items Total:</span> <span>৳{saleTotal.toFixed(2)}</span>
+            <span>Items Total:</span> <span>৳{saleTotal}</span>
           </div>
-          {extraCharge > 0 && (
+          {extraCharge !== 0 && (
             <div className="flex justify-between">
-              <span>Extra Charge:</span>{" "}
-              <span>+ ৳{extraCharge.toFixed(2)}</span>
+              <span>Extra Charge:</span> <span>+ ৳{extraCharge}</span>
             </div>
           )}
-          {discountAmount > 0 && (
+          {discountAmount !== 0 && (
             <div className="flex justify-between text-green-600">
-              <span>Discount ({data.discountType || "N/A"}):</span>{" "}
-              <span>- ৳{discountAmount.toFixed(2)}</span>
+              <span>Discount ({data?.discountType || "N/A"}):</span>{" "}
+              <span>- ৳{discountAmount}</span>
             </div>
           )}
           <div className="flex justify-between pt-2 font-semibold border-t">
-            <span>Grand Total:</span> <span>৳{grandTotal.toFixed(2)}</span>
+            <span>Grand Total:</span> <span>৳{grandTotal}</span>
           </div>
           <div className="flex justify-between">
-            <span>Paid:</span> <span>৳{paidAmount.toFixed(2)}</span>
+            <span>Paid:</span> <span>৳{paidAmount}</span>
           </div>
-          {currentDue > 0 && (
+          {preDueAmount !== 0 && !isQuickSell && (
+            <div className="flex justify-between text-orange-600">
+              <span>Previous Due:</span> <span>৳{preDueAmount}</span>
+            </div>
+          )}
+          {currentDue !== 0 && (
             <div className="flex justify-between font-semibold text-red-600">
-              <span>Current Due:</span> <span>৳{currentDue.toFixed(2)}</span>
+              <span>Current Due:</span> <span>৳{currentDue}</span>
             </div>
           )}
         </div>

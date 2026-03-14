@@ -70,7 +70,7 @@ export const PurchaseA4Invoice = ({ data }: { data: any }) => {
             </p>
             <p className="text-sm">
               <span className="font-semibold">Previous Due:</span> ৳
-              {data.preDueAmount?.toFixed(2) || "0.00"}
+              {data.preDueAmount?.toFixed(2) || 0}
             </p>
           </div>
         </div>
@@ -97,16 +97,16 @@ export const PurchaseA4Invoice = ({ data }: { data: any }) => {
                 <tr key={item.id}>
                   <td className="py-2 px-2 text-center border">{index + 1}</td>
                   <td className="py-2 px-3 font-medium border">
-                    {item.name ?? item.productId}
+                    {item?.product?.name ?? item.productId}
                   </td>
                   <td className="py-2 px-3 text-right border">
                     {item.quantity || 0}
                   </td>
                   <td className="py-2 px-3 text-right border">
-                    ৳{item.buyPrice?.toFixed(2) || "0.00"}
+                    ৳{item.buyPrice?.toFixed(2) || 0}
                   </td>
                   <td className="py-2 px-3 text-right border">
-                    ৳{item.totalPrice?.toFixed(2) || "0.00"}
+                    ৳{item.totalPrice?.toFixed(2) || 0}
                   </td>
                 </tr>
               ))}
@@ -120,7 +120,7 @@ export const PurchaseA4Invoice = ({ data }: { data: any }) => {
         <div className="mt-8 space-y-2 w-80 text-sm">
           <div className="flex justify-between">
             <span>Total Purchase Amount:</span>
-            <span>৳{data.totalPurchaseAmount?.toFixed(2) || "0.00"}</span>
+            <span>৳{data.totalPurchaseAmount?.toFixed(2) || 0}</span>
           </div>
           {(data.extraCharge || 0) > 0 && (
             <div className="flex justify-between">
@@ -136,11 +136,11 @@ export const PurchaseA4Invoice = ({ data }: { data: any }) => {
           )}
           <div className="flex justify-between pt-2 font-semibold border-t">
             <span>Total Amount:</span>
-            <span>৳{data.totalAmount?.toFixed(2) || "0.00"}</span>
+            <span>৳{data.totalAmount?.toFixed(2) || 0}</span>
           </div>
           <div className="flex justify-between">
             <span>Paid Amount:</span>
-            <span>৳{data.paidAmount?.toFixed(2) || "0.00"}</span>
+            <span>৳{data.paidAmount?.toFixed(2) || 0}</span>
           </div>
           {(data.preDueAmount || 0) > 0 && (
             <div className="flex justify-between text-orange-600">
@@ -150,7 +150,7 @@ export const PurchaseA4Invoice = ({ data }: { data: any }) => {
           )}
           <div className="flex justify-between pt-2 font-semibold text-red-600 border-t">
             <span>Current Due:</span>
-            <span>৳{data.currentDueAmount?.toFixed(2) || "0.00"}</span>
+            <span>৳{data.currentDueAmount?.toFixed(2) || 0}</span>
           </div>
         </div>
       </div>

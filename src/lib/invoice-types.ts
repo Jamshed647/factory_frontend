@@ -1,14 +1,23 @@
+export interface Product {
+  id: string;
+  name: string;
+  quantity: string;
+  quantityType: string;
+  category: string;
+  productType: string;
+}
+
 export interface InvoiceItem {
   id: string;
+  saleId: string;
   productId: string;
-  name?: string;
   quantity: number;
-  sellPrice: number;
   updateSellPrice: number;
+  sellPrice: number;
   buyPrice: number;
   totalPrice: number;
   createdAt: string;
-  productName?: string;
+  product: Product;
 }
 
 export interface Customer {
@@ -23,6 +32,12 @@ export interface Customer {
   updatedAt: string;
 }
 
+export interface Bank {
+  id: string;
+  name: string;
+  address: string;
+}
+
 export interface Invoice {
   id: string;
   invoiceNo: string;
@@ -30,27 +45,31 @@ export interface Invoice {
   date: string;
   customerId: string;
   factoryId: string;
+
   totalSaleAmount: number;
   paidAmount: number;
   preDueAmount: number;
   currentDueAmount: number;
+
   extraCharge: number;
+
   discountType: string;
   discountPercentage: number | null;
   discountAmount: number;
+
   totalAmount: number;
   paymentMethod: string;
+
   note: string | null;
   bankId: string | null;
+
   sellerId: string;
   sellerName: string;
+
   createdAt: string;
   updatedAt: string;
+
   customer: Customer;
   items: InvoiceItem[];
-  bank: {
-    id: string;
-    name: string;
-    address: string;
-  };
+  bank: Bank | null;
 }

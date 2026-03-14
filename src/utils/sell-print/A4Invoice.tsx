@@ -121,7 +121,7 @@ export const A4Invoice = ({ data }: { data: any }) => {
                   <td className="py-2 px-2 text-center border">{index + 1}</td>
 
                   <td className="py-2 px-3 border">
-                    {item?.name || item?.productId || "N/A"}
+                    {item?.product?.name || item?.productId || "N/A"}
                   </td>
 
                   <td className="py-2 px-3 text-right border">

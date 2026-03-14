@@ -28,7 +28,8 @@ jobs:
             cd /root/Project
 
             echo "Rebuilding frontend container"
-            docker compose up -d --build frontend
+            docker compose build --no-cache frontend
+            docker compose up -d frontend
 
             echo "Deployment finished"
 

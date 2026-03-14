@@ -47,8 +47,8 @@ export default function UpdateExpenseDialog({ factory, value }: Props) {
   const { options: bankOptions } = DataFetcher.fetchBankAccounts({
     path: `factory/bank/factory/${factory?.id}`,
   });
-  const handleSubmit = () => {
-    const updatedData = getChangedFields(form, value);
+  const handleSubmit = (v: ExpenseFormType) => {
+    const { amount, transactionType, factoryId, ...updatedData } = v;
     takeDue.mutate(updatedData);
   };
 
@@ -77,6 +77,7 @@ export default function UpdateExpenseDialog({ factory, value }: Props) {
             />
 
             <CustomField.Text
+              disabled
               form={form}
               name="amount"
               labelName="Amount"
@@ -99,6 +100,7 @@ export default function UpdateExpenseDialog({ factory, value }: Props) {
 
             <CustomField.SelectField
               form={form}
+              disabled
               name="transactionType"
               labelName="Transaction Type"
               placeholder="Transaction Type"
@@ -110,6 +112,7 @@ export default function UpdateExpenseDialog({ factory, value }: Props) {
 
             {form.watch("transactionType") === "ONLINE" && (
               <CustomField.SelectField
+                disabled
                 form={form}
                 name="bankId"
                 labelName="Bank Account"

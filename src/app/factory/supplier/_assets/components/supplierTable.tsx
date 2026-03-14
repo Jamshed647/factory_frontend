@@ -9,6 +9,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { ResponsiveButtonGroup } from "@/components/common/button/responsiveButtons";
 import UpdateSupplierModal from "./update/updateSuppplierModal";
 import DeleteSupplierModal from "./delete/deleteSupplierModal";
+import { formatTwoDecimal } from "@/utils/formatter/DecimalFn";
 
 interface TableProps {
   factoryId?: string;
@@ -68,7 +69,11 @@ const SupplierTable = ({ factoryId, switchUser = false }: TableProps) => {
               },
               { key: "phone", header: t.contactInfo },
               { key: "address", header: t.address },
-              { key: "totalDueAmount", header: t.totalDueAmount },
+              {
+                key: "totalDueAmount",
+                header: t.totalDueAmount,
+                render: (t) => formatTwoDecimal(t.totalDueAmount),
+              },
               // {
               //   key: "factoryName",
               //   header: t.factoryName,

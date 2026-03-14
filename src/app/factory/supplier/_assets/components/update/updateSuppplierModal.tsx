@@ -36,6 +36,8 @@ const UpdateSupplierModal = ({
       bankForm.reset({});
       showToast("success", data);
       queryClient.invalidateQueries({ queryKey: ["getSupplierDataToSupply"] });
+      queryClient.invalidateQueries({ queryKey: ["getSupplierData"] });
+
       setOpen(false);
     },
   });

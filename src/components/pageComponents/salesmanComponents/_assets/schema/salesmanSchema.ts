@@ -18,7 +18,10 @@ export const salesmanSchema = z
       label: "Contact Info",
       type: "string",
     }),
-    status: validationSchemas.textSchema({ label: "Salesman Status" }),
+    status: validationSchemas.textSchema({
+      label: "Salesman Status",
+      required: false,
+    }),
     factoryId: validationSchemas.textSchema({ label: "Factory Owner Id" }),
     pinCode: z.string().min(4).max(4),
     confirmPinCode: z.string().min(4).max(4),

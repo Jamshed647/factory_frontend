@@ -38,7 +38,9 @@ const UpdateCustomerModal = ({ data }: { data: any }) => {
   });
 
   const onSubmit = async (data: CustomerFormType) => {
-    updateCustomer.mutate(data);
+    const { phone, address, initialDue, factoryId, ...rest } = data;
+
+    updateCustomer.mutate(rest);
   };
 
   return (

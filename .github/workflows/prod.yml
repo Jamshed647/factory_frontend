@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set image tag
+        run: echo "IMAGE_TAG=frontend-${{ github.run_number }}" >> $GITHUB_ENV
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -23,12 +26,12 @@ jobs:
         run: |
           docker build \
           --build-arg NEXT_PUBLIC_API_URL=http://69.62.79.100:3060/api/v1 \
-          -t jamshed86/factory:frontend-latest \
-          .
+          -t jamshed86/factory:${IMAGE_TAG} \
+          ./factory_frontend
 
       - name: Push Docker Image
         run: |
-          docker push jamshed86/factory:frontend-latest
+          docker push jamshed86/factory:${IMAGE_TAG}
 
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -38,14 +41,13 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: 22
           script: |
-            echo "Pulling new docker image"
+            echo "Using image tag frontend-${{ github.run_number }}"
 
-            docker pull jamshed86/factory:frontend-latest
-
-            echo "Restarting container"
+            docker pull jamshed86/factory:frontend-${{ github.run_number }}
 
             cd /root/Project
-            export DOCKER_IMAGE_FRONTEND=jamshed86/factory:frontend-latest
+
+            export DOCKER_IMAGE_FRONTEND=jamshed86/factory:frontend-${{ github.run_number }}
 
             docker compose up -d frontend
 

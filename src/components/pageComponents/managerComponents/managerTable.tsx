@@ -75,11 +75,12 @@ const ManagerTable = ({
             // href="#"
             href={`/factory/manager/dashboard`}
             onClick={() => {
+              console.log("user", user);
               setFactory(
                 {
                   id: String(user.factory.id),
-                  name: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
-                  address: user.factoryAddress ?? "",
+                  name: user?.factory.name,
+                  address: user?.factoryAddress ?? "",
                   status: String(user.status),
                 },
                 String(user.id),

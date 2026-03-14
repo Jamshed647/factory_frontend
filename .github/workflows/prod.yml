@@ -24,7 +24,7 @@ jobs:
           docker build \
           --build-arg NEXT_PUBLIC_API_URL=http://69.62.79.100:3060/api/v1 \
           -t jamshed86/factory:frontend-latest \
-          ./factory_frontend
+          .
 
       - name: Push Docker Image
         run: |

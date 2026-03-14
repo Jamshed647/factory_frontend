@@ -27,7 +27,7 @@ jobs:
           docker build \
           --build-arg NEXT_PUBLIC_API_URL=http://69.62.79.100:3060/api/v1 \
           -t jamshed86/factory:${IMAGE_TAG} \
-          .
+          ./factory_frontend
 
       - name: Push Docker Image
         run: |
@@ -41,6 +41,10 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: 22
           script: |
+            echo "Logging into Docker Hub"
+
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+
             echo "Using image tag frontend-${{ github.run_number }}"
 
             docker pull jamshed86/factory:frontend-${{ github.run_number }}
@@ -49,10 +53,9 @@ jobs:
 
             export DOCKER_IMAGE_FRONTEND=jamshed86/factory:frontend-${{ github.run_number }}
 
-            docker compose up -d frontend
+            docker compose up -d --build frontend 
 
             echo "Deployment finished"
-
 
 
 

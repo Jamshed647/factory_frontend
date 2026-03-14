@@ -29,10 +29,7 @@ export default function HeaderBar() {
     >
       {" "}
       <Link href={`${path}/dashboard`}>
-        <h2
-          style={{ margin: 0, fontSize: 18 }}
-          className="font-semibold capitalize"
-        >
+        <h2 className="text-sm font-semibold capitalize lg:text-3xl">
           {factory?.name ?? "JangoSoft"}
         </h2>
       </Link>

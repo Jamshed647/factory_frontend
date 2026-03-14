@@ -22,32 +22,36 @@ export function ManagerDashboard({
   return (
     <>
       <div className="space-y-6">
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h1 className="text-3xl font-bold capitalize">Factory Dashboard</h1>
-            <p className="my-3 font-semibold capitalize text-muted-foreground">
-              {" "}
+        <div className="flex flex-col gap-4 mb-4 lg:flex-row lg:justify-between lg:items-center">
+          {/* Title */}
+          <div className="min-w-0">
+            <h1 className="text-xl font-bold capitalize sm:text-2xl lg:text-3xl">
+              Factory Dashboard
+            </h1>
+
+            <p className="mt-1 text-sm font-semibold break-words sm:text-base text-muted-foreground">
               {name} - {address}
             </p>
           </div>
 
-          <div className="flex gap-x-4">
-            <Link href="/factory/sell/createSell">
+          {/* Buttons */}
+          <div className="flex flex-col gap-3 w-full sm:flex-row lg:w-auto">
+            <Link href="/factory/sell/createSell" className="w-full sm:w-auto">
               <ActionButton
                 buttonContent="Sell Product"
                 type="button"
                 isPending={false}
                 icon={<ShoppingCart className="w-5 h-5" />}
-                btnStyle="bg-blue-500 text-white"
+                btnStyle="bg-blue-500 text-white w-full sm:w-auto"
               />
             </Link>
 
-            <Link href="/factory/productName">
+            <Link href="/factory/productName" className="w-full sm:w-auto">
               <ActionButton
                 buttonContent="Product Name"
                 type="button"
                 icon={<Boxes className="w-5 h-5" />}
-                btnStyle="bg-blue-500 text-white"
+                btnStyle="bg-blue-500 text-white w-full sm:w-auto"
               />
             </Link>
           </div>

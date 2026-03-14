@@ -39,7 +39,7 @@ const CustomerTable = ({ factoryId, switchUser = false }: TableProps) => {
       <div className="rounded-md border shadow-lg">
         {/* Table Header */}
         <div className="flex justify-between items-center p-3">
-          <h2 className="text-2xl font-bold">{t.customerList}</h2>
+          <h2 className="text-sm font-bold lg:text-2xl">{t.customerList}</h2>
           <div className="flex gap-x-2 items-center">
             <CustomField.CommonSearch
               width="w-full"

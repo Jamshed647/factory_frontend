@@ -38,7 +38,6 @@ export default function LayoutContainer({
             padding: "0 16px",
             background: "#fff",
             boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-            zIndex: 100,
           }}
         >
           {HeaderBar}

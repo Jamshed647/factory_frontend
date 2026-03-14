@@ -21,6 +21,7 @@ const CreateProductModal = ({ factoryId }: { factoryId: string }) => {
     resolver: zodResolver(createProductSchema),
     defaultValues: productDefaultValue({
       factoryId: factoryId,
+      category: "Raw",
     }),
   });
 

@@ -50,20 +50,20 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           />
         )}
 
-        <CustomField.SelectField
-          name="category"
-          labelName="Category"
-          placeholder="Enter your category"
-          form={form}
-          options={
-            [
-              { value: "rice", label: "Rice" },
-              { value: "muri", label: "Muri" },
-            ]
-            // productCategories
-          }
-          optional={false}
-        />
+        {/* <CustomField.SelectField */}
+        {/*   name="category" */}
+        {/*   labelName="Category" */}
+        {/*   placeholder="Enter your category" */}
+        {/*   form={form} */}
+        {/*   options={ */}
+        {/*     [ */}
+        {/*       { value: "rice", label: "Rice" }, */}
+        {/*       { value: "muri", label: "Muri" }, */}
+        {/*     ] */}
+        {/*     // productCategories */}
+        {/*   } */}
+        {/*   optional={false} */}
+        {/* /> */}
         <CustomField.SelectField
           name="quantityType"
           labelName="Unit Type"

@@ -147,23 +147,35 @@ export default function FactoryLayout({
       label: "রিপোর্ট",
       children: [
         {
-          key: "/factory/sell-report",
-          label: <Link href="/factory/sell-report">{t.sellReport}</Link>,
-        },
-        {
-          key: "/factory/purchase-report",
+          key: "/factory/reports/sell-report",
           label: (
-            <Link href="/factory/purchase-report">{t.purchaseReport}</Link>
+            <Link href="/factory/reports/sell-report">{t.sellReport}</Link>
           ),
         },
         {
-          key: "/factory/expense-report",
-          label: <Link href="/factory/expense-report">{t.expenseReport}</Link>,
+          key: "/factory/reports/purchase-report",
+          label: (
+            <Link href="/factory/reports/purchase-report">
+              {t.purchaseReport}
+            </Link>
+          ),
+        },
+        {
+          key: "/factory/reports/expense-report",
+          label: (
+            <Link href="/factory/reports/expense-report">
+              {t.expenseReport}
+            </Link>
+          ),
         },
 
         {
-          key: "/factory/monthly-report",
-          label: <Link href="/factory/monthly-report">{t.monthlyReport}</Link>,
+          key: "/factory/reports/monthly-report",
+          label: (
+            <Link href="/factory/reports/monthly-report">
+              {t.monthlyReport}
+            </Link>
+          ),
         },
       ],
     },

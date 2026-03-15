@@ -26,7 +26,7 @@ const UpdateCustomerModal = ({ data }: { data: any }) => {
   }
 
   const updateCustomer = useApiMutation({
-    path: `factory/bank/${data?.id}`,
+    path: `factory/customer/${data?.id}`,
     method: "PATCH",
     // dataType: "multipart/form-data",
     onSuccess: (data) => {
@@ -38,9 +38,7 @@ const UpdateCustomerModal = ({ data }: { data: any }) => {
   });
 
   const onSubmit = async (data: CustomerFormType) => {
-    const { phone, address, initialDue, factoryId, ...rest } = data;
-
-    updateCustomer.mutate(rest);
+    updateCustomer.mutate(data);
   };
 
   return (

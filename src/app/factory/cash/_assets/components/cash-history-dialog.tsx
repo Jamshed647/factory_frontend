@@ -6,6 +6,7 @@ import { ClipboardClock, Filter, TrendingDown, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { TransactionRow } from "./transactionRow";
 import { Transaction } from "./cash-history-viewer";
+import { useFactory } from "@/utils/factoryInfo";
 
 const CashHistoryDialog = ({
   type,
@@ -15,8 +16,7 @@ const CashHistoryDialog = ({
   rangeType: string;
 }) => {
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
-  const factory = user?.factory;
+  const { factory } = useFactory();
   const title = type === "cashIn" ? "Cash In" : "Cash Out";
 
   const { data, isLoading } = useFetchData({

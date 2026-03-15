@@ -43,6 +43,10 @@ export interface Translations {
   purchase: string;
   employeeWork: string;
   salesmanWork: string;
+  sellReport: string;
+  purchaseReport: string;
+  expenseReport: string;
+  monthlyReport: string;
 
   // Dashboard Types
   salesDashboard: string;
@@ -253,6 +257,10 @@ export const translations: Record<Language, Translations> = {
     purchase: "ক্রয়",
     employeeWork: "কর্মচারীর কাজ",
     salesmanWork: "বিক্রয়কর্মীর কাজ",
+    sellReport: "বিক্রয় রিপোর্ট",
+    purchaseReport: "ক্রয় রিপোর্ট",
+    expenseReport: "ব্যয় রিপোর্ট",
+    monthlyReport: "মাসিক রিপোর্ট",
 
     // Dashboard Types
     salesDashboard: "বিক্রয় ড্যাশবোর্ড",
@@ -461,6 +469,10 @@ export const translations: Record<Language, Translations> = {
     purchase: "Purchase",
     employeeWork: "Employee Work",
     salesmanWork: "Salesman Work",
+    sellReport: "Sell Report",
+    purchaseReport: "Purchase Report",
+    expenseReport: "Expense Report",
+    monthlyReport: "Monthly Report",
 
     // Dashboard Types
     salesDashboard: "Sales Dashboard",

@@ -147,20 +147,23 @@ export default function FactoryLayout({
       label: "রিপোর্ট",
       children: [
         {
-          key: "/factory/report/purchase",
-          label: <Link href="/factory/report/purchase">ক্রয় রিপোর্ট</Link>,
+          key: "/factory/sell-report",
+          label: <Link href="/factory/sell-report">{t.sellReport}</Link>,
         },
         {
-          key: "/factory/report/sell",
-          label: <Link href="/factory/report/sell">বিক্রয় রিপোর্ট</Link>,
+          key: "/factory/purchase-report",
+          label: (
+            <Link href="/factory/purchase-report">{t.purchaseReport}</Link>
+          ),
         },
         {
-          key: "/factory/report/expense",
-          label: <Link href="/factory/report/expense">ব্যয় রিপোর্ট</Link>,
+          key: "/factory/expense-report",
+          label: <Link href="/factory/expense-report">{t.expenseReport}</Link>,
         },
+
         {
-          key: "/factory/report/factory",
-          label: <Link href="/factory/report/factory">ফ্যাক্টরি রিপোর্ট</Link>,
+          key: "/factory/monthly-report",
+          label: <Link href="/factory/monthly-report">{t.monthlyReport}</Link>,
         },
       ],
     },

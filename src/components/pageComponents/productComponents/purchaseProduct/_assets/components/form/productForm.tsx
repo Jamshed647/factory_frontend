@@ -71,11 +71,11 @@ export default function ProductFormComponent<T extends Record<string, any>>({
           form={form}
           options={[
             { value: "kg", label: "Kg" },
-            { value: "pcs", label: "Pcs" },
-            { value: "bag", label: "Bag" },
-            { value: "meter", label: "Meter" },
-            { value: "liter", label: "Liter" },
-            { value: "roll", label: "Roll" },
+            // { value: "pcs", label: "Pcs" },
+            // { value: "bag", label: "Bag" },
+            // { value: "meter", label: "Meter" },
+            // { value: "liter", label: "Liter" },
+            // { value: "roll", label: "Roll" },
           ]}
           optional={false}
         />

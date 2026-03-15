@@ -88,7 +88,6 @@ export default function LayoutContainer({
             overflowY: "auto",
             transition: "all 0.3s",
             borderRight: "1px solid #f0f0f0",
-            zIndex: 999,
           }}
         >
           <Sidebar

@@ -1,11 +1,12 @@
 "use client";
 import { useFormContext } from "react-hook-form";
-import { ProductionFormType } from "../schema/product-schema";
+// import { ProductionFormInput } from "../schema/product-schema";
 import ActionButton from "@/components/common/button/actionButton";
 import { CustomField } from "@/components/common/fields/cusField";
 import { useState } from "react";
 import DataFetcher from "@/hooks/fetchDataCollection/hooksExport";
 import { useFactory } from "@/utils/factoryInfo";
+import { ProductionFormType } from "../schema/product-schema";
 
 const ProductionItemRow = ({
   index,

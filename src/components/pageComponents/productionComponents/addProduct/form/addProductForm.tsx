@@ -27,26 +27,60 @@ const AddProductForm = ({
     name: "items",
   });
 
+  const isFractional = form.watch("allowFractionalPackaging") === true;
+
   return (
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, onFormError)}
         className="space-y-6"
       >
+        <CustomField.CheckField
+          labelName="Is Production Fractional"
+          placeholder="Is Production Fractional"
+          form={form}
+          name="allowFractionalPackaging"
+        />
+        {isFractional && (
+          <>
+            <CustomField.Number
+              labelName="Total Production Weight"
+              placeholder="Enter Overall Total Weight"
+              form={form}
+              name="overallTotalWeight"
+            />
+
+            <CustomField.Number
+              labelName="unpacking Weight"
+              placeholder="Enter Unpacked Weight"
+              form={form}
+              name="unpackedWeight"
+            />
+          </>
+        )}
+        {form.watch("isPreviousMuriExisting") && (
+          <CustomField.Number
+            labelName="Previous Production Weight"
+            placeholder="Previous Production Weight"
+            form={form}
+            name="prevMuriWeight"
+          />
+        )}
+
         <CustomField.Number
-          labelName="Total Weight"
+          labelName={
+            isFractional ? `Packaging Weight` : "Total Production Weight"
+          }
           placeholder="Enter Total Weight"
           form={form}
           name="totalWeight"
         />
-
         <CustomField.Number
           labelName="Packaging Type"
           placeholder="Enter Packaging Type"
           form={form}
           name="packagingType"
         />
-
         {/* NOTE */}
         {/* <div> */}
         {/*   <CustomField.TextArea */}
@@ -56,7 +90,6 @@ const AddProductForm = ({
         {/*     name="note" */}
         {/*   /> */}
         {/* </div> */}
-
         {/* DYNAMIC ITEMS */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
@@ -88,11 +121,8 @@ const AddProductForm = ({
             />
           ))}
         </div>
-
         {/* SUBMIT */}
-
         <Button type="submit">Submit Production</Button>
-
         {/* <ActionButton */}
         {/*   //          className="py-2 px-4 w-full font-bold text-white bg-blue-500 rounded hover:bg-blue-700" */}
         {/*   buttonContent="Submit Production" */}
